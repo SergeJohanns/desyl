@@ -1,2 +1,1 @@
-# desyl
-DEductive SYnthesis Logic engine for synthesising computer programs
+# DeSyL | DEductive SYnthesis Logic engine for synthesising computer programs
