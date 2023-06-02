@@ -1,6 +1,9 @@
 #include <desyl/desyllib.hpp>
 
-Query parse(std::string const &)
+namespace desyl
 {
-    return Query{};
+    Query parse(std::string const &input)
+    {
+        return Query{};
+    }
 }

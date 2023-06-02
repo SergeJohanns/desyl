@@ -5,131 +5,134 @@
 #include <variant>
 #include <memory>
 
-using Literal = int;
-using Identifier = std::string;
-
-// Forward declarations because definitions recursively depend on Expression
-struct UnaryOperatorCall;
-struct BinaryOperatorCall;
-
-using Expression = std::variant<
-    Literal,
-    Identifier,
-    UnaryOperatorCall,
-    BinaryOperatorCall>;
-
-enum class UnaryOperator
+namespace desyl
 {
-    Neg,
-    Not,
-};
+    using Literal = int;
+    using Identifier = std::string;
 
-struct UnaryOperatorCall
-{
-    UnaryOperator type;
-    std::unique_ptr<Expression> operand;
-};
+    // Forward declarations because definitions recursively depend on Expression
+    struct UnaryOperatorCall;
+    struct BinaryOperatorCall;
 
-enum class BinarOperator
-{
-    Add,
-    Sub,
-    Mul,
-    Div,
-    Mod,
-    Eq,
-    Neq,
-    Lt,
-    Leq,
-    Gt,
-    Geq,
-    And,
-    Or,
-    Implies,
-};
+    using Expression = std::variant<
+        Literal,
+        Identifier,
+        UnaryOperatorCall,
+        BinaryOperatorCall>;
 
-struct BinaryOperatorCall
-{
-    BinarOperator type;
-    std::unique_ptr<Expression> lhs;
-    std::unique_ptr<Expression> rhs;
-};
+    enum class UnaryOperator
+    {
+        Neg,
+        Not,
+    };
 
-struct ArrayDeclaration
-{
-    std::string name;
-    std::string size;
-};
+    struct UnaryOperatorCall
+    {
+        UnaryOperator type;
+        std::unique_ptr<Expression> operand;
+    };
 
-struct PointerDeclaration
-{
-    Expression base;
-    int offset;
-};
+    enum class BinarOperator
+    {
+        Add,
+        Sub,
+        Mul,
+        Div,
+        Mod,
+        Eq,
+        Neq,
+        Lt,
+        Leq,
+        Gt,
+        Geq,
+        And,
+        Or,
+        Implies,
+    };
 
-struct PredicateCall
-{
-    std::string name;
-    std::vector<std::string> args;
-};
+    struct BinaryOperatorCall
+    {
+        BinarOperator type;
+        std::unique_ptr<Expression> lhs;
+        std::unique_ptr<Expression> rhs;
+    };
 
-struct Heap
-{
-    std::vector<ArrayDeclaration> array_declarations;
-    std::vector<PointerDeclaration> pointer_declarations;
-    std::vector<PredicateCall> predicate_calls;
-};
+    struct ArrayDeclaration
+    {
+        std::string name;
+        std::string size;
+    };
 
-using Proposition = Expression;
+    struct PointerDeclaration
+    {
+        Expression base;
+        int offset;
+    };
 
-struct Assertion
-{
-    Proposition proposition;
-    Heap heap;
-};
+    struct PredicateCall
+    {
+        std::string name;
+        std::vector<std::string> args;
+    };
 
-enum class Type
-{
-    Int,
-    Loc,
-};
+    struct Heap
+    {
+        std::vector<ArrayDeclaration> array_declarations;
+        std::vector<PointerDeclaration> pointer_declarations;
+        std::vector<PredicateCall> predicate_calls;
+    };
 
-struct TypedVariable
-{
-    Type type;
-    std::string name;
-};
+    using Proposition = Expression;
 
-struct Function
-{
-    std::string name;
-    Type type;
-    std::vector<TypedVariable> args;
-    Assertion precondition;
-    Assertion postcondition;
-};
+    struct Assertion
+    {
+        Proposition proposition;
+        Heap heap;
+    };
 
-enum class AlgebraicType
-{
-    Int,
-    Loc,
-    Set,
-};
+    enum class Type
+    {
+        Int,
+        Loc,
+    };
 
-struct AlgebraicTypedVariable
-{
-    AlgebraicType type;
-    std::string name;
-};
+    struct TypedVariable
+    {
+        Type type;
+        std::string name;
+    };
 
-struct Predicate
-{
-    std::string name;
-    std::vector<AlgebraicTypedVariable> args;
-};
+    struct Function
+    {
+        std::string name;
+        Type type;
+        std::vector<TypedVariable> args;
+        Assertion precondition;
+        Assertion postcondition;
+    };
 
-struct Query
-{
-    std::vector<Predicate> predicates;
-    std::vector<Function> functions;
-};
+    enum class AlgebraicType
+    {
+        Int,
+        Loc,
+        Set,
+    };
+
+    struct AlgebraicTypedVariable
+    {
+        AlgebraicType type;
+        std::string name;
+    };
+
+    struct Predicate
+    {
+        std::string name;
+        std::vector<AlgebraicTypedVariable> args;
+    };
+
+    struct Query
+    {
+        std::vector<Predicate> predicates;
+        std::vector<Function> functions;
+    };
+}

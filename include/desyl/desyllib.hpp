@@ -2,4 +2,7 @@
 
 #include <desyl/ast.hpp>
 
-Query parse(std::string const &input);
+namespace desyl
+{
+    Query parse(std::string const &input);
+}
