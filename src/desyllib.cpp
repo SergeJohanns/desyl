@@ -1,8 +1,6 @@
 #include <desyl/desyllib.hpp>
 
-#include <string>
-
-std::string example()
+Query parse(std::string const &)
 {
-    return "example";
+    return Query{};
 }

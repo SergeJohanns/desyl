@@ -4,6 +4,6 @@
 
 int main()
 {
-    std::cout << example() << std::endl;
+    std::cout << "Done" << std::endl;
     return 0;
 }
