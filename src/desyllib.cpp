@@ -2,7 +2,7 @@
 
 namespace desyl
 {
-    Query parse(std::string const &input)
+    Query parse(std::string const &)
     {
         return Query{};
     }
