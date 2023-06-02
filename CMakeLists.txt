@@ -23,5 +23,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O3 -g -fsanitize=address,undefined")
 endif()
 
+include(FetchContent)
+
+# Include lexing/parsing library
+FetchContent_Declare(lexy URL https://lexy.foonathan.net/download/lexy-src.zip)
+FetchContent_MakeAvailable(lexy)
+
 add_subdirectory(src)
 add_subdirectory(apps)
