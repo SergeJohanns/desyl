@@ -15,6 +15,23 @@ namespace desyl
         return op == UnaryOperator::Neg ? std::string{"-"} : std::string{"!"};
     }
 
+    std::string stringify_op(BinaryOperator const &op)
+    {
+        switch (op)
+        {
+        case BinaryOperator::Lt:
+            return std::string{"<"};
+        case BinaryOperator::Leq:
+            return std::string{"<="};
+        case BinaryOperator::Gt:
+            return std::string{">"};
+        case BinaryOperator::Geq:
+            return std::string{">="};
+        default:
+            return std::string{};
+        }
+    }
+
     // Standard overload resolution (https://www.modernescpp.com/index.php/visiting-a-std-variant-with-the-overload-pattern)
     // doesn't like recursive lambdas, so we use a plain struct
     struct StringifyVisitor
@@ -36,7 +53,7 @@ namespace desyl
 
         const auto operator()(BinaryOperatorCall const &call) const
         {
-            return std::string{"("} + std::visit(*this, *call.lhs) + std::string{" "};
+            return std::string{"("} + std::visit(*this, *call.lhs) + std::string{" "} + stringify_op(call.type) + std::string{" "} + std::visit(*this, *call.rhs) + std::string{")"};
         }
     };
 
@@ -45,6 +62,6 @@ namespace desyl
     std::string
     example(std::string const &input)
     {
-        return std::visit(stringify, example2(input));
+        return std::visit(stringify, parse_expr(input));
     }
 }

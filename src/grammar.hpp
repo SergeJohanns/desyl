@@ -4,6 +4,5 @@
 
 namespace desyl
 {
-    std::variant<Literal, Identifier> example1(std::string const &input);
-    Expression example2(std::string const &input);
+    Expression parse_expr(std::string const &input);
 }

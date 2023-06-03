@@ -1,6 +1,7 @@
 #include <grammar.hpp>
 
 #include <string>
+#include <iostream>
 #include <lexy/dsl.hpp>
 #include <lexy/callback.hpp>
 #include <lexy/input/range_input.hpp>
@@ -27,9 +28,10 @@ namespace desyl
         static constexpr auto value = lexy::as_string<std::string>;
     };
 
-    struct production : lexy::expression_production
+    struct expression : lexy::expression_production
     {
         static constexpr auto atom = dsl::p<literal> | dsl::p<identifier>;
+        static constexpr auto whitespace = dsl::ascii::space;
 
         static constexpr auto min = dsl::op(dsl::lit_c<'-'>);
         static constexpr auto neg = dsl::op(dsl::lit_c<'!'>);
@@ -40,7 +42,18 @@ namespace desyl
             using operand = dsl::atom;
         };
 
-        using operation = prefix;
+        static constexpr auto lt = dsl::op(dsl::lit_c<'<'>);
+        static constexpr auto leq = dsl::op(LEXY_LIT("<="));
+        static constexpr auto gt = dsl::op(dsl::lit_c<'>'>);
+        static constexpr auto geq = dsl::op(LEXY_LIT(">="));
+
+        struct ordering : dsl::infix_op_left
+        {
+            static constexpr auto op = leq / lt / geq / gt;
+            using operand = prefix;
+        };
+
+        using operation = ordering;
         static constexpr auto value = lexy::callback<Expression>(
             [](int literal)
             { return literal; },
@@ -49,18 +62,15 @@ namespace desyl
             [](lexy::op<min>, Expression operand)
             { return UnaryOperatorCall{UnaryOperator::Neg, std::make_unique<Expression>(std::move(operand))}; },
             [](lexy::op<neg>, Expression operand)
-            { return UnaryOperatorCall{UnaryOperator::Not, std::make_unique<Expression>(std::move(operand))}; });
-
-        // static constexpr auto mult = dsl::op(dsl::lit_c<'*'>);
-        // static constexpr auto div = dsl::op(dsl::lit_c<'/'>);
-        // static constexpr auto rem = dsl::op(dsl::lit_c<'%'>);
-
-        // struct product : dsl::infix_op_left
-        // {
-        //     static constexpr auto op = mult / div / rem;
-        //     using operand = prefix;
-        //     static constexpr auto value = lexy::as_aggregate<BinaryOperatorCall>;
-        // };
+            { return UnaryOperatorCall{UnaryOperator::Not, std::make_unique<Expression>(std::move(operand))}; },
+            [](Expression lhs, lexy::op<lt>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Lt, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<leq>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Leq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<gt>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Gt, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<geq>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Geq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; });
 
         // static constexpr auto add = dsl::op(dsl::lit_c<'+'>);
         // static constexpr auto sub = dsl::op(dsl::lit_c<'-'>);
@@ -73,15 +83,9 @@ namespace desyl
         // };
     };
 
-    std::variant<Literal, Identifier> example1(std::string const &input)
+    Expression parse_expr(std::string const &input)
     {
-        auto result = lexy::parse<literal>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
-        return result.value();
-    }
-
-    Expression example2(std::string const &input)
-    {
-        auto result = lexy::parse<production>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
+        auto result = lexy::parse<expression>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
         return std::move(result).value();
     }
 }
