@@ -53,7 +53,16 @@ namespace desyl
             using operand = prefix;
         };
 
-        using operation = ordering;
+        static constexpr auto eq = dsl::op(LEXY_LIT("=="));
+        static constexpr auto neq = dsl::op(LEXY_LIT("!="));
+
+        struct equality : dsl::infix_op_left
+        {
+            static constexpr auto op = eq / neq;
+            using operand = ordering;
+        };
+
+        using operation = equality;
         static constexpr auto value = lexy::callback<Expression>(
             [](int literal)
             { return literal; },
@@ -70,17 +79,11 @@ namespace desyl
             [](Expression lhs, lexy::op<gt>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Gt, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<geq>, Expression rhs)
-            { return BinaryOperatorCall{BinaryOperator::Geq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; });
-
-        // static constexpr auto add = dsl::op(dsl::lit_c<'+'>);
-        // static constexpr auto sub = dsl::op(dsl::lit_c<'-'>);
-
-        // struct sum : dsl::infix_op_left
-        // {
-        //     static constexpr auto op = add / sub;
-        //     using operand = product;
-        //     static constexpr auto value = lexy::as_aggregate<BinaryOperatorCall>;
-        // };
+            { return BinaryOperatorCall{BinaryOperator::Geq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<eq>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Eq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<neq>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Neq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; });
     };
 
     Expression parse_expr(std::string const &input)

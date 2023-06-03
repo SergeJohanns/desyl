@@ -27,6 +27,10 @@ namespace desyl
             return std::string{">"};
         case BinaryOperator::Geq:
             return std::string{">="};
+        case BinaryOperator::Eq:
+            return std::string{"=="};
+        case BinaryOperator::Neq:
+            return std::string{"!="};
         default:
             return std::string{};
         }
