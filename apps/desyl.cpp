@@ -4,6 +4,6 @@
 
 int main()
 {
-    std::cout << "Done" << std::endl;
+    std::cout << desyl::example("!-456") << std::endl;
     return 0;
 }
