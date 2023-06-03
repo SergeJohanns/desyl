@@ -28,9 +28,17 @@ namespace desyl
         static constexpr auto value = lexy::as_string<std::string>;
     };
 
+    struct subexpression : lexy::transparent_production
+    {
+        // Change the whitespace to include newlines, since the parens make them unambiguous.
+        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
+        static constexpr auto rule = dsl::recurse<struct expression>;
+        static constexpr auto value = lexy::forward<Expression>;
+    };
+
     struct expression : lexy::expression_production
     {
-        static constexpr auto atom = dsl::p<literal> | dsl::p<identifier>;
+        static constexpr auto atom = dsl::p<literal> | dsl::p<identifier> | dsl::parenthesized(dsl::p<subexpression>);
         static constexpr auto whitespace = dsl::ascii::space;
 
         static constexpr auto min = dsl::op(dsl::lit_c<'-'>);
@@ -68,6 +76,8 @@ namespace desyl
             { return literal; },
             [](std::string identifier)
             { return identifier; },
+            [](Expression nested)
+            { return nested; },
             [](lexy::op<min>, Expression operand)
             { return UnaryOperatorCall{UnaryOperator::Neg, std::make_unique<Expression>(std::move(operand))}; },
             [](lexy::op<neg>, Expression operand)

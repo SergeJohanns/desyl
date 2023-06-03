@@ -4,6 +4,6 @@
 
 int main()
 {
-    std::cout << desyl::example("!f == -54 <= !-4") << std::endl;
+    std::cout << desyl::example("!f == 5 < (-54 <= !-4)") << std::endl;
     return 0;
 }
