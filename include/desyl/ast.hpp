@@ -32,7 +32,7 @@ namespace desyl
         std::unique_ptr<Expression> operand;
     };
 
-    enum class BinarOperator
+    enum class BinaryOperator
     {
         Eq,
         Neq,
@@ -47,7 +47,7 @@ namespace desyl
 
     struct BinaryOperatorCall
     {
-        BinarOperator type;
+        BinaryOperator type;
         std::unique_ptr<Expression> lhs;
         std::unique_ptr<Expression> rhs;
     };
