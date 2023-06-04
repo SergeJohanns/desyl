@@ -8,6 +8,7 @@
 #include <lexy/input/range_input.hpp>
 #include <lexy/action/parse.hpp>
 #include <lexy_ext/report_error.hpp>
+#include <overload.hpp>
 #include <desyl/ast.hpp>
 
 namespace desyl
@@ -115,7 +116,7 @@ namespace desyl
 
     struct array_declaration
     {
-        static constexpr auto rule = dsl::lit_c<'['> + dsl::p<identifier> + dsl::p<literal> + dsl::lit_c<']'>;
+        static constexpr auto rule = dsl::lit_c<'['> >> (dsl::p<identifier> + dsl::p<literal> + dsl::lit_c<']'>);
         static constexpr auto value = lexy::callback<ArrayDeclaration>(
             [](std::string identifier, int size)
             { return ArrayDeclaration{std::move(identifier), size}; });
@@ -123,7 +124,7 @@ namespace desyl
 
     struct pointer_declaration
     {
-        static constexpr auto rule = dsl::lit_c<'<'> + dsl::p<identifier> + dsl::lit_c<','> + dsl::p<literal> + dsl::lit_c<'>'> + LEXY_LIT("->") + dsl::p<expression>;
+        static constexpr auto rule = dsl::lit_c<'<'> >> (dsl::p<identifier> + dsl::lit_c<','> + dsl::p<literal> + dsl::lit_c<'>'> + LEXY_LIT("->") + dsl::p<expression>);
         static constexpr auto value = lexy::callback<PointerDeclaration>(
             [](std::string identifier, int offset, Expression expression)
             { return PointerDeclaration{std::move(identifier), offset, std::move(expression)}; });
@@ -137,5 +138,40 @@ namespace desyl
         static constexpr auto value = lexy::callback<PredicateCall>(
             [](std::string identifier, std::vector<Identifier> parameters)
             { return PredicateCall{std::move(identifier), std::move(parameters)}; });
+    };
+
+    using HeapElement = std::variant<ArrayDeclaration, PointerDeclaration, PredicateCall>;
+
+    struct heap_element
+    {
+        // array_declaration and pointer_declaration are identified by [ adn <, respectively, so we use else_ to match the predicate call.
+        static constexpr auto rule = dsl::p<array_declaration> | dsl::p<pointer_declaration> | dsl::else_ >> dsl::p<predicate_call>;
+        static constexpr auto value = lexy::forward<HeapElement>;
+    };
+
+    struct heap
+    {
+        static constexpr auto rule = dsl::list(dsl::p<heap_element>, dsl::sep(dsl::asterisk));
+        static constexpr auto value = lexy::fold_inplace<Heap>(
+            []
+            { return Heap{}; },
+            [](Heap &heap, auto &heap_element)
+            {
+                std::visit(
+                    heap_element,
+                    overloaded{
+                        [&](ArrayDeclaration const &array_declaration)
+                        {
+                            heap.array_declarations.push_back(array_declaration);
+                        },
+                        [&](PointerDeclaration const &pointer_declaration)
+                        {
+                            heap.pointer_declarations.push_back(pointer_declaration);
+                        },
+                        [&](PredicateCall const &predicate_call)
+                        {
+                            heap.predicate_calls.push_back(predicate_call);
+                        }});
+            });
     };
 }
