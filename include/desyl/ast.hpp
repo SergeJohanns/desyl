@@ -55,13 +55,14 @@ namespace desyl
     struct ArrayDeclaration
     {
         std::string name;
-        std::string size;
+        int size;
     };
 
     struct PointerDeclaration
     {
         Expression base;
         int offset;
+        Expression value;
     };
 
     struct PredicateCall

@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <lexy/dsl.hpp>
+#include <lexy/dsl/separator.hpp>
 #include <lexy/callback.hpp>
 #include <lexy/input/range_input.hpp>
 #include <lexy/action/parse.hpp>
@@ -111,4 +112,30 @@ namespace desyl
         auto result = lexy::parse<expression>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
         return std::move(result).value();
     }
+
+    struct array_declaration
+    {
+        static constexpr auto rule = dsl::lit_c<'['> + dsl::p<identifier> + dsl::p<literal> + dsl::lit_c<']'>;
+        static constexpr auto value = lexy::callback<ArrayDeclaration>(
+            [](std::string identifier, int size)
+            { return ArrayDeclaration{std::move(identifier), size}; });
+    };
+
+    struct pointer_declaration
+    {
+        static constexpr auto rule = dsl::lit_c<'<'> + dsl::p<identifier> + dsl::lit_c<','> + dsl::p<literal> + dsl::lit_c<'>'> + LEXY_LIT("->") + dsl::p<expression>;
+        static constexpr auto value = lexy::callback<PointerDeclaration>(
+            [](std::string identifier, int offset, Expression expression)
+            { return PointerDeclaration{std::move(identifier), offset, std::move(expression)}; });
+    };
+
+    struct predicate_call
+    {
+        // Normally we'd use a list of expressions, but the paper specifies that the arguments can only be identifiers.
+        static constexpr auto args = dsl::list(dsl::p<identifier>, dsl::sep(dsl::comma));
+        static constexpr auto rule = dsl::p<identifier> + dsl::lit_c<'('> + args + dsl::lit_c<')'>;
+        static constexpr auto value = lexy::callback<PredicateCall>(
+            [](std::string identifier, std::vector<Identifier> parameters)
+            { return PredicateCall{std::move(identifier), std::move(parameters)}; });
+    };
 }
