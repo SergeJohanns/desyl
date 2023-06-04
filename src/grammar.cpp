@@ -70,7 +70,15 @@ namespace desyl
             using operand = ordering;
         };
 
-        using operation = equality;
+        static constexpr auto impl = dsl::op(LEXY_LIT("=>"));
+
+        struct implication : dsl::infix_op_right
+        {
+            static constexpr auto op = impl;
+            using operand = equality;
+        };
+
+        using operation = implication;
         static constexpr auto value = lexy::callback<Expression>(
             [](int literal)
             { return literal; },
@@ -93,7 +101,9 @@ namespace desyl
             [](Expression lhs, lexy::op<eq>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Eq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<neq>, Expression rhs)
-            { return BinaryOperatorCall{BinaryOperator::Neq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; });
+            { return BinaryOperatorCall{BinaryOperator::Neq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<impl>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Implies, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; });
     };
 
     Expression parse_expr(std::string const &input)
