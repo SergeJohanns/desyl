@@ -163,7 +163,7 @@ namespace desyl
 
     struct heap
     {
-        static constexpr auto rule = dsl::terminator(dsl::lit_c<';'>).list(dsl::p<heap_elem_test>, dsl::sep(dsl::comma));
+        static constexpr auto rule = dsl::terminator(dsl::lit_c<';'>).list(dsl::p<heap_elem_test>, dsl::sep(dsl::asterisk));
         static constexpr auto value = lexy::fold_inplace<Heap>(
             []
             { return Heap{}; },
