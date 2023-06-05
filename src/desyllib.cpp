@@ -5,9 +5,9 @@
 
 namespace desyl
 {
-    Query parse(std::string const &)
+    Query parse(std::string const &input)
     {
-        return Query{};
+        return parse_query(input);
     }
 
     std::string stringify_op(UnaryOperator const &op)
