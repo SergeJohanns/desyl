@@ -2,8 +2,10 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include <lexy/dsl.hpp>
 #include <lexy/dsl/separator.hpp>
+#include <lexy/dsl/brackets.hpp>
 #include <lexy/callback.hpp>
 #include <lexy/input/range_input.hpp>
 #include <lexy/action/parse.hpp>
@@ -124,10 +126,13 @@ namespace desyl
 
     struct pointer_declaration
     {
-        static constexpr auto rule = dsl::lit_c<'<'> >> (dsl::p<identifier> + dsl::lit_c<','> + dsl::p<literal> + dsl::lit_c<'>'> + LEXY_LIT("->") + dsl::p<expression>);
+        static constexpr auto rule = dsl::lit_c<'<'> >> (dsl::p<expression> + dsl::lit_c<','> + dsl::p<literal> + dsl::lit_c<'>'> + LEXY_LIT("->") + dsl::p<expression>);
         static constexpr auto value = lexy::callback<PointerDeclaration>(
-            [](std::string identifier, int offset, Expression expression)
-            { return PointerDeclaration{std::move(identifier), offset, std::move(expression)}; });
+            [](Expression base, int offset, Expression expression)
+            { return PointerDeclaration{
+                  std::make_unique<Expression>(std::move(base)),
+                  offset,
+                  std::make_unique<Expression>(std::move(expression))}; });
     };
 
     struct predicate_call
@@ -149,29 +154,105 @@ namespace desyl
         static constexpr auto value = lexy::forward<HeapElement>;
     };
 
+    struct heap_elem_test
+    {
+        // array_declaration and pointer_declaration are identified by [ adn <, respectively, so we use else_ to match the predicate call.
+        static constexpr auto rule = dsl::p<pointer_declaration>;
+        static constexpr auto value = lexy::forward<HeapElement>;
+    };
+
     struct heap
     {
-        static constexpr auto rule = dsl::list(dsl::p<heap_element>, dsl::sep(dsl::asterisk));
+        static constexpr auto rule = dsl::terminator(dsl::lit_c<';'>).list(dsl::p<heap_elem_test>, dsl::sep(dsl::comma));
         static constexpr auto value = lexy::fold_inplace<Heap>(
             []
             { return Heap{}; },
-            [](Heap &heap, auto &heap_element)
+            [](Heap &heap, auto elem)
             {
                 std::visit(
-                    heap_element,
                     overloaded{
-                        [&](ArrayDeclaration const &array_declaration)
-                        {
-                            heap.array_declarations.push_back(array_declaration);
-                        },
-                        [&](PointerDeclaration const &pointer_declaration)
-                        {
-                            heap.pointer_declarations.push_back(pointer_declaration);
-                        },
-                        [&](PredicateCall const &predicate_call)
-                        {
-                            heap.predicate_calls.push_back(predicate_call);
-                        }});
+                        [&heap](ArrayDeclaration elem)
+                        { heap.array_declarations.push_back(std::move(elem)); },
+                        [&heap](PointerDeclaration elem)
+                        { heap.pointer_declarations.push_back(std::move(elem)); },
+                        [&heap](PredicateCall elem)
+                        { heap.predicate_calls.push_back(std::move(elem)); }},
+                    std::move(elem));
             });
     };
+
+    Heap parse_heap(std::string const &input)
+    {
+        auto const_result = lexy::parse<heap>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
+        return std::move(const_result).value();
+    }
+
+    struct assertion
+    {
+        static constexpr auto rule = dsl::curly_bracketed(dsl::p<expression> + dsl::lit_c<';'> + dsl::p<heap>);
+        static constexpr auto value = lexy::construct<Assertion>;
+    };
+
+    struct int_type
+    {
+        static constexpr auto rule = LEXY_LIT("int");
+        static constexpr auto value = lexy::callback<Type>(
+            []()
+            { return Type::Int; });
+    };
+
+    struct loc_type
+    {
+        static constexpr auto rule = LEXY_LIT("loc");
+        static constexpr auto value = lexy::callback<Type>(
+            []()
+            { return Type::Loc; });
+    };
+
+    struct type
+    {
+        static constexpr auto rule = dsl::p<int_type> | dsl::p<loc_type>;
+        static constexpr auto value = lexy::forward<Type>;
+    };
+
+    struct typed_variable
+    {
+        static constexpr auto rule = dsl::p<type> + dsl::p<identifier>;
+        static constexpr auto value = lexy::construct<TypedVariable>;
+    };
+
+    struct function_parameters
+    {
+        static constexpr auto rule = dsl::parenthesized.opt_list(dsl::p<typed_variable>, dsl::sep(dsl::comma));
+        static constexpr auto value = lexy::as_list<std::vector<TypedVariable>>;
+    };
+
+    struct function_signature
+    {
+        static constexpr auto rule = dsl::p<identifier> + dsl::p<function_parameters>;
+        static constexpr auto value = lexy::construct<FunctionSignature>;
+    };
+
+    struct function_specification
+    {
+        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
+        static constexpr auto rule = dsl::p<assertion> + dsl::p<function_signature> + dsl::p<assertion>;
+        static constexpr auto value = lexy::construct<FunctionSpecification>;
+    };
+
+    struct query
+    {
+        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
+        static constexpr auto rule = dsl::p<function_specification>;
+        static constexpr auto value = lexy::forward<FunctionSpecification>;
+    };
+
+    Query parse_query(std::string const &input)
+    {
+        auto const_result = lexy::parse<query>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
+        if (const_result)
+            std::cout << "Parsed int_type\n"
+                      << std::endl;
+        return Query{};
+    }
 }

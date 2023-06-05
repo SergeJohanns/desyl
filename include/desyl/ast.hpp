@@ -60,9 +60,9 @@ namespace desyl
 
     struct PointerDeclaration
     {
-        Expression base;
+        std::unique_ptr<Expression> base;
         int offset;
-        Expression value;
+        std::unique_ptr<Expression> value;
     };
 
     struct PredicateCall
@@ -98,12 +98,16 @@ namespace desyl
         std::string name;
     };
 
-    struct Function
+    struct FunctionSignature
     {
         std::string name;
-        Type type;
         std::vector<TypedVariable> args;
+    };
+
+    struct FunctionSpecification
+    {
         Assertion precondition;
+        FunctionSignature signature;
         Assertion postcondition;
     };
 
@@ -129,6 +133,6 @@ namespace desyl
     struct Query
     {
         std::vector<Predicate> predicates;
-        std::vector<Function> functions;
+        std::vector<FunctionSpecification> functions;
     };
 }
