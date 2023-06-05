@@ -243,16 +243,17 @@ namespace desyl
     struct query
     {
         static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
-        static constexpr auto rule = dsl::p<function_specification>;
-        static constexpr auto value = lexy::forward<FunctionSpecification>;
+        static constexpr auto rule = dsl::list(dsl::p<function_specification>, dsl::sep(dsl::newline));
+        static constexpr auto value =
+            lexy::as_list<std::vector<FunctionSpecification>> >>
+            lexy::callback<Query>(
+                [](std::vector<FunctionSpecification> functions)
+                { return Query{std::vector<Predicate>{}, std::move(functions)}; });
     };
 
     Query parse_query(std::string const &input)
     {
         auto const_result = lexy::parse<query>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
-        if (const_result)
-            std::cout << "Parsed int_type\n"
-                      << std::endl;
-        return Query{};
+        return std::move(const_result).value();
     }
 }
