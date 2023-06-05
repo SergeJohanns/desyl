@@ -2,12 +2,18 @@
 
 #include <desyl/ast.hpp>
 #include <grammar.hpp>
+#include <synthesis.hpp>
 
 namespace desyl
 {
     Query parse(std::string const &input)
     {
         return parse_query(input);
+    }
+
+    void synthesize(Query const &query)
+    {
+        synthesize_query(query);
     }
 
     std::string stringify_op(UnaryOperator const &op)
