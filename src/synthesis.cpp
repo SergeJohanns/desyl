@@ -56,6 +56,10 @@ namespace desyl
         {
             std::cout << res.value() << std::endl;
         }
+        else
+        {
+            std::cout << "No value" << std::endl;
+        }
     }
 
     Program ConstantContinuation::join(std::vector<Program> const &) const
