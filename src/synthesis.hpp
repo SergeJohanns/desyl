@@ -27,7 +27,7 @@ namespace desyl
         virtual std::vector<Derivation> apply(Context const &context) const = 0;
     };
 
-    std::optional<Program> with_rules(std::vector<Rule> const &rules, Context const &goal);
+    std::optional<Program> with_rules(std::vector<std::unique_ptr<Rule>> const &rules, Context const &goal);
     void synthesize_query(Context const &query);
 
     class ConstantContinuation : public Continuation

@@ -6,7 +6,15 @@
 
 namespace desyl
 {
-    auto all_rules = std::vector<Rule>{};
+    // Pointers because the subclasses take up different amounts of memory
+    std::unique_ptr<Rule> all_rule_init[] = {
+        std::make_unique<EmpRule>(EmpRule()),
+    };
+    // Initialization array and make_move_iterator because unique_prt is move-only and that doesn't
+    // work by default with std::vector and a brace-enclosed initializer list
+    std::vector<std::unique_ptr<Rule>> all_rules{
+        std::make_move_iterator(std::begin(all_rule_init)),
+        std::make_move_iterator(std::end(all_rule_init))};
 
     std::optional<Program> solve_subgoals(std::vector<Context> const &goals, Continuation const &continuation)
     {
@@ -23,7 +31,7 @@ namespace desyl
         return continuation.join(result);
     }
 
-    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, Rule const &)
+    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &)
     {
         for (auto const &deriv : subderivs)
         {
@@ -36,11 +44,11 @@ namespace desyl
         return std::nullopt;
     }
 
-    std::optional<Program> with_rules(std::vector<Rule> const &rules, Context const &goal)
+    std::optional<Program> with_rules(std::vector<std::unique_ptr<Rule>> const &rules, Context const &goal)
     {
         for (auto &rule : rules)
         {
-            auto sub = try_alts(rule.apply(std::move(goal)), rule);
+            auto sub = try_alts(rule->apply(std::move(goal)), rule);
             if (sub.has_value())
             {
                 return sub.value();
