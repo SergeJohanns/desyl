@@ -135,14 +135,25 @@ namespace desyl
                   std::make_unique<Expression>(std::move(expression))}; });
     };
 
-    struct predicate_call
+    struct predicate_argument_list
     {
         // Normally we'd use a list of expressions, but the paper specifies that the arguments can only be identifiers.
-        static constexpr auto args = dsl::list(dsl::p<identifier>, dsl::sep(dsl::comma));
-        static constexpr auto rule = dsl::p<identifier> + dsl::lit_c<'('> + args + dsl::lit_c<')'>;
+        static constexpr auto rule = dsl::list(dsl::p<identifier>, dsl::sep(dsl::comma));
+        static constexpr auto value = lexy::as_list<std::vector<Identifier>>;
+    };
+
+    struct predicate_call
+    {
+        static constexpr auto rule = dsl::p<identifier> + dsl::lit_c<'('> + dsl::p<predicate_argument_list> + dsl::lit_c<')'>;
         static constexpr auto value = lexy::callback<PredicateCall>(
             [](std::string identifier, std::vector<Identifier> parameters)
             { return PredicateCall{std::move(identifier), std::move(parameters)}; });
+    };
+
+    struct emp
+    {
+        static constexpr auto rule = LEXY_LIT("emp");
+        static constexpr auto value = lexy::nullopt{};
     };
 
     using HeapElement = std::variant<ArrayDeclaration, PointerDeclaration, PredicateCall>;
@@ -151,34 +162,34 @@ namespace desyl
     {
         // array_declaration and pointer_declaration are identified by [ adn <, respectively, so we use else_ to match the predicate call.
         static constexpr auto rule = dsl::p<array_declaration> | dsl::p<pointer_declaration> | dsl::else_ >> dsl::p<predicate_call>;
-        static constexpr auto value = lexy::forward<HeapElement>;
-    };
-
-    struct heap_elem_test
-    {
-        // array_declaration and pointer_declaration are identified by [ adn <, respectively, so we use else_ to match the predicate call.
-        static constexpr auto rule = dsl::p<pointer_declaration>;
-        static constexpr auto value = lexy::forward<HeapElement>;
+        static constexpr auto value = lexy::callback<HeapElement>(
+            [](ArrayDeclaration elem)
+            { return elem; },
+            [](PointerDeclaration elem)
+            { return elem; },
+            [](PredicateCall elem)
+            { return elem; });
     };
 
     struct heap
     {
-        static constexpr auto rule = dsl::terminator(dsl::lit_c<';'>).list(dsl::p<heap_elem_test>, dsl::sep(dsl::asterisk));
-        static constexpr auto value = lexy::fold_inplace<Heap>(
-            []
-            { return Heap{}; },
-            [](Heap &heap, auto elem)
-            {
-                std::visit(
-                    overloaded{
-                        [&heap](ArrayDeclaration elem)
-                        { heap.array_declarations.push_back(std::move(elem)); },
-                        [&heap](PointerDeclaration elem)
-                        { heap.pointer_declarations.push_back(std::move(elem)); },
-                        [&heap](PredicateCall elem)
-                        { heap.predicate_calls.push_back(std::move(elem)); }},
-                    std::move(elem));
-            });
+        static constexpr auto rule = dsl::terminator(dsl::lit_c<';'>).list(dsl::p<heap_element>, dsl::sep(dsl::asterisk));
+        static constexpr auto value =
+            lexy::fold_inplace<Heap>(
+                []
+                { return Heap{}; },
+                [](Heap &heap, auto elem)
+                {
+                    std::visit(
+                        overloaded{
+                            [&heap](ArrayDeclaration elem)
+                            { heap.array_declarations.push_back(std::move(elem)); },
+                            [&heap](PointerDeclaration elem)
+                            { heap.pointer_declarations.push_back(std::move(elem)); },
+                            [&heap](PredicateCall elem)
+                            { heap.predicate_calls.push_back(std::move(elem)); }},
+                        std::move(elem));
+                });
     };
 
     Heap parse_heap(std::string const &input)
