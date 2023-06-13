@@ -5,6 +5,8 @@
 
 namespace desyl
 {
+    constexpr size_t RULES = 1;
+
     // TODO: Switch to AST representation
     using Program = std::string;
     using Context = FunctionSpecification;
@@ -27,7 +29,7 @@ namespace desyl
         virtual std::vector<Derivation> apply(Context const &context) const = 0;
     };
 
-    std::optional<Program> with_rules(std::vector<std::unique_ptr<Rule>> const &rules, Context const &goal);
+    std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Context const &goal);
     void synthesize_query(Context const &query);
 
     class ConstantContinuation : public Continuation

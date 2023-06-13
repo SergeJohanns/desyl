@@ -7,14 +7,8 @@
 namespace desyl
 {
     // Pointers because the subclasses take up different amounts of memory
-    std::unique_ptr<Rule> all_rule_init[] = {
-        std::make_unique<EmpRule>(EmpRule()),
-    };
-    // Initialization array and make_move_iterator because unique_prt is move-only and that doesn't
-    // work by default with std::vector and a brace-enclosed initializer list
-    std::vector<std::unique_ptr<Rule>> all_rules{
-        std::make_move_iterator(std::begin(all_rule_init)),
-        std::make_move_iterator(std::end(all_rule_init))};
+    const std::unique_ptr<Rule> all_rules[RULES] = {
+        std::make_unique<EmpRule>(EmpRule())};
 
     std::optional<Program> solve_subgoals(std::vector<Context> const &goals, Continuation const &continuation)
     {
@@ -44,7 +38,7 @@ namespace desyl
         return std::nullopt;
     }
 
-    std::optional<Program> with_rules(std::vector<std::unique_ptr<Rule>> const &rules, Context const &goal)
+    std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Context const &goal)
     {
         for (auto &rule : rules)
         {
