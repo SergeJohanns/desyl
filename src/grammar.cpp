@@ -153,21 +153,25 @@ namespace desyl
     struct emp
     {
         static constexpr auto rule = LEXY_LIT("emp");
-        static constexpr auto value = lexy::nullopt{};
+        static constexpr auto value = lexy::callback<std::monostate>(
+            []
+            { return std::monostate{}; });
     };
 
-    using HeapElement = std::variant<ArrayDeclaration, PointerDeclaration, PredicateCall>;
+    using HeapElement = std::variant<ArrayDeclaration, PointerDeclaration, PredicateCall, std::monostate>;
 
     struct heap_element
     {
         // array_declaration and pointer_declaration are identified by [ adn <, respectively, so we use else_ to match the predicate call.
-        static constexpr auto rule = dsl::p<array_declaration> | dsl::p<pointer_declaration> | dsl::else_ >> dsl::p<predicate_call>;
+        static constexpr auto rule = dsl::p<array_declaration> | dsl::p<pointer_declaration> | dsl::p<emp> | dsl::else_ >> dsl::p<predicate_call>;
         static constexpr auto value = lexy::callback<HeapElement>(
             [](ArrayDeclaration elem)
             { return elem; },
             [](PointerDeclaration elem)
             { return elem; },
             [](PredicateCall elem)
+            { return elem; },
+            [](std::monostate elem)
             { return elem; });
     };
 
@@ -187,7 +191,8 @@ namespace desyl
                             [&heap](PointerDeclaration elem)
                             { heap.pointer_declarations.push_back(std::move(elem)); },
                             [&heap](PredicateCall elem)
-                            { heap.predicate_calls.push_back(std::move(elem)); }},
+                            { heap.predicate_calls.push_back(std::move(elem)); },
+                            [&heap](std::monostate) {}},
                         std::move(elem));
                 });
     };
