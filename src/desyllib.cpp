@@ -13,7 +13,7 @@ namespace desyl
 
     void synthesize(Query const &query)
     {
-        synthesize_query(query);
+        synthesize_query(query.functions[0]);
     }
 
     std::string stringify_op(UnaryOperator const &op)
