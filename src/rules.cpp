@@ -8,7 +8,7 @@ namespace desyl
     Goal::Goal(FunctionSpecification spec)
     {
         this->spec = std::move(spec);
-        // environment = vars(spec.signature, environment);
+        vars(spec.signature, environment);
     }
 
     Program ConstantContinuation::join(std::vector<Program> const &) const
