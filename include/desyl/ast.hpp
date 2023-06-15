@@ -54,7 +54,7 @@ namespace desyl
 
     struct ArrayDeclaration
     {
-        std::string name;
+        Identifier name;
         int size;
     };
 
@@ -67,8 +67,8 @@ namespace desyl
 
     struct PredicateCall
     {
-        std::string name;
-        std::vector<std::string> args;
+        Identifier name;
+        std::vector<Identifier> args;
     };
 
     struct Heap
@@ -95,12 +95,12 @@ namespace desyl
     struct TypedVariable
     {
         Type type;
-        std::string name;
+        Identifier name;
     };
 
     struct FunctionSignature
     {
-        std::string name;
+        Identifier name;
         std::vector<TypedVariable> args;
     };
 
@@ -121,12 +121,12 @@ namespace desyl
     struct AlgebraicTypedVariable
     {
         AlgebraicType type;
-        std::string name;
+        Identifier name;
     };
 
     struct Predicate
     {
-        std::string name;
+        Identifier name;
         std::vector<AlgebraicTypedVariable> args;
     };
 
