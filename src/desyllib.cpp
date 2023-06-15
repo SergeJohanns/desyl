@@ -11,9 +11,9 @@ namespace desyl
         return parse_query(input);
     }
 
-    void synthesize(Query const &query)
+    void synthesize(Query query)
     {
-        synthesize_query(query.functions[0]);
+        synthesize_query(Goal(std::move(query.functions[0])));
     }
 
     std::string stringify_op(UnaryOperator const &op)

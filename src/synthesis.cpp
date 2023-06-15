@@ -10,7 +10,7 @@ namespace desyl
     const std::unique_ptr<Rule> all_rules[RULES] = {
         std::make_unique<EmpRule>(EmpRule())};
 
-    std::optional<Program> solve_subgoals(std::vector<Context> const &goals, Continuation const &continuation)
+    std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation)
     {
         auto result = std::vector<Program>{};
         for (auto const &goal : goals)
@@ -38,7 +38,7 @@ namespace desyl
         return std::nullopt;
     }
 
-    std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Context const &goal)
+    std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Goal const &goal)
     {
         for (auto &rule : rules)
         {
@@ -51,7 +51,7 @@ namespace desyl
         return std::nullopt;
     }
 
-    void synthesize_query(Context const &spec)
+    void synthesize_query(Goal const &spec)
     {
         auto res = with_rules(all_rules, spec);
         if (res.has_value())

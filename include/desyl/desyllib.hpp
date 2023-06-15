@@ -5,6 +5,6 @@
 namespace desyl
 {
     Query parse(std::string const &input);
-    void synthesize(Query const &query);
+    void synthesize(Query query);
     std::string example(std::string const &input);
 }
