@@ -9,15 +9,24 @@ namespace desyl
 
     // TODO: Switch to AST representation
     using Program = std::string;
-    class Goal
+
+    struct VariableSnapshot
     {
-    public:
+        Vars precondition;
+        Vars environment;
+        Vars postcondition;
+
+        Vars all();
+        Vars ghosts();
+        Vars existentials();
+    };
+
+    struct Goal
+    {
         Goal(FunctionSpecification spec);
         FunctionSpecification spec;
         Vars environment;
-
-        Vars ghosts() const;
-        Vars existentials() const;
+        VariableSnapshot variables();
     };
 
     class Continuation
