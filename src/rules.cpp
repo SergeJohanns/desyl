@@ -72,7 +72,7 @@ namespace desyl
         {
             auto deriv = Derivation{
                 .goals = std::vector<Goal>{},
-                .continuation = std::make_unique<ConstantContinuation>(ConstantContinuation("emp")),
+                .continuation = std::make_unique<ConstantContinuation>(ConstantContinuation("emp;\n")),
             };
             std::vector<Derivation> result;
             result.push_back(std::move(deriv));
