@@ -56,6 +56,7 @@ namespace desyl
     {
         Identifier name;
         int size;
+        bool operator==(ArrayDeclaration const &other) const = default;
     };
 
     struct PointerDeclaration
@@ -63,12 +64,14 @@ namespace desyl
         std::shared_ptr<Expression> base;
         int offset;
         std::shared_ptr<Expression> value;
+        bool operator==(PointerDeclaration const &other) const = default;
     };
 
     struct PredicateCall
     {
         Identifier name;
         std::vector<Identifier> args;
+        bool operator==(PredicateCall const &other) const = default;
     };
 
     struct Heap
