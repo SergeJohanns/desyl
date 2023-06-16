@@ -12,7 +12,7 @@ namespace desyl
         vars(spec.signature, environment);
     }
 
-    VariableSnapshot Goal::variables()
+    VariableSnapshot Goal::variables() const
     {
         Vars precondition, postcondition;
         vars(spec.precondition, precondition);

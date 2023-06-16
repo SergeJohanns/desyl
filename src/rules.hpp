@@ -26,7 +26,7 @@ namespace desyl
         Goal(FunctionSpecification spec);
         FunctionSpecification spec;
         Vars environment;
-        VariableSnapshot variables();
+        VariableSnapshot variables() const;
     };
 
     class Continuation
