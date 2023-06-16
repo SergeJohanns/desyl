@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <iostream>
 
 namespace desyl
 {
@@ -70,6 +71,7 @@ namespace desyl
         auto const &postcondition_empty = std::move(goal).spec.postcondition.heap.pointer_declarations.size() == 0;
         if (precondition_empty && postcondition_empty)
         {
+            std::cout << "Using EMP" << std::endl;
             auto deriv = Derivation{
                 .goals = std::vector<Goal>{},
                 .continuation = std::make_unique<ConstantContinuation>(ConstantContinuation("emp;\n")),
@@ -148,6 +150,7 @@ namespace desyl
             return std::vector<Derivation>{};
         }
 
+        std::cout << "Using FRAME" << std::endl;
         Derivation deriv{
             .goals = std::vector<Goal>{new_goal},
             .continuation = std::make_unique<IdentityContinuation>(IdentityContinuation()),
