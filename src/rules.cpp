@@ -108,6 +108,7 @@ namespace desyl
                 }
             }
         }
+        std::vector<size_t> precondition_to_remove, postcondition_to_remove;
         for (auto [precondition_index, postcondition_index] : overlap)
         {
             Vars term_vars, intersection;
@@ -120,7 +121,17 @@ namespace desyl
             {
                 continue;
             }
+            precondition_to_remove.push_back(precondition_index);
+            postcondition_to_remove.push_back(postcondition_index);
+        }
+        std::sort(precondition_to_remove.begin(), precondition_to_remove.end(), std::greater());
+        std::sort(postcondition_to_remove.begin(), postcondition_to_remove.end(), std::greater());
+        for (auto precondition_index : precondition_to_remove)
+        {
             precondition.erase(precondition.begin() + precondition_index);
+        }
+        for (auto postcondition_index : postcondition_to_remove)
+        {
             postcondition.erase(postcondition.begin() + postcondition_index);
         }
     }
