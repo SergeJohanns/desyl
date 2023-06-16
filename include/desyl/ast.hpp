@@ -14,6 +14,7 @@ namespace desyl
     struct UnaryOperatorCall;
     struct BinaryOperatorCall;
 
+    constexpr int EXPRESSION_IDENTIFIER_INDEX = 1;
     using Expression = std::variant<
         Literal,
         Identifier,

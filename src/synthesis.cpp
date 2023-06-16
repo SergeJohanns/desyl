@@ -11,6 +11,7 @@ namespace desyl
         std::make_unique<EmpRule>(EmpRule()),
         std::make_unique<FrameRule>(FrameRule()),
         std::make_unique<WriteRule>(WriteRule()),
+        std::make_unique<ReadRule>(ReadRule()),
     };
 
     std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation)

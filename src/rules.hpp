@@ -5,7 +5,7 @@
 
 namespace desyl
 {
-    constexpr size_t RULES = 3;
+    constexpr size_t RULES = 4;
 
     // TODO: Switch to AST representation
     using Program = std::string;
@@ -84,6 +84,21 @@ namespace desyl
     };
 
     class WriteRule : public Rule
+    {
+    public:
+        std::vector<Derivation> apply(Goal const &goal) const;
+    };
+
+    class ReadContinuation : public Continuation
+    {
+        Program program;
+
+    public:
+        ReadContinuation(Identifier const &output, PointerDeclaration const &pointer);
+        Program join(std::vector<Program> const &results) const;
+    };
+
+    class ReadRule : public Rule
     {
     public:
         std::vector<Derivation> apply(Goal const &goal) const;
