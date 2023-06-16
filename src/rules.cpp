@@ -183,8 +183,17 @@ namespace desyl
         {
             for (size_t j = 0; j < postconditions.size(); ++j)
             {
-                if (*preconditions[i].base == *postconditions[j].base && preconditions[i].offset == postconditions[j].offset)
+                if (*preconditions[i].base == *postconditions[j].base && preconditions[i].offset == postconditions[j].offset && *preconditions[i].value != *postconditions[j].value)
                 {
+                    Vars term_vars;
+                    auto environment = goal.variables().environment;
+                    vars(*postconditions[i].value, term_vars);
+                    if (!std::includes(
+                            environment.begin(), environment.end(),
+                            term_vars.begin(), term_vars.end()))
+                    {
+                        continue;
+                    }
                     std::cout << "Using WRITE" << std::endl;
                     auto new_goal(goal);
                     auto new_declaration = PointerDeclaration{
