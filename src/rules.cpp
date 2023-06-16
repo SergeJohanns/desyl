@@ -113,7 +113,7 @@ namespace desyl
                 std::inserter(intersection, intersection.end()));
             if (intersection.size() == 0)
             {
-                return;
+                continue;
             }
             precondition.erase(precondition.begin() + precondition_index);
             postcondition.erase(postcondition.begin() + postcondition_index);
@@ -125,16 +125,16 @@ namespace desyl
         auto new_goal(goal);
         auto const existentials = new_goal.variables().existentials();
 
-        auto precondition_pointers = std::move(new_goal).spec.precondition.heap.pointer_declarations;
-        auto postcondition_pointers = std::move(new_goal).spec.postcondition.heap.pointer_declarations;
+        auto precondition_pointers = new_goal.spec.precondition.heap.pointer_declarations;
+        auto postcondition_pointers = new_goal.spec.postcondition.heap.pointer_declarations;
         remove_frame_overlap(existentials, precondition_pointers, postcondition_pointers);
 
-        auto precondition_arrays = std::move(new_goal).spec.precondition.heap.array_declarations;
-        auto postcondition_arrays = std::move(new_goal).spec.postcondition.heap.array_declarations;
+        auto precondition_arrays = new_goal.spec.precondition.heap.array_declarations;
+        auto postcondition_arrays = new_goal.spec.postcondition.heap.array_declarations;
         remove_frame_overlap(existentials, precondition_arrays, postcondition_arrays);
 
-        auto precondition_predicates = std::move(new_goal).spec.precondition.heap.predicate_calls;
-        auto postcondition_predicates = std::move(new_goal).spec.postcondition.heap.predicate_calls;
+        auto precondition_predicates = new_goal.spec.precondition.heap.predicate_calls;
+        auto postcondition_predicates = new_goal.spec.postcondition.heap.predicate_calls;
         remove_frame_overlap(existentials, precondition_predicates, postcondition_predicates);
 
         Derivation deriv{
