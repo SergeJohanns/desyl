@@ -29,7 +29,7 @@ namespace desyl
     struct UnaryOperatorCall
     {
         UnaryOperator type;
-        std::unique_ptr<Expression> operand;
+        std::shared_ptr<Expression> operand;
     };
 
     enum class BinaryOperator
@@ -48,8 +48,8 @@ namespace desyl
     struct BinaryOperatorCall
     {
         BinaryOperator type;
-        std::unique_ptr<Expression> lhs;
-        std::unique_ptr<Expression> rhs;
+        std::shared_ptr<Expression> lhs;
+        std::shared_ptr<Expression> rhs;
     };
 
     struct ArrayDeclaration
@@ -60,9 +60,9 @@ namespace desyl
 
     struct PointerDeclaration
     {
-        std::unique_ptr<Expression> base;
+        std::shared_ptr<Expression> base;
         int offset;
-        std::unique_ptr<Expression> value;
+        std::shared_ptr<Expression> value;
     };
 
     struct PredicateCall
