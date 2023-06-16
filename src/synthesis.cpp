@@ -58,6 +58,7 @@ namespace desyl
     void synthesize_query(Goal const &spec)
     {
         auto res = with_rules(all_rules, spec);
+        std::cout << std::endl;
         if (res.has_value())
         {
             std::cout << res.value() << std::endl;

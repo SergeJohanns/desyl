@@ -9,10 +9,6 @@ std::string swap = "{true; <x,  0> -> a * <y, 0> -> b;} swap(loc x, loc y) {true
 
 int main()
 {
-    std::cout << desyl::example("!f => 4 == 5  < (-54 <= !-4)") << std::endl;
-    // desyl::Query query = desyl::parse(empt);
-    // desyl::Query query = desyl::parse(fram);
-    // desyl::Query query = desyl::parse(writ);
     desyl::Query query = desyl::parse(swap);
     desyl::synthesize(std::move(query));
     return 0;
