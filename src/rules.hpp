@@ -5,7 +5,7 @@
 
 namespace desyl
 {
-    constexpr size_t RULES = 1;
+    constexpr size_t RULES = 2;
 
     // TODO: Switch to AST representation
     using Program = std::string;

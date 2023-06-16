@@ -8,7 +8,9 @@ namespace desyl
 {
     // Pointers because the subclasses take up different amounts of memory
     const std::unique_ptr<Rule> all_rules[RULES] = {
-        std::make_unique<EmpRule>(EmpRule())};
+        std::make_unique<EmpRule>(EmpRule()),
+        std::make_unique<FrameRule>(FrameRule()),
+    };
 
     std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation)
     {
