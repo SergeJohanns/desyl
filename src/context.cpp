@@ -2,25 +2,25 @@
 
 namespace desyl
 {
-    void vars(Literal const &, Vars) {}
+    void vars(Literal const &, Vars &) {}
 
-    void vars(Identifier const &element, Vars target)
+    void vars(Identifier const &element, Vars &target)
     {
         target.insert(element);
     }
 
-    void vars(UnaryOperatorCall const &element, Vars target)
+    void vars(UnaryOperatorCall const &element, Vars &target)
     {
         vars(*element.operand, target);
     }
 
-    void vars(BinaryOperatorCall const &element, Vars target)
+    void vars(BinaryOperatorCall const &element, Vars &target)
     {
         vars(*element.lhs, target);
         vars(*element.rhs, target);
     }
 
-    void vars(Expression const &element, Vars target)
+    void vars(Expression const &element, Vars &target)
     {
         std::visit(
             [&target](auto const &e)
@@ -28,18 +28,18 @@ namespace desyl
             element);
     }
 
-    void vars(ArrayDeclaration const &element, Vars target)
+    void vars(ArrayDeclaration const &element, Vars &target)
     {
         target.insert(element.name);
     }
 
-    void vars(PointerDeclaration const &element, Vars target)
+    void vars(PointerDeclaration const &element, Vars &target)
     {
         vars(*element.base, target);
         vars(*element.value, target);
     }
 
-    void vars(PredicateCall const &element, Vars target)
+    void vars(PredicateCall const &element, Vars &target)
     {
         for (auto const &arg : element.args)
         {
@@ -47,7 +47,7 @@ namespace desyl
         }
     }
 
-    void vars(Heap const &element, Vars target)
+    void vars(Heap const &element, Vars &target)
     {
         for (auto const &array : element.array_declarations)
         {
@@ -63,18 +63,18 @@ namespace desyl
         }
     }
 
-    void vars(Assertion const &element, Vars target)
+    void vars(Assertion const &element, Vars &target)
     {
         vars(element.heap, target);
         vars(element.proposition, target);
     }
 
-    void vars(TypedVariable const &element, Vars target)
+    void vars(TypedVariable const &element, Vars &target)
     {
         target.insert(element.name);
     }
 
-    void vars(FunctionSignature const &element, Vars target)
+    void vars(FunctionSignature const &element, Vars &target)
     {
         for (auto const &arg : element.args)
         {

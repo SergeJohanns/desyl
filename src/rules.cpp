@@ -187,7 +187,7 @@ namespace desyl
                 {
                     Vars term_vars;
                     auto environment = goal.variables().environment;
-                    vars(*postconditions[i].value, term_vars);
+                    vars(*postconditions[j].value, term_vars);
                     if (!std::includes(
                             environment.begin(), environment.end(),
                             term_vars.begin(), term_vars.end()))
