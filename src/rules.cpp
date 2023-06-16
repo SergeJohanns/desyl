@@ -11,8 +11,8 @@ namespace desyl
 {
     Goal::Goal(FunctionSpecification spec)
     {
-        this->spec = std::move(spec);
         vars(spec.signature, environment);
+        this->spec = std::move(spec);
     }
 
     VariableSnapshot Goal::variables() const
