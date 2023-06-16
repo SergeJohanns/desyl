@@ -54,6 +54,8 @@ namespace desyl
         bool operator==(BinaryOperatorCall const &other) const;
     };
 
+    std::string stringify_expression(Expression const &expression);
+
     struct ArrayDeclaration
     {
         Identifier name;
