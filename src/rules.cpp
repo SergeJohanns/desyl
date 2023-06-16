@@ -1,8 +1,10 @@
 #include <rules.hpp>
 
+#include <desyl/ast.hpp>
 #include <vector>
 #include <memory>
 #include <algorithm>
+#include <sstream>
 #include <iostream>
 
 namespace desyl
@@ -157,6 +159,48 @@ namespace desyl
         };
         std::vector<Derivation> result;
         result.push_back(std::move(deriv));
+        return result;
+    }
+
+    WriteContinuation::WriteContinuation(PointerDeclaration const &pointer)
+    {
+        std::ostringstream stream;
+        stream << "*(" << stringify_expression(*pointer.base) << " + " << pointer.offset << ") = " << stringify_expression(*pointer.value) << ";" << std::endl;
+        program = stream.str();
+    }
+
+    Program WriteContinuation::join(std::vector<Program> const &result) const
+    {
+        return result[0] + program;
+    }
+
+    std::vector<Derivation> WriteRule::apply(Goal const &goal) const
+    {
+        std::vector<Derivation> result;
+        auto &preconditions = goal.spec.precondition.heap.pointer_declarations;
+        auto &postconditions = goal.spec.postcondition.heap.pointer_declarations;
+        for (size_t i = 0; i < preconditions.size(); ++i)
+        {
+            for (size_t j = 0; j < postconditions.size(); ++j)
+            {
+                if (*preconditions[i].base == *postconditions[j].base && preconditions[i].offset == postconditions[j].offset)
+                {
+                    std::cout << "Using WRITE" << std::endl;
+                    auto new_goal(goal);
+                    auto new_declaration = PointerDeclaration{
+                        .base = preconditions[i].base,
+                        .offset = preconditions[i].offset,
+                        .value = postconditions[j].value,
+                    };
+                    new_goal.spec.precondition.heap.pointer_declarations[i] = new_declaration;
+                    Derivation deriv{
+                        .goals = std::vector<Goal>{new_goal},
+                        .continuation = std::make_unique<WriteContinuation>(WriteContinuation(new_declaration)),
+                    };
+                    result.push_back(std::move(deriv));
+                }
+            }
+        }
         return result;
     }
 }
