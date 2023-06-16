@@ -172,7 +172,7 @@ namespace desyl
 
     Program WriteContinuation::join(std::vector<Program> const &result) const
     {
-        return result[0] + program;
+        return program + result[0];
     }
 
     std::vector<Derivation> WriteRule::apply(Goal const &goal) const
@@ -223,7 +223,7 @@ namespace desyl
 
     Program ReadContinuation::join(std::vector<Program> const &result) const
     {
-        return result[0] + program;
+        return program + result[0];
     }
 
     Identifier substitute(Identifier &target, Identifier const &before, Identifier const &after)
