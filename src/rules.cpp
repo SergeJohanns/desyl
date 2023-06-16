@@ -133,13 +133,13 @@ namespace desyl
 
         auto &precondition_arrays = new_goal.spec.precondition.heap.array_declarations;
         auto &postcondition_arrays = new_goal.spec.postcondition.heap.array_declarations;
-        size_t array_size = precondition_pointers.size();
+        size_t array_size = precondition_arrays.size();
         remove_frame_overlap(existentials, precondition_arrays, postcondition_arrays);
         bool array_changed = array_size != precondition_arrays.size();
 
         auto &precondition_predicates = new_goal.spec.precondition.heap.predicate_calls;
         auto &postcondition_predicates = new_goal.spec.postcondition.heap.predicate_calls;
-        size_t predicate_size = precondition_pointers.size();
+        size_t predicate_size = precondition_predicates.size();
         remove_frame_overlap(existentials, precondition_predicates, postcondition_predicates);
         bool predicate_changed = predicate_size != precondition_predicates.size();
 
