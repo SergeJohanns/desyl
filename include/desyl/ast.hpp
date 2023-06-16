@@ -30,6 +30,7 @@ namespace desyl
     {
         UnaryOperator type;
         std::shared_ptr<Expression> operand;
+        bool operator==(UnaryOperatorCall const &other) const;
     };
 
     enum class BinaryOperator
@@ -50,6 +51,7 @@ namespace desyl
         BinaryOperator type;
         std::shared_ptr<Expression> lhs;
         std::shared_ptr<Expression> rhs;
+        bool operator==(BinaryOperatorCall const &other) const;
     };
 
     struct ArrayDeclaration
@@ -64,7 +66,7 @@ namespace desyl
         std::shared_ptr<Expression> base;
         int offset;
         std::shared_ptr<Expression> value;
-        bool operator==(PointerDeclaration const &other) const = default;
+        bool operator==(PointerDeclaration const &other) const;
     };
 
     struct PredicateCall

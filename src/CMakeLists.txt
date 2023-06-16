@@ -1,6 +1,6 @@
 set(HEADER_LIST "${PROJECT_SOURCE_DIR}/include/desyl/desyllib.hpp")
 
-add_library(desyl_lib desyllib.cpp grammar.cpp synthesis.cpp rules.cpp context.cpp)
+add_library(desyl_lib desyllib.cpp grammar.cpp synthesis.cpp rules.cpp context.cpp ast.cpp)
 target_link_libraries(desyl_lib PRIVATE foonathan::lexy)
 
 target_include_directories(desyl_lib PUBLIC ../include)
