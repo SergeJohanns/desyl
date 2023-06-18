@@ -1,7 +1,7 @@
 #pragma once
 
 #include <desyl/ast.hpp>
-#include <contex.hpp>
+#include <context.hpp>
 
 namespace desyl
 {
