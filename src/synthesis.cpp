@@ -6,6 +6,9 @@
 
 namespace desyl
 {
+    // Forward declaration (no header) because the function is not public but is part of mutual recursion
+    std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Goal const &goal);
+
     // Pointers because the subclasses take up different amounts of memory
     const std::unique_ptr<Rule> all_rules[RULES] = {
         std::make_unique<EmpRule>(EmpRule()),
