@@ -4,19 +4,12 @@
 #include <optional>
 #include <desyl/ast.hpp>
 #include <rules.hpp>
+#include <all_rules.hpp>
 
 namespace desyl
 {
     // Forward declaration (no header) because the function is not public but is part of mutual recursion
     std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Goal const &goal);
-
-    // Pointers because the subclasses take up different amounts of memory
-    const std::unique_ptr<Rule> all_rules[RULES] = {
-        std::make_unique<EmpRule>(EmpRule()),
-        std::make_unique<FrameRule>(FrameRule()),
-        std::make_unique<WriteRule>(WriteRule()),
-        std::make_unique<ReadRule>(ReadRule()),
-    };
 
     std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation)
     {
