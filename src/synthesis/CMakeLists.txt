@@ -1,4 +1,4 @@
-add_library(synthesis synthesis.cpp rules.cpp)
+add_library(synthesis synthesis.cpp goal.cpp rules.cpp)
 
 target_link_libraries(synthesis PRIVATE context)
 
