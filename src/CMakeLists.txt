@@ -7,8 +7,10 @@ add_subdirectory(context)
 add_subdirectory(synthesis)
 target_link_libraries(desyl_lib PRIVATE ast parser context synthesis)
 
-target_include_directories(desyl_lib PUBLIC ../include)
-target_include_directories(desyl_lib PRIVATE . PRIVATE ./include)
+target_include_directories(desyl_lib
+    PUBLIC "${PROJECT_SOURCE_DIR}/include"
+    PRIVATE "${PROJECT_SOURCE_DIR}/src/include"
+)
 
 source_group(
     TREE "${PROJECT_SOURCE_DIR}/include"
