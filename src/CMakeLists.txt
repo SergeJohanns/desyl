@@ -6,7 +6,7 @@ add_subdirectory(ast)
 target_link_libraries(desyl_lib PRIVATE ast)
 
 target_include_directories(desyl_lib PUBLIC ../include)
-target_include_directories(desyl_lib PRIVATE .)
+target_include_directories(desyl_lib PRIVATE . PRIVATE ./include)
 
 source_group(
     TREE "${PROJECT_SOURCE_DIR}/include"
