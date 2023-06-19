@@ -1,6 +1,9 @@
 # CMake generated files
 build/
 
+# Doxygen generated files
+docs
+
 # Prerequisites
 *.d
 

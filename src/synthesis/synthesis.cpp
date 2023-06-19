@@ -11,6 +11,10 @@ namespace desyl
     // Forward declaration (no header) because the function is not public but is part of mutual recursion
     std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Goal const &goal);
 
+    /// @brief Try to synthesize programs for a list of subgoals and join them
+    /// @param goals The subgoals to synthesize
+    /// @param continuation The continuation to join the synthesized programs
+    /// @return The synthesized program, if any
     std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation)
     {
         auto result = std::vector<Program>{};
@@ -26,6 +30,10 @@ namespace desyl
         return continuation.join(result);
     }
 
+    /// @brief Try to synthesize a program from a list of subderivations of a rule
+    /// @param subderivs The subderivations to try
+    /// @param rule The rule that was applied to get the subderivations
+    /// @return The synthesized program, if any
     std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &)
     {
         for (auto const &deriv : subderivs)
@@ -39,6 +47,10 @@ namespace desyl
         return std::nullopt;
     }
 
+    /// @brief Synthesize a program from a specification using a set of rules
+    /// @param rules The rules to use
+    /// @param goal The specification to synthesize
+    /// @return The synthesized program, if any
     std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Goal const &goal)
     {
         for (auto &rule : rules)
@@ -52,6 +64,8 @@ namespace desyl
         return std::nullopt;
     }
 
+    /// @brief Synthesize a function from a specification
+    /// @param spec The specification to synthesize
     void synthesize_query(Goal const &spec)
     {
         auto res = with_rules(all_rules, spec);
