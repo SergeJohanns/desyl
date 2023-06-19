@@ -3,6 +3,7 @@
 #include <iostream>
 #include <optional>
 #include <desyl/ast.hpp>
+#include <rules.hpp>
 
 namespace desyl
 {

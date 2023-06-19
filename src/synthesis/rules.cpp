@@ -1,6 +1,7 @@
 #include <rules.hpp>
 
 #include <desyl/ast.hpp>
+#include <synthesis.hpp>
 #include <overload.hpp>
 #include <vector>
 #include <memory>

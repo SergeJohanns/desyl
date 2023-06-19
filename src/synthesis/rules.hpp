@@ -2,6 +2,7 @@
 
 #include <desyl/ast.hpp>
 #include <context.hpp>
+#include <synthesis.hpp>
 
 namespace desyl
 {
@@ -9,25 +10,6 @@ namespace desyl
 
     // TODO: Switch to AST representation
     using Program = std::string;
-
-    struct VariableSnapshot
-    {
-        Vars precondition;
-        Vars environment;
-        Vars postcondition;
-
-        Vars all();
-        Vars ghosts();
-        Vars existentials();
-    };
-
-    struct Goal
-    {
-        Goal(FunctionSpecification spec);
-        FunctionSpecification spec;
-        Vars environment;
-        VariableSnapshot variables() const;
-    };
 
     class Continuation
     {
