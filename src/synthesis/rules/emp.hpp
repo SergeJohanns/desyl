@@ -4,15 +4,6 @@
 
 namespace desyl
 {
-    class ConstantContinuation : public Continuation
-    {
-        Program program;
-
-    public:
-        ConstantContinuation(Program program) : program(program) {}
-        Program join(std::vector<Program> const &) const;
-    };
-
     class EmpRule : public Rule
     {
     public:

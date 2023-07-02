@@ -1,14 +1,10 @@
 #include <emp.hpp>
 
+#include <generic_continuations.hpp>
 #include <iostream>
 
 namespace desyl
 {
-    Program ConstantContinuation::join(std::vector<Program> const &) const
-    {
-        return program;
-    }
-
     std::vector<Derivation> EmpRule::apply(Goal const &goal) const
     {
         auto const &precondition_empty = std::move(goal).spec.precondition.heap.pointer_declarations.size() == 0;

@@ -1,15 +1,11 @@
 #include <frame.hpp>
 
+#include <generic_continuations.hpp>
 #include <iostream>
 #include <algorithm>
 
 namespace desyl
 {
-    Program IdentityContinuation::join(std::vector<Program> const &result) const
-    {
-        return result[0];
-    }
-
     template <typename HeapElement>
     void remove_frame_overlap(Vars const &existentials, std::vector<HeapElement> &precondition, std::vector<HeapElement> &postcondition)
     {
