@@ -14,7 +14,7 @@ namespace desyl
             std::cout << "Using EMP" << std::endl;
             auto deriv = Derivation{
                 .goals = std::vector<Goal>{},
-                .continuation = std::make_unique<ConstantContinuation>(ConstantContinuation("emp;\n")),
+                .continuation = std::make_unique<ConstantContinuation>(ConstantContinuation(goal.spec.signature)),
             };
             std::vector<Derivation> result;
             result.push_back(std::move(deriv));

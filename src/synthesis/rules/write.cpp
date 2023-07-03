@@ -10,12 +10,12 @@ namespace desyl
     {
         std::ostringstream stream;
         stream << "*(" << stringify_expression(*pointer.base) << " + " << pointer.offset << ") = " << stringify_expression(*pointer.value) << ";" << std::endl;
-        program = stream.str();
+        line = stream.str();
     }
 
     Program WriteContinuation::join(std::vector<Program> const &result) const
     {
-        return program + result[0];
+        return result[0].add_line(line);
     }
 
     std::vector<Derivation> WriteRule::apply(Goal const &goal) const

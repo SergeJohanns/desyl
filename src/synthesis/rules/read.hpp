@@ -6,7 +6,7 @@ namespace desyl
 {
     class ReadContinuation : public Continuation
     {
-        Program program;
+        Line line;
 
     public:
         ReadContinuation(Identifier const &output, PointerDeclaration const &pointer);

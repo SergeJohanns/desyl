@@ -10,12 +10,12 @@ namespace desyl
     {
         std::ostringstream stream;
         stream << output << " = *(" << stringify_expression(*pointer.base) << " + " << pointer.offset << ");" << std::endl;
-        program = stream.str();
+        line = stream.str();
     }
 
     Program ReadContinuation::join(std::vector<Program> const &result) const
     {
-        return program + result[0];
+        return result[0].add_line(line);
     }
 
     Identifier substitute(Identifier &target, Identifier const &before, Identifier const &after)

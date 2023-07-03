@@ -12,10 +12,10 @@ namespace desyl
 
     class ConstantContinuation : public Continuation
     {
-        Program program;
+        std::string outer;
 
     public:
-        ConstantContinuation(Program program) : program(program) {}
+        ConstantContinuation(FunctionSignature const &signature);
         Program join(std::vector<Program> const &) const;
     };
 }

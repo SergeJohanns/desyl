@@ -6,7 +6,7 @@ namespace desyl
 {
     class WriteContinuation : public Continuation
     {
-        Program program;
+        Line line;
 
     public:
         WriteContinuation(PointerDeclaration const &pointer);
