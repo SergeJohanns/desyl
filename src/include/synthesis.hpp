@@ -12,9 +12,9 @@ namespace desyl
         Vars environment;
         Vars postcondition;
 
-        Vars all();
-        Vars ghosts();
-        Vars existentials();
+        Vars all() const;
+        Vars ghosts() const;
+        Vars existentials() const;
     };
 
     struct Goal

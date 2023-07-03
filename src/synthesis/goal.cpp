@@ -22,7 +22,7 @@ namespace desyl
         };
     }
 
-    Vars VariableSnapshot::all()
+    Vars VariableSnapshot::all() const
     {
         Vars result;
         result.insert(precondition.begin(), precondition.end());
@@ -31,7 +31,7 @@ namespace desyl
         return result;
     }
 
-    Vars VariableSnapshot::ghosts()
+    Vars VariableSnapshot::ghosts() const
     {
         Vars result;
         std::set_difference(
@@ -41,7 +41,7 @@ namespace desyl
         return result;
     }
 
-    Vars VariableSnapshot::existentials()
+    Vars VariableSnapshot::existentials() const
     {
         // We need to union the signature and precondition separately because reusing the result
         // as both input and output is UB
