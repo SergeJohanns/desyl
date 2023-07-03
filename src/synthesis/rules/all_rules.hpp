@@ -17,9 +17,9 @@ namespace desyl
     const std::unique_ptr<Rule> all_rules[RULES] = {
         std::make_unique<EmpRule>(EmpRule()),
         std::make_unique<FrameRule>(FrameRule()),
-        std::make_unique<WriteRule>(WriteRule()),
-        std::make_unique<ReadRule>(ReadRule()),
         std::make_unique<HeapUnifyRule>(HeapUnifyRule()),
         std::make_unique<PickRule>(PickRule()),
+        std::make_unique<WriteRule>(WriteRule()),
+        std::make_unique<ReadRule>(ReadRule()),
     };
 }
