@@ -4,7 +4,7 @@
 
 namespace desyl
 {
-    void substitute_expression(Expression &expression, Identifier const &identifier, Expression const &substitution);
+    Expression substitute_expression(Expression const &expression, Identifier const &identifier, Expression const &substitution);
 
     using Substitutions = std::unordered_map<Identifier, Expression>;
 

@@ -1,25 +1,31 @@
 #include <substitution.hpp>
-#include <substitution.hpp>
 
 namespace desyl
 {
-    void substitute_expression(Expression &expression, Identifier const &identifier, Expression const &substitution)
+    Expression substitute_expression(Expression const &expression, Identifier const &identifier, Expression const &substitution)
     {
         if (std::holds_alternative<Identifier>(expression) && std::get<Identifier>(expression) == identifier)
         {
-            expression = substitution;
+            return substitution;
         }
         else if (std::holds_alternative<UnaryOperatorCall>(expression))
         {
             auto &call = std::get<UnaryOperatorCall>(expression);
-            substitute_expression(*call.operand, identifier, substitution);
+            return UnaryOperatorCall{
+                .type = call.type,
+                .operand = std::make_unique<Expression>(substitute_expression(*call.operand, identifier, substitution)),
+            };
         }
         else if (std::holds_alternative<BinaryOperatorCall>(expression))
         {
             auto &call = std::get<BinaryOperatorCall>(expression);
-            substitute_expression(*call.lhs, identifier, substitution);
-            substitute_expression(*call.rhs, identifier, substitution);
+            return BinaryOperatorCall{
+                .type = call.type,
+                .lhs = std::make_unique<Expression>(substitute_expression(*call.lhs, identifier, substitution)),
+                .rhs = std::make_unique<Expression>(substitute_expression(*call.rhs, identifier, substitution)),
+            };
         }
+        return expression;
     }
 
     bool subtitutions_conflict(Substitutions const &first, Substitutions const &second)
@@ -39,11 +45,11 @@ namespace desyl
         Goal substituted(goal);
         for (auto const &[identifier, expression] : substitutions)
         {
-            substitute_expression(substituted.spec.postcondition.proposition, identifier, expression);
+            substituted.spec.postcondition.proposition = substitute_expression(substituted.spec.postcondition.proposition, identifier, expression);
             for (auto &pointer_declaration : substituted.spec.postcondition.heap.pointer_declarations)
             {
-                substitute_expression(*pointer_declaration.base, identifier, expression);
-                substitute_expression(*pointer_declaration.value, identifier, expression);
+                pointer_declaration.base = std::make_shared<Expression>(substitute_expression(*pointer_declaration.base, identifier, expression));
+                pointer_declaration.value = std::make_shared<Expression>(substitute_expression(*pointer_declaration.value, identifier, expression));
             }
         }
         return substituted;
