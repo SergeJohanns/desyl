@@ -44,7 +44,7 @@ namespace desyl
         }
         if (derivations.size() > 0)
         {
-            std::cout << "Applying PICK: " << derivations.size() << std::endl;
+            std::cout << "Using PICK" << std::endl;
         }
         return derivations;
     }

@@ -112,10 +112,6 @@ namespace desyl
         std::vector<Derivation> derivations;
         for (auto const &substitution : substitutions)
         {
-            for (auto const &[identifier, expression] : substitution)
-            {
-                std::cout << identifier << " := " << stringify_expression(expression) << std::endl;
-            }
             derivations.push_back(Derivation{
                 .goals = std::vector<Goal>{substitute(goal, substitution)},
                 .continuation = std::make_unique<IdentityContinuation>(IdentityContinuation()),
