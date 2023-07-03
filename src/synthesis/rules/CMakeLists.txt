@@ -1,4 +1,4 @@
-add_library(rules emp.cpp frame.cpp write.cpp read.cpp heap_unify.cpp generic_continuations.cpp substitution.cpp)
+add_library(rules emp.cpp frame.cpp write.cpp read.cpp heap_unify.cpp pick.cpp generic_continuations.cpp substitution.cpp)
 
 target_include_directories(rules
     PUBLIC "${PROJECT_SOURCE_DIR}/include"

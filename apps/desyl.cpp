@@ -14,7 +14,7 @@ std::string notsure = "{true; <x,  0> -> a * <y, 0> -> b;} notsure(loc x, loc y)
 
 int main()
 {
-    desyl::Query query = desyl::parse(pick);
+    desyl::Query query = desyl::parse(swap);
     desyl::synthesize(std::move(query));
     return 0;
 }
