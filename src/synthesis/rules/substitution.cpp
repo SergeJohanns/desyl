@@ -1,4 +1,5 @@
 #include <substitution.hpp>
+#include <substitution.hpp>
 
 namespace desyl
 {
@@ -19,5 +20,32 @@ namespace desyl
             substitute_expression(*call.lhs, identifier, substitution);
             substitute_expression(*call.rhs, identifier, substitution);
         }
+    }
+
+    bool subtitutions_conflict(Substitutions const &first, Substitutions const &second)
+    {
+        for (auto const &[identifier, expression] : first)
+        {
+            if (second.find(identifier) != second.end() && second.at(identifier) != expression)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Goal substitute(Goal const &goal, Substitutions const &substitutions)
+    {
+        Goal substituted(goal);
+        for (auto const &[identifier, expression] : substitutions)
+        {
+            substitute_expression(substituted.spec.postcondition.proposition, identifier, expression);
+            for (auto &pointer_declaration : substituted.spec.postcondition.heap.pointer_declarations)
+            {
+                substitute_expression(*pointer_declaration.base, identifier, expression);
+                substitute_expression(*pointer_declaration.value, identifier, expression);
+            }
+        }
+        return substituted;
     }
 }

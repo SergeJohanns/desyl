@@ -5,26 +5,11 @@
 #include <overload.hpp>
 #include <variant>
 #include <algorithm>
-#include <unordered_map>
 #include <stdexcept>
 #include <iostream>
 
 namespace desyl
 {
-    using Substitutions = std::unordered_map<Identifier, Expression>;
-
-    bool subtitutions_conflict(Substitutions const &first, Substitutions const &second)
-    {
-        for (auto const &[identifier, expression] : first)
-        {
-            if (second.find(identifier) != second.end() && second.at(identifier) != expression)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     std::optional<Substitutions> unify(Expression const &domain, Expression const &codomain, Vars const &variables)
     {
         if (domain == codomain)
@@ -115,24 +100,6 @@ namespace desyl
         // TODO
     }
 
-    Derivation substitute(Goal const &goal, Substitutions const &substitutions)
-    {
-        Goal substituted(goal);
-        for (auto const &[identifier, expression] : substitutions)
-        {
-            substitute_expression(substituted.spec.postcondition.proposition, identifier, expression);
-            for (auto &pointer_declaration : substituted.spec.postcondition.heap.pointer_declarations)
-            {
-                substitute_expression(*pointer_declaration.base, identifier, expression);
-                substitute_expression(*pointer_declaration.value, identifier, expression);
-            }
-        }
-        return Derivation{
-            .goals = std::vector<Goal>{substituted},
-            .continuation = std::make_unique<IdentityContinuation>(IdentityContinuation()),
-        };
-    }
-
     std::vector<Derivation> HeapUnifyRule::apply(Goal const &goal) const
     {
         std::vector<Substitutions> substitutions;
@@ -149,7 +116,10 @@ namespace desyl
             {
                 std::cout << identifier << " := " << stringify_expression(expression) << std::endl;
             }
-            derivations.push_back(substitute(goal, substitution));
+            derivations.push_back(Derivation{
+                .goals = std::vector<Goal>{substitute(goal, substitution)},
+                .continuation = std::make_unique<IdentityContinuation>(IdentityContinuation()),
+            });
         }
         return derivations;
     }
