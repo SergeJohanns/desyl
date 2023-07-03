@@ -29,7 +29,6 @@ namespace desyl
                     std::set_intersection(term.begin(), term.end(), existentials.begin(), existentials.end(), std::inserter(intersection, intersection.end()));
                     if (intersection.size() == 0)
                     {
-                        std::cout << "using last FRAME" << std::endl;
                         derivations.push_back(Derivation{
                             .goals = {new_goal},
                             .continuation = std::make_unique<IdentityContinuation>(),

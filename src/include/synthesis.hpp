@@ -6,19 +6,32 @@
 
 namespace desyl
 {
+    /// @brief A fixed variable classification made at the start so variables don't become existential halfway through synthesis.
+    struct VariableClassification
+    {
+        Vars ghosts;
+        Vars existentials;
+
+        VariableClassification() = default;
+        VariableClassification(Vars const &precondition, Vars const &environment, Vars const &postcondition);
+    };
+
     struct VariableSnapshot
     {
-        Vars precondition;
+        Vars variables;
         Vars environment;
-        Vars postcondition;
+        VariableClassification classification;
 
         Vars all() const;
         Vars ghosts() const;
         Vars existentials() const;
     };
 
-    struct Goal
+    class Goal
     {
+        VariableClassification classification;
+
+    public:
         Goal(FunctionSpecification spec);
         FunctionSpecification spec;
         Vars environment;

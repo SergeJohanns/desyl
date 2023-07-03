@@ -1,58 +1,71 @@
 #include <synthesis.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 namespace desyl
 {
+    VariableClassification::VariableClassification(Vars const &precondition, Vars const &environment, Vars const &postcondition)
+    {
+        Vars logic_variables;
+        std::set_union(
+            precondition.begin(), precondition.end(),
+            postcondition.begin(), postcondition.end(),
+            std::inserter(logic_variables, logic_variables.end()));
+        std::set_difference(
+            logic_variables.begin(), logic_variables.end(),
+            environment.begin(), environment.end(),
+            std::inserter(ghosts, ghosts.end()));
+        std::set_difference(
+            ghosts.begin(), ghosts.end(),
+            precondition.begin(), precondition.end(),
+            std::inserter(existentials, existentials.end()));
+    }
+
     Goal::Goal(FunctionSpecification spec)
     {
         vars(spec.signature, environment);
+        Vars precondition, postcondition;
+        vars(spec.precondition, precondition);
+        vars(spec.postcondition, postcondition);
         this->spec = std::move(spec);
+        this->classification = VariableClassification(precondition, environment, postcondition);
     }
 
     VariableSnapshot Goal::variables() const
     {
-        Vars precondition, postcondition;
-        vars(spec.precondition, precondition);
-        vars(spec.postcondition, postcondition);
+        Vars all;
+        all.insert(environment.begin(), environment.end());
+        vars(spec.precondition, all);
+        vars(spec.postcondition, all);
         return VariableSnapshot{
-            .precondition = std::move(precondition),
-            .environment = std::move(environment),
-            .postcondition = std::move(postcondition),
+            .variables = std::move(all),
+            .environment = environment,
+            .classification = classification,
         };
     }
 
     Vars VariableSnapshot::all() const
     {
-        Vars result;
-        result.insert(precondition.begin(), precondition.end());
-        result.insert(environment.begin(), environment.end());
-        result.insert(postcondition.begin(), postcondition.end());
-        return result;
+        return variables;
     }
 
     Vars VariableSnapshot::ghosts() const
     {
         Vars result;
-        std::set_difference(
-            precondition.begin(), precondition.end(),
-            environment.begin(), environment.end(),
+        std::set_intersection(
+            variables.begin(), variables.end(),
+            classification.ghosts.begin(), classification.ghosts.end(),
             std::inserter(result, result.end()));
         return result;
     }
 
     Vars VariableSnapshot::existentials() const
     {
-        // We need to union the signature and precondition separately because reusing the result
-        // as both input and output is UB
-        Vars exclusion, result;
-        std::set_union(
-            precondition.begin(), precondition.end(),
-            environment.begin(), environment.end(),
-            std::inserter(exclusion, exclusion.end()));
-        std::set_difference(
-            postcondition.begin(), postcondition.end(),
-            exclusion.begin(), exclusion.end(),
+        Vars result;
+        std::set_intersection(
+            variables.begin(), variables.end(),
+            classification.existentials.begin(), classification.existentials.end(),
             std::inserter(result, result.end()));
         return result;
     }
