@@ -5,7 +5,7 @@ namespace desyl
     Program Program::add_line(Line const &line) const
     {
         Program out(*this);
-        out.code += std::string(indentation_level * 4, ' ') + line;
+        out.code = std::string(indentation_level * 4, ' ') + line + out.code;
         return out;
     }
 
