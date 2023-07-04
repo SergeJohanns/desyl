@@ -74,12 +74,28 @@ namespace desyl
             using operand = ordering;
         };
 
+        static constexpr auto land = dsl::op(LEXY_LIT("&&"));
+
+        struct logical_and : dsl::infix_op_left
+        {
+            static constexpr auto op = land;
+            using operand = equality;
+        };
+
+        static constexpr auto lor = dsl::op(LEXY_LIT("||"));
+
+        struct logical_or : dsl::infix_op_left
+        {
+            static constexpr auto op = lor;
+            using operand = logical_and;
+        };
+
         static constexpr auto impl = dsl::op(LEXY_LIT("=>"));
 
         struct implication : dsl::infix_op_right
         {
             static constexpr auto op = impl;
-            using operand = equality;
+            using operand = logical_or;
         };
 
         using operation = implication;
@@ -106,6 +122,10 @@ namespace desyl
             { return BinaryOperatorCall{BinaryOperator::Eq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<neq>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Neq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<land>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::And, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<lor>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Or, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<impl>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Implies, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; });
     };

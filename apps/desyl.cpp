@@ -16,10 +16,12 @@ std::string four_swap = "{true; <x,  0> -> a * <y, 0> -> b * <z, 0> -> c * <zz, 
 std::string pick = "{true; <x,  0> -> 239 * <y, 0> -> 30;} pick(loc x, loc y) {true; <x, 0> -> z * <y, 0> -> z;}";
 // Requires pick
 std::string notsure = "{true; <x,  0> -> a * <y, 0> -> b;} notsure(loc x, loc y) {true; <x, 0> -> c * <c, 0> -> 0;}";
+// Requires branch?
+std::string max = "{ true; <r, 0> -> null; } max(loc r, int x, int y) { x <= m || y <= m; <r, 0> -> m; }";
 
 int main()
 {
-    desyl::Query query = desyl::parse(notsure);
+    desyl::Query query = desyl::parse(max);
     desyl::synthesize(std::move(query));
     return 0;
 }
