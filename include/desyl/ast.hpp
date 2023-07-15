@@ -36,12 +36,17 @@ namespace desyl
 
     enum class BinaryOperator
     {
-        Eq,
-        Neq,
+        Mul,
+        Div,
+        Mod,
+        Add,
+        Sub,
         Lt,
         Leq,
         Gt,
         Geq,
+        Eq,
+        Neq,
         And,
         Or,
         Implies,

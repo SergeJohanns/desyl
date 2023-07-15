@@ -55,6 +55,25 @@ namespace desyl
             using operand = dsl::atom;
         };
 
+        static constexpr auto mul = dsl::op(dsl::lit_c<'*'>);
+        static constexpr auto div = dsl::op(dsl::lit_c<'/'>);
+        static constexpr auto mod = dsl::op(dsl::lit_c<'%'>);
+
+        struct multiplication : dsl::infix_op_left
+        {
+            static constexpr auto op = mul / div / mod;
+            using operand = prefix;
+        };
+
+        static constexpr auto add = dsl::op(dsl::lit_c<'+'>);
+        static constexpr auto sub = dsl::op(dsl::lit_c<'-'>);
+
+        struct addition : dsl::infix_op_left
+        {
+            static constexpr auto op = add / sub;
+            using operand = multiplication;
+        };
+
         static constexpr auto lt = dsl::op(dsl::lit_c<'<'>);
         static constexpr auto leq = dsl::op(LEXY_LIT("<="));
         static constexpr auto gt = dsl::op(dsl::lit_c<'>'>);
@@ -63,7 +82,7 @@ namespace desyl
         struct ordering : dsl::infix_op_left
         {
             static constexpr auto op = leq / lt / geq / gt;
-            using operand = prefix;
+            using operand = addition;
         };
 
         static constexpr auto eq = dsl::op(LEXY_LIT("=="));
@@ -111,6 +130,16 @@ namespace desyl
             { return UnaryOperatorCall{UnaryOperator::Neg, std::make_unique<Expression>(std::move(operand))}; },
             [](lexy::op<neg>, Expression operand)
             { return UnaryOperatorCall{UnaryOperator::Not, std::make_unique<Expression>(std::move(operand))}; },
+            [](Expression lhs, lexy::op<mul>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Mul, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<div>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Div, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<mod>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Mod, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<add>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Add, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<sub>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Sub, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<lt>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Lt, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<leq>, Expression rhs)
