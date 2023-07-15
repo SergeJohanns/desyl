@@ -45,9 +45,9 @@ namespace desyl
         Goal substituted(goal);
         for (auto const &[identifier, expression] : substitutions)
         {
-            for (auto &expression : substituted.spec.precondition.proposition)
+            for (size_t i = 0; i < substituted.spec.precondition.proposition.size(); ++i)
             {
-                expression = substitute_expression(expression, identifier, expression);
+                substituted.spec.precondition.proposition[i] = substitute_expression(substituted.spec.precondition.proposition[i], identifier, expression);
             }
             for (auto &pointer_declaration : substituted.spec.postcondition.heap.pointer_declarations)
             {
