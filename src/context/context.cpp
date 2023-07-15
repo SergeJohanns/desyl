@@ -28,6 +28,14 @@ namespace desyl
             element);
     }
 
+    void vars(Proposition const &element, Vars &target)
+    {
+        for (auto const &expression : element)
+        {
+            vars(expression, target);
+        }
+    }
+
     void vars(ArrayDeclaration const &element, Vars &target)
     {
         target.insert(element.name);

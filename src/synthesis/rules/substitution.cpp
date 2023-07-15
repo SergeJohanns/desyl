@@ -45,7 +45,10 @@ namespace desyl
         Goal substituted(goal);
         for (auto const &[identifier, expression] : substitutions)
         {
-            substituted.spec.postcondition.proposition = substitute_expression(substituted.spec.postcondition.proposition, identifier, expression);
+            for (auto &expression : substituted.spec.precondition.proposition)
+            {
+                expression = substitute_expression(expression, identifier, expression);
+            }
             for (auto &pointer_declaration : substituted.spec.postcondition.heap.pointer_declarations)
             {
                 pointer_declaration.base = std::make_shared<Expression>(substitute_expression(*pointer_declaration.base, identifier, expression));

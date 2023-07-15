@@ -25,7 +25,7 @@ std::string three_max = "{true; <r, 0> -> null;} max(loc r, int x, int y) { x <=
 
 int main()
 {
-    desyl::Query query = desyl::parse(notsure);
+    desyl::Query query = desyl::parse(empty);
     desyl::synthesize(std::move(query));
     return 0;
 }

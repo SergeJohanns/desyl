@@ -86,7 +86,7 @@ namespace desyl
         std::vector<PredicateCall> predicate_calls;
     };
 
-    using Proposition = Expression;
+    using Proposition = std::vector<Expression>;
 
     struct Assertion
     {

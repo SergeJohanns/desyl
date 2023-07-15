@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <stack>
 #include <lexy/dsl.hpp>
 #include <lexy/dsl/separator.hpp>
 #include <lexy/dsl/brackets.hpp>
@@ -223,9 +224,38 @@ namespace desyl
         return std::move(const_result).value();
     }
 
+    struct proposition
+    {
+        static constexpr auto rule = dsl::p<expression>;
+        static constexpr auto value = lexy::callback<Proposition>(
+            [](Expression expression)
+            {
+                std::stack<Expression> stack;
+                stack.push(std::move(expression));
+                std::vector<Expression> result;
+                while (!stack.empty())
+                {
+                    auto top = std::move(stack.top());
+                    stack.pop();
+                    auto binary_operator_call = std::get_if<BinaryOperatorCall>(&top);
+                    auto var = std::get_if<Identifier>(&top);
+                    if (binary_operator_call && binary_operator_call->type == BinaryOperator::And)
+                    {
+                        stack.push(std::move(*binary_operator_call->rhs));
+                        stack.push(std::move(*binary_operator_call->lhs));
+                    }
+                    else if (!var || *var != "true")
+                    {
+                        result.push_back(std::move(top));
+                    }
+                }
+                return Proposition{std::move(result)};
+            });
+    };
+
     struct assertion
     {
-        static constexpr auto rule = dsl::curly_bracketed(dsl::p<expression> + dsl::lit_c<';'> + dsl::p<heap>);
+        static constexpr auto rule = dsl::curly_bracketed(dsl::p<proposition> + dsl::lit_c<';'> + dsl::p<heap>);
         static constexpr auto value = lexy::construct<Assertion>;
     };
 

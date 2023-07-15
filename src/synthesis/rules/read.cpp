@@ -52,7 +52,10 @@ namespace desyl
 
     void substitute(Assertion &target, Identifier const &before, Identifier const &after)
     {
-        target.proposition = substitute(target.proposition, before, after);
+        for (auto &expression : target.proposition)
+        {
+            expression = substitute(expression, before, after);
+        }
         for (auto &pointer : target.heap.pointer_declarations)
         {
             pointer.base = std::make_shared<Expression>(substitute(*pointer.base, before, after));
