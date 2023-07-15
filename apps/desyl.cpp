@@ -7,7 +7,7 @@ std::string empty = "{true;emp;} empty() {true;emp;}";
 // Requires frame
 std::string frame = "{true; <x, 0> -> a;} frame() {true; <x, 0> -> a;}";
 // Requires write
-std::string write = "{true; <x, 0> -> a;} write(int b) {true; <x, 0> -> b;}";
+std::string writer = "{true; <x, 0> -> a;} write(int b) {true; <x, 0> -> b;}";
 // Requires read
 std::string swap = "{true; <x,  0> -> a * <y, 0> -> b;} swap(loc x, loc y) {true; <x, 0> -> b * <y, 0> -> a;}";
 std::string three_swap = "{true; <x,  0> -> a * <y, 0> -> b * <z, 0> -> c;} swap(loc x, loc y, loc z) {true; <x, 0> -> b * <y, 0> -> c * <z, 0> -> a;}";
