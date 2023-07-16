@@ -227,7 +227,7 @@ namespace desyl
 
     struct heap
     {
-        static constexpr auto rule = dsl::terminator(dsl::lit_c<';'>).list(dsl::p<heap_element>, dsl::sep(dsl::asterisk));
+        static constexpr auto rule = dsl::terminator(dsl::lit_c<';'>).list(dsl::p<heap_element>, dsl::sep(dsl::vbar));
         static constexpr auto value =
             lexy::fold_inplace<Heap>(
                 []
