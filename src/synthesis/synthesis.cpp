@@ -61,7 +61,7 @@ namespace desyl
             {
                 subderivs = rule->apply(std::move(goal));
             }
-            catch (std::exception(Failure))
+            catch (Failure const &)
             {
                 return std::nullopt;
             }
@@ -79,27 +79,27 @@ namespace desyl
     void synthesize_query(Goal const &spec)
     {
         auto res = with_rules(all_rules, spec);
-        std::cout << std::endl
-                  << "void " << spec.spec.signature.name << "(";
-        for (auto const &param : spec.spec.signature.args)
-        {
-            if (param.type == Type::Int)
-            {
-                std::cout << "int ";
-            }
-            else if (param.type == Type::Loc)
-            {
-                std::cout << "loc ";
-            }
-            std::cout << param.name;
-            if (&param != &spec.spec.signature.args.back())
-            {
-                std::cout << ", ";
-            }
-        }
-        std::cout << ")";
+        std::cout << std::endl;
         if (res.has_value())
         {
+            std::cout << "void " << spec.spec.signature.name << "(";
+            for (auto const &param : spec.spec.signature.args)
+            {
+                if (param.type == Type::Int)
+                {
+                    std::cout << "int ";
+                }
+                else if (param.type == Type::Loc)
+                {
+                    std::cout << "loc ";
+                }
+                std::cout << param.name;
+                if (&param != &spec.spec.signature.args.back())
+                {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << ")";
             std::cout << res.value() << std::endl;
         }
         else
