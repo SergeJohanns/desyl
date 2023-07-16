@@ -1,4 +1,4 @@
-add_library(pure_rewrites pure_frame.cpp)
+add_library(pure_rewrites pure_frame.cpp reflexivity.cpp)
 
 target_include_directories(pure_rewrites
     PUBLIC "${PROJECT_SOURCE_DIR}/include"
