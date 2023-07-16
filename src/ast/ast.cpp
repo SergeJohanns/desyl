@@ -11,6 +11,16 @@ namespace desyl
     {
         switch (op)
         {
+        case BinaryOperator::Mul:
+            return std::string{"*"};
+        case BinaryOperator::Div:
+            return std::string{"/"};
+        case BinaryOperator::Mod:
+            return std::string{"%"};
+        case BinaryOperator::Add:
+            return std::string{"+"};
+        case BinaryOperator::Sub:
+            return std::string{"-"};
         case BinaryOperator::Lt:
             return std::string{"<"};
         case BinaryOperator::Leq:
@@ -23,6 +33,10 @@ namespace desyl
             return std::string{"=="};
         case BinaryOperator::Neq:
             return std::string{"!="};
+        case BinaryOperator::And:
+            return std::string{"&&"};
+        case BinaryOperator::Or:
+            return std::string{"||"};
         case BinaryOperator::Implies:
             return std::string{"=>"};
         default:
