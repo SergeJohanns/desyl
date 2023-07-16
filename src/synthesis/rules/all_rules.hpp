@@ -17,6 +17,8 @@ namespace desyl
 {
     constexpr size_t RULES = 10;
 
+    std::vector<Expression> learned_clauses;
+
     // Pointers because the subclasses take up different amounts of memory
     const std::unique_ptr<Rule> all_rules[RULES] = {
         std::make_unique<EmpRule>(EmpRule()),
