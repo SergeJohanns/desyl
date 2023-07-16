@@ -9,13 +9,14 @@
 #include <pick.hpp>
 #include <pure_unify.hpp>
 #include <subst_right.hpp>
+#include <branch.hpp>
 #include <pure_rewrites/pure_frame.hpp>
 #include <pure_rewrites/reflexivity.hpp>
 #include <memory>
 
 namespace desyl
 {
-    constexpr size_t RULES = 10;
+    constexpr size_t RULES = 11;
 
     std::vector<Expression> learned_clauses;
 
@@ -30,6 +31,7 @@ namespace desyl
         std::make_unique<PureUnifyRule>(PureUnifyRule()),
         std::make_unique<SubstRightRule>(SubstRightRule()),
         std::make_unique<WriteRule>(WriteRule()),
+        std::make_unique<BranchRule>(BranchRule(learned_clauses)),
         std::make_unique<ReadRule>(ReadRule()),
     };
 }
