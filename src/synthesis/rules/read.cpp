@@ -15,7 +15,7 @@ namespace desyl
 
     Program ReadContinuation::join(std::vector<Program> const &result) const
     {
-        return result[0].add_line(line);
+        return result[0].add_lines(line);
     }
 
     Identifier substitute(Identifier &target, Identifier const &before, Identifier const &after)

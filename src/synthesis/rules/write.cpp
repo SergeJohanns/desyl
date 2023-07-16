@@ -15,7 +15,7 @@ namespace desyl
 
     Program WriteContinuation::join(std::vector<Program> const &result) const
     {
-        return result[0].add_line(line);
+        return result[0].add_lines(line);
     }
 
     std::vector<Derivation> WriteRule::apply(Goal const &goal) const

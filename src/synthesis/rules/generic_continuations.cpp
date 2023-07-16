@@ -26,24 +26,8 @@ namespace desyl
         out << " " << param.name;
     }
 
-    ConstantContinuation::ConstantContinuation(FunctionSignature const &signature)
+    Program EmptyContinuation::join(std::vector<Program> const &) const
     {
-        std::stringstream out;
-        out << "void " << signature.name << "(";
-        for (size_t i = 0; i < signature.args.size(); ++i)
-        {
-            output_variable(out, signature.args[i]);
-            if (i != signature.args.size() - 1)
-            {
-                out << ", ";
-            }
-        }
-        out << ")";
-        outer = out.str();
-    }
-
-    Program ConstantContinuation::join(std::vector<Program> const &) const
-    {
-        return Program(outer);
+        return Program{""};
     }
 }

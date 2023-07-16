@@ -19,7 +19,7 @@ namespace desyl
     public:
         Program(std::string outer) : outer(outer) {}
         // Can't modify the program itself because the old version may be needed for backtracking
-        Program add_line(Line const &line) const;
+        Program add_lines(Line const &line) const;
         friend std::ostream &operator<<(std::ostream &os, const Program &program);
     };
 

@@ -10,12 +10,9 @@ namespace desyl
         Program join(std::vector<Program> const &results) const;
     };
 
-    class ConstantContinuation : public Continuation
+    class EmptyContinuation : public Continuation
     {
-        std::string outer;
-
     public:
-        ConstantContinuation(FunctionSignature const &signature);
         Program join(std::vector<Program> const &) const;
     };
 }
