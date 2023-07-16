@@ -22,14 +22,19 @@ namespace desyl
             {
                 continue;
             }
+            Expression negated_clause = UnaryOperatorCall{
+                .type = UnaryOperator::Not,
+                .operand = std::make_shared<Expression>(clause),
+            };
+            if (std::find(goal.spec.precondition.proposition.begin(), goal.spec.precondition.proposition.end(), negated_clause) != goal.spec.precondition.proposition.end())
+            {
+                continue;
+            }
             std::cout << "Using BRANCH" << std::endl;
             Goal ifgoal(goal);
             ifgoal.spec.precondition.proposition.push_back(clause);
             Goal elsegoal(goal);
-            elsegoal.spec.precondition.proposition.push_back(UnaryOperatorCall{
-                .type = UnaryOperator::Not,
-                .operand = std::make_shared<Expression>(clause),
-            });
+            elsegoal.spec.precondition.proposition.push_back(negated_clause);
             derivations.push_back(Derivation{
                 .goals = {ifgoal, elsegoal},
                 .continuation = std::make_unique<BranchContinuation>(clause),
