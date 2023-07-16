@@ -140,7 +140,7 @@ namespace desyl
         {
         case BinaryOperator::Lt:
             return {BinaryOperatorCall{
-                        .type = BinaryOperator::Geq,
+                        .type = BinaryOperator::Leq,
                         .lhs = binary_operation.lhs,
                         .rhs = binary_operation.rhs,
                     },
@@ -150,19 +150,15 @@ namespace desyl
                         .rhs = binary_operation.lhs,
                     }};
         case BinaryOperator::Leq:
-            return {BinaryOperatorCall{
-                        .type = BinaryOperator::Gt,
-                        .lhs = binary_operation.lhs,
-                        .rhs = binary_operation.rhs,
-                    },
-                    BinaryOperatorCall{
-                        .type = BinaryOperator::Geq,
-                        .lhs = binary_operation.rhs,
-                        .rhs = binary_operation.lhs,
-                    }};
+            return {
+                BinaryOperatorCall{
+                    .type = BinaryOperator::Geq,
+                    .lhs = binary_operation.rhs,
+                    .rhs = binary_operation.lhs,
+                }};
         case BinaryOperator::Gt:
             return {BinaryOperatorCall{
-                        .type = BinaryOperator::Leq,
+                        .type = BinaryOperator::Geq,
                         .lhs = binary_operation.lhs,
                         .rhs = binary_operation.rhs,
                     },
@@ -172,16 +168,12 @@ namespace desyl
                         .rhs = binary_operation.lhs,
                     }};
         case BinaryOperator::Geq:
-            return {BinaryOperatorCall{
-                        .type = BinaryOperator::Lt,
-                        .lhs = binary_operation.lhs,
-                        .rhs = binary_operation.rhs,
-                    },
-                    BinaryOperatorCall{
-                        .type = BinaryOperator::Leq,
-                        .lhs = binary_operation.rhs,
-                        .rhs = binary_operation.lhs,
-                    }};
+            return {
+                BinaryOperatorCall{
+                    .type = BinaryOperator::Leq,
+                    .lhs = binary_operation.rhs,
+                    .rhs = binary_operation.lhs,
+                }};
         case BinaryOperator::Eq:
             return {BinaryOperatorCall{
                 .type = BinaryOperator::Eq,
