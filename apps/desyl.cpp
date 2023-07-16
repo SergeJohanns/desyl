@@ -18,8 +18,12 @@ std::string three_pick = "{true; <x,  0> -> 239 | <y, 0> -> 30 | <z, 0> -> 42;} 
 // Requires pick
 std::string notsure = "{true; <x,  0> -> a | <y, 0> -> b;} notsure(loc x, loc y) {true; <x, 0> -> c | <c, 0> -> 0;}";
 std::string three_notsure = "{true; <x,  0> -> a | <y, 0> -> b | <z, 0> -> null;} notsure(loc x, loc y, loc z) {true; <x, 0> -> c | <c, 0> -> 0 | <z, 0> -> c;}";
+// Requires pureframe
+std::string elem = "{S == v + R; <x, 0> -> a;} elem(loc x, int v) {S == u + R; <x, 0> -> u + 1;}";
 // Requires pureunify
-std::string elem = "{S == v + R; <x, 0> -> a;} pure(loc x, int v) {S == u + R; <x, 0> -> u + 1;}";
+std::string fortytwo1 = "{a == 42; <x, 0> -> null;} fortytwo(loc x) {a == c; <x, 0> -> c;}";
+// Requires substright
+std::string fortytwo2 = "{true; <x, 0> -> null;} fortytwo(loc x) {c == 42; <x, 0> -> c;}";
 // Requires branch?
 std::string max = "{true; <r, 0> -> null;} max(loc r, int x, int y) { x <= m && y <= m; <r, 0> -> m;}";
 // Shouldn't find any clauses even with branch
@@ -27,7 +31,7 @@ std::string three_max = "{true; <r, 0> -> null;} max(loc r, int x, int y) { x <=
 
 int main()
 {
-    desyl::Query query = desyl::parse(elem);
+    desyl::Query query = desyl::parse(fortytwo2);
     desyl::synthesize(std::move(query));
     return 0;
 }
