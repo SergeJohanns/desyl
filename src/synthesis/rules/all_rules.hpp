@@ -10,7 +10,7 @@
 #include <pure_unify.hpp>
 #include <subst_right.hpp>
 #include <branch.hpp>
-#include <post_invalid.hpp>
+#include <failures/post_invalid.hpp>
 #include <pure_rewrites/pure_frame.hpp>
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>

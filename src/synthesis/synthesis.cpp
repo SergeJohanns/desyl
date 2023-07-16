@@ -5,6 +5,7 @@
 #include <desyl/ast.hpp>
 #include <rules.hpp>
 #include <all_rules.hpp>
+#include <failures/failure.hpp>
 
 namespace desyl
 {
@@ -55,7 +56,16 @@ namespace desyl
     {
         for (auto &rule : rules)
         {
-            auto sub = try_alts(rule->apply(std::move(goal)), rule);
+            std::vector<Derivation> subderivs;
+            try
+            {
+                subderivs = rule->apply(std::move(goal));
+            }
+            catch (std::exception(Failure))
+            {
+                return std::nullopt;
+            }
+            auto sub = try_alts(subderivs, rule);
             if (sub.has_value())
             {
                 return sub.value();
