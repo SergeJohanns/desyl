@@ -8,11 +8,12 @@
 #include <heap_unify.hpp>
 #include <pick.hpp>
 #include <pure_unify.hpp>
+#include <subst_right.hpp>
 #include <memory>
 
 namespace desyl
 {
-    constexpr size_t RULES = 7;
+    constexpr size_t RULES = 8;
 
     // Pointers because the subclasses take up different amounts of memory
     const std::unique_ptr<Rule> all_rules[RULES] = {
@@ -21,6 +22,7 @@ namespace desyl
         std::make_unique<HeapUnifyRule>(HeapUnifyRule()),
         std::make_unique<PickRule>(PickRule()),
         std::make_unique<PureUnifyRule>(PureUnifyRule()),
+        std::make_unique<SubstRightRule>(SubstRightRule()),
         std::make_unique<WriteRule>(WriteRule()),
         std::make_unique<ReadRule>(ReadRule()),
     };
