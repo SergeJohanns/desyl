@@ -9,7 +9,7 @@
 #include <pick.hpp>
 #include <pure_unify.hpp>
 #include <subst_right.hpp>
-#include <pure_frame.hpp>
+#include <pure_rewrites/pure_frame.hpp>
 #include <memory>
 
 namespace desyl
