@@ -11,7 +11,7 @@
 #include <subst_right.hpp>
 #include <branch.hpp>
 #include <failures/post_invalid.hpp>
-#include <failures/pre_inconsistent.hpp>
+#include <failures/post_inconsistent.hpp>
 #include <pure_rewrites/pure_frame.hpp>
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
@@ -25,7 +25,7 @@ namespace desyl
 
     // Pointers because the subclasses take up different amounts of memory
     const std::unique_ptr<Rule> all_rules[RULES] = {
-        std::make_unique<PreInconsistentRule>(PreInconsistentRule()),
+        std::make_unique<PostInconsistentRule>(PostInconsistentRule()),
         std::make_unique<EmpRule>(EmpRule()),
         std::make_unique<FrameRule>(FrameRule()),
         std::make_unique<PureFrameRule>(PureFrameRule()),

@@ -4,7 +4,7 @@
 
 namespace desyl
 {
-    class PreInconsistentRule : public Rule
+    class PostInconsistentRule : public Rule
     {
     public:
         std::vector<Derivation> apply(Goal const &goal) const;
