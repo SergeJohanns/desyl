@@ -70,6 +70,10 @@ namespace desyl
             {
                 return sub.value();
             }
+            if (rule->is_invertible() && !subderivs.empty())
+            {
+                return std::nullopt;
+            }
         }
         return std::nullopt;
     }

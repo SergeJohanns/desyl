@@ -18,6 +18,7 @@ namespace desyl
         std::vector<Expression> const &learned_clauses;
 
     public:
+        bool is_invertible() { return true; };
         BranchRule(std::vector<Expression> const &learned_clauses) : learned_clauses(learned_clauses){};
         std::vector<Derivation> apply(Goal const &goal) const;
     };

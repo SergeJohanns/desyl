@@ -38,7 +38,6 @@ namespace desyl
             ifgoal.spec.precondition.proposition.push_back(clause);
             Goal elsegoal(goal);
             elsegoal.spec.precondition.proposition.push_back(negated_clause);
-            std::cout << (clause == negated_clause) << std::endl;
             derivations.push_back(Derivation{
                 .goals = {ifgoal, elsegoal},
                 .continuation = std::make_unique<BranchContinuation>(clause),
