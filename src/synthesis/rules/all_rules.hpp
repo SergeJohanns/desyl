@@ -1,7 +1,7 @@
 #pragma once
 
 #include <rules.hpp>
-#include <emp.hpp>
+#include <heap_rewrites/emp.hpp>
 #include <frame.hpp>
 #include <statements/write.hpp>
 #include <statements/read.hpp>
