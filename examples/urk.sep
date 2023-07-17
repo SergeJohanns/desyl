@@ -1,0 +1,3 @@
+{a == x && y == a; <x, 0> -> y | <y, 0> -> z;}
+urk(loc x, loc y)
+{true; <y, 0> -> a | <x, 0> -> y;}

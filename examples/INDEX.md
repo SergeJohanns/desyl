@@ -21,6 +21,7 @@ the current version of DeSyL is able to synthesize it.
 | `elem.sep`          | PureFrame   | :heavy_check_mark:       |
 | `fortytwo1.sep`     | PureUnify   | :heavy_check_mark:       |
 | `fortytwo2.sep`     | SubstRight  | :heavy_check_mark:       |
+| `urk.sep`           | Should fail | :x:                      |
 | `max.sep`           | Branch      | :heavy_check_mark:       |
 | `maxx.sep`          | Branch      | :heavy_check_mark:       |
 | `hilo.sep`          | Branch      | :hourglass_flowing_sand: |
