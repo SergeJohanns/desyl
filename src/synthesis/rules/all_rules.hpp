@@ -5,10 +5,10 @@
 #include <frame.hpp>
 #include <write.hpp>
 #include <read.hpp>
-#include <heap_unify.hpp>
-#include <pick.hpp>
-#include <pure_unify.hpp>
-#include <subst_right.hpp>
+#include <substitution/heap_unify.hpp>
+#include <substitution/pick.hpp>
+#include <substitution/pure_unify.hpp>
+#include <substitution/subst_right.hpp>
 #include <branch.hpp>
 #include <failures/post_invalid.hpp>
 #include <failures/post_inconsistent.hpp>
