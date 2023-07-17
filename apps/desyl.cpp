@@ -24,14 +24,17 @@ std::string elem = "{S == v + R; <x, 0> -> a;} elem(loc x, int v) {S == u + R; <
 std::string fortytwo1 = "{a == 42; <x, 0> -> null;} fortytwo(loc x) {a == c; <x, 0> -> c;}";
 // Requires substright
 std::string fortytwo2 = "{true; <x, 0> -> null;} fortytwo(loc x) {c == 42; <x, 0> -> c;}";
-// Requires branch?
+// Requires branch
 std::string max = "{true; <r, 0> -> null;} max(loc r, int x, int y) { x <= m && y <= m; <r, 0> -> m;}";
+std::string maxx = "{true; <r, 0> -> null | <s, 0> -> null;} maxx(loc r, loc s, int x, int y) { x <= m && y <= m; <r, 0> -> m | <s, 0> -> x;}";
+std::string hilo = "{true; <hi, 0> -> null | <lo, 0> -> null;} hilo(int x, int y, loc hi, loc lo) { x <= h && y <= h && l <= x && l <= y; <hi, 0> -> h | <lo, 0> -> l;}";
+std::string hilodif = "{true; <hi, 0> -> null | <lo, 0> -> null | <dif, 0> -> null;} hilodif(int x, int y, loc hi, loc lo, loc dif) { x <= h && y <= h && l <= x && l <= y && d = h - l; <hi, 0> -> h | <lo, 0> -> l | <dif, 0> -> d;}";
 // Shouldn't find any clauses even with branch
 std::string three_max = "{true; <r, 0> -> null;} max(loc r, int x, int y) { x <= m && y <= m && z <= m; <r, 0> -> m;}";
 
 int main()
 {
-    desyl::Query query = desyl::parse(max);
+    desyl::Query query = desyl::parse(three_notsure);
     desyl::synthesize(std::move(query));
     return 0;
 }
