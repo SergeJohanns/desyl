@@ -1,7 +1,7 @@
 #include <pick.hpp>
 
 #include <substitution.hpp>
-#include <generic_continuations/generic_continuations.hpp>
+#include <generic_continuations/identity_continuation.hpp>
 #include <iostream>
 
 namespace desyl

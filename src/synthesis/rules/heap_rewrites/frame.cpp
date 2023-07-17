@@ -1,6 +1,6 @@
 #include <frame.hpp>
 
-#include <generic_continuations/generic_continuations.hpp>
+#include <generic_continuations/identity_continuation.hpp>
 #include <iostream>
 #include <algorithm>
 #include <functional>

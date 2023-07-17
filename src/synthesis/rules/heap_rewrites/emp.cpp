@@ -1,6 +1,6 @@
 #include <emp.hpp>
 
-#include <generic_continuations/generic_continuations.hpp>
+#include <generic_continuations/empty_continuation.hpp>
 #include <iostream>
 
 namespace desyl
