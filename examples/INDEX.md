@@ -22,7 +22,7 @@ the current version of DeSyL is able to synthesize it.
 | `fortytwo1.sep`     | PureUnify   | :heavy_check_mark:       |
 | `fortytwo2.sep`     | SubstRight  | :heavy_check_mark:       |
 | `max.sep`           | Branch      | :heavy_check_mark:       |
-| `maxx.sep`          | Branch      |                          |
-| `hilo.sep`          | Branch      |                          |
-| `hilodif.sep`       | Branch      |                          |
-| `three_max.sep`     | -           |                          |
+| `maxx.sep`          | Branch      | :heavy_check_mark:       |
+| `hilo.sep`          | Branch      | :hourglass_flowing_sand: |
+| `hilodif.sep`       | Branch      | :hourglass_flowing_sand: |
+| `three_max.sep`     | Should fail | :x:                      |
