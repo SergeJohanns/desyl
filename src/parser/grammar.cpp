@@ -8,7 +8,7 @@
 #include <lexy/dsl/separator.hpp>
 #include <lexy/dsl/brackets.hpp>
 #include <lexy/callback.hpp>
-#include <lexy/input/range_input.hpp>
+#include <lexy/input/file.hpp>
 #include <lexy/action/parse.hpp>
 #include <lexy_ext/report_error.hpp>
 #include <overload.hpp>
@@ -348,7 +348,13 @@ namespace desyl
 
     Query parse_query(std::string const &input)
     {
-        auto const_result = lexy::parse<query>(lexy::range_input(input.begin(), input.end()), lexy_ext::report_error);
+        auto const &file = lexy::read_file(input.c_str());
+        if (!file)
+        {
+            std::cerr << "Error: could not read file " << input << std::endl;
+            std::exit(1);
+        }
+        auto const_result = lexy::parse<query>(file.buffer(), lexy_ext::report_error);
         return std::move(const_result).value();
     }
 }

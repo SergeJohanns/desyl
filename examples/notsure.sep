@@ -1,0 +1,3 @@
+{true; <x,  0> -> a | <y, 0> -> b;}
+notsure(loc x, loc y)
+{true; <x, 0> -> c | <c, 0> -> 0;}

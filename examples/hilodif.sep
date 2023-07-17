@@ -1,0 +1,3 @@
+{true; <hi, 0> -> null | <lo, 0> -> null | <dif, 0> -> null;}
+hilodif(int x, int y, loc hi, loc lo, loc dif)
+{ x <= h && y <= h && l <= x && l <= y && d = h - l; <hi, 0> -> h | <lo, 0> -> l | <dif, 0> -> d;}

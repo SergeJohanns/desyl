@@ -1,0 +1,3 @@
+{true; <r, 0> -> null | <s, 0> -> null;}
+maxx(loc r, loc s, int x, int y)
+{ x <= m && y <= m; <r, 0> -> m | <s, 0> -> x;}

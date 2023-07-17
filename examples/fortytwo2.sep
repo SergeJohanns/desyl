@@ -1,0 +1,3 @@
+{true; <x, 0> -> null;}
+fortytwo(loc x)
+{c == 42; <x, 0> -> c;}
