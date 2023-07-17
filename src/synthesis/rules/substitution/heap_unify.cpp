@@ -1,6 +1,6 @@
 #include <heap_unify.hpp>
 
-#include <generic_continuations.hpp>
+#include <generic_continuations/generic_continuations.hpp>
 #include <unification.hpp>
 #include <overload.hpp>
 #include <variant>

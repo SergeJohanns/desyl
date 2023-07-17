@@ -1,6 +1,6 @@
 #include <pure_unify.hpp>
 
-#include <generic_continuations.hpp>
+#include <generic_continuations/generic_continuations.hpp>
 #include <unification.hpp>
 #include <iostream>
 

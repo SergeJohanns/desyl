@@ -1,7 +1,7 @@
 #include <post_inconsistent.hpp>
 
 #include <failure.hpp>
-#include <generic_continuations.hpp>
+#include <generic_continuations/generic_continuations.hpp>
 #include <desyl/ast.hpp>
 #include <iostream>
 

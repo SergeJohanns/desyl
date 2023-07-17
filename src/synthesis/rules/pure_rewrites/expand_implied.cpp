@@ -1,6 +1,6 @@
 #include <expand_implied.hpp>
 
-#include <generic_continuations.hpp>
+#include <generic_continuations/generic_continuations.hpp>
 #include <overload.hpp>
 #include <algorithm>
 #include <iostream>

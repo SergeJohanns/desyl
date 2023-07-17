@@ -1,7 +1,7 @@
 #include <subst_right.hpp>
 
 #include <unification.hpp>
-#include <generic_continuations.hpp>
+#include <generic_continuations/generic_continuations.hpp>
 #include <optional>
 #include <algorithm>
 #include <iostream>

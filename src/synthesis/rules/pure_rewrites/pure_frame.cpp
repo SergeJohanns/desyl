@@ -1,6 +1,6 @@
 #include <pure_frame.hpp>
 
-#include <generic_continuations.hpp>
+#include <generic_continuations/generic_continuations.hpp>
 #include <optional>
 #include <iostream>
 
