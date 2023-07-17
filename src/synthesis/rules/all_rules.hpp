@@ -2,7 +2,7 @@
 
 #include <rules.hpp>
 #include <heap_rewrites/emp.hpp>
-#include <frame.hpp>
+#include <heap_rewrites/frame.hpp>
 #include <statements/write.hpp>
 #include <statements/read.hpp>
 #include <substitution/heap_unify.hpp>
