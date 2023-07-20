@@ -4,6 +4,7 @@
 #include <vector>
 #include <variant>
 #include <memory>
+#include <unordered_map>
 
 namespace desyl
 {
@@ -152,7 +153,7 @@ namespace desyl
 
     struct Query
     {
-        std::vector<Predicate> predicates;
+        std::unordered_map<Identifier, Predicate> predicates;
         std::vector<FunctionSpecification> functions;
     };
 }

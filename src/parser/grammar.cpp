@@ -411,7 +411,17 @@ namespace desyl
     {
         static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
         static constexpr auto rule = dsl::list(dsl::p<predicate_specification>, dsl::sep(dsl::newline));
-        static constexpr auto value = lexy::as_list<std::vector<Predicate>>;
+        static constexpr auto value = lexy::as_list<std::vector<Predicate>> >>
+                                      lexy::callback<std::unordered_map<Identifier, Predicate>>(
+                                          [](std::vector<Predicate> predicates)
+                                          {
+                                              std::unordered_map<Identifier, Predicate> result;
+                                              for (auto &predicate : predicates)
+                                              {
+                                                  result.emplace(predicate.name, std::move(predicate));
+                                              }
+                                              return result;
+                                          });
     };
 
     struct query
