@@ -40,6 +40,16 @@ namespace desyl
         return false;
     }
 
+    Expression substitute(Expression const &expression, Substitutions const &substitutions)
+    {
+        Expression substituted(expression);
+        for (auto const &[identifier, expression] : substitutions)
+        {
+            substituted = substitute_expression(substituted, identifier, expression);
+        }
+        return substituted;
+    }
+
     Goal substitute(Goal const &goal, Substitutions const &substitutions)
     {
         Goal substituted(goal);

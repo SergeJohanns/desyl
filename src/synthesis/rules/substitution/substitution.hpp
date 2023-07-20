@@ -10,5 +10,7 @@ namespace desyl
 
     bool subtitutions_conflict(Substitutions const &first, Substitutions const &second);
 
+    Expression substitute(Expression const &expression, Substitutions const &substitutions);
+
     Goal substitute(Goal const &goal, Substitutions const &substitutions);
 }
