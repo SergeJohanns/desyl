@@ -335,15 +335,90 @@ namespace desyl
         static constexpr auto value = lexy::construct<FunctionSpecification>;
     };
 
+    struct functions
+    {
+        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
+        static constexpr auto rule = dsl::p<function_specification>;
+        static constexpr auto value = lexy::as_list<std::vector<FunctionSpecification>>;
+        // static constexpr auto value = lexy::callback<std::vector<FunctionSpecification>>(
+        //     [](FunctionSpecification function_specification)
+        //     { return std::vector<FunctionSpecification>{std::move(function_specification)}; });
+    };
+
+    struct algebraic_int_type
+    {
+        static constexpr auto rule = LEXY_LIT("int");
+        static constexpr auto value = lexy::callback<AlgebraicType>(
+            []()
+            { return AlgebraicType::Int; });
+    };
+
+    struct algebraic_loc_type
+    {
+        static constexpr auto rule = LEXY_LIT("loc");
+        static constexpr auto value = lexy::callback<AlgebraicType>(
+            []()
+            { return AlgebraicType::Loc; });
+    };
+
+    struct algebraic_set_type
+    {
+        static constexpr auto rule = LEXY_LIT("set");
+        static constexpr auto value = lexy::callback<AlgebraicType>(
+            []()
+            { return AlgebraicType::Set; });
+    };
+
+    struct algebraic_type
+    {
+        static constexpr auto rule = dsl::p<algebraic_int_type> | dsl::p<algebraic_loc_type> | dsl::p<algebraic_set_type>;
+        static constexpr auto value = lexy::forward<AlgebraicType>;
+    };
+
+    struct algebraic_typed_variable
+    {
+        static constexpr auto rule = dsl::p<algebraic_type> + dsl::p<identifier>;
+        static constexpr auto value = lexy::construct<AlgebraicTypedVariable>;
+    };
+
+    struct predicate_parameters
+    {
+        static constexpr auto rule = dsl::parenthesized.opt_list(dsl::p<algebraic_typed_variable>, dsl::sep(dsl::comma));
+        static constexpr auto value = lexy::as_list<std::vector<AlgebraicTypedVariable>>;
+    };
+
+    struct clause
+    {
+        static constexpr auto rule = dsl::vbar + dsl::p<expression> + LEXY_LIT("|=>") + dsl::p<assertion>;
+        static constexpr auto value = lexy::construct<Clause>;
+    };
+
+    struct clauses
+    {
+        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
+        static constexpr auto rule = dsl::curly_bracketed.list(dsl::p<clause>);
+        static constexpr auto value = lexy::as_list<std::vector<Clause>>;
+    };
+
+    struct predicate_specification
+    {
+        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
+        static constexpr auto rule = LEXY_LIT("predicate") + dsl::p<identifier> + dsl::p<predicate_parameters> + dsl::p<clauses>;
+        static constexpr auto value = lexy::construct<Predicate>;
+    };
+
+    struct predicates
+    {
+        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
+        static constexpr auto rule = dsl::list(dsl::p<predicate_specification>, dsl::sep(dsl::newline));
+        static constexpr auto value = lexy::as_list<std::vector<Predicate>>;
+    };
+
     struct query
     {
         static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
-        static constexpr auto rule = dsl::list(dsl::p<function_specification>, dsl::sep(dsl::newline));
-        static constexpr auto value =
-            lexy::as_list<std::vector<FunctionSpecification>> >>
-            lexy::callback<Query>(
-                [](std::vector<FunctionSpecification> functions)
-                { return Query{std::vector<Predicate>{}, std::move(functions)}; });
+        static constexpr auto rule = dsl::p<predicates> + dsl::p<functions>;
+        static constexpr auto value = lexy::construct<Query>;
     };
 
     Query parse_query(std::string const &input)
