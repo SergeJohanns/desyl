@@ -330,19 +330,8 @@ namespace desyl
 
     struct function_specification
     {
-        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
         static constexpr auto rule = dsl::p<assertion> + dsl::p<function_signature> + dsl::p<assertion>;
         static constexpr auto value = lexy::construct<FunctionSpecification>;
-    };
-
-    struct functions
-    {
-        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
-        static constexpr auto rule = dsl::p<function_specification>;
-        static constexpr auto value = lexy::as_list<std::vector<FunctionSpecification>>;
-        // static constexpr auto value = lexy::callback<std::vector<FunctionSpecification>>(
-        //     [](FunctionSpecification function_specification)
-        //     { return std::vector<FunctionSpecification>{std::move(function_specification)}; });
     };
 
     struct algebraic_int_type
@@ -402,33 +391,46 @@ namespace desyl
 
     struct predicate_specification
     {
-        static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
-        static constexpr auto rule = LEXY_LIT("predicate") + dsl::p<identifier> + dsl::p<predicate_parameters> + dsl::p<clauses>;
+        static constexpr auto rule = LEXY_LIT("predicate") >> (dsl::p<identifier> + dsl::p<predicate_parameters> + dsl::p<clauses>);
         static constexpr auto value = lexy::construct<Predicate>;
     };
 
-    struct predicates
+    using FunctionOrPredicate = std::variant<FunctionSpecification, Predicate>;
+
+    struct function_or_predicate
     {
         static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
-        static constexpr auto rule = dsl::list(dsl::p<predicate_specification>, dsl::sep(dsl::newline));
-        static constexpr auto value = lexy::as_list<std::vector<Predicate>> >>
-                                      lexy::callback<std::unordered_map<Identifier, Predicate>>(
-                                          [](std::vector<Predicate> predicates)
-                                          {
-                                              std::unordered_map<Identifier, Predicate> result;
-                                              for (auto &predicate : predicates)
-                                              {
-                                                  result.emplace(predicate.name, std::move(predicate));
-                                              }
-                                              return result;
-                                          });
+        static constexpr auto rule = dsl::p<predicate_specification> | dsl::else_ >> dsl::p<function_specification>;
+        static constexpr auto value = lexy::callback<FunctionOrPredicate>(
+            [](FunctionSpecification spec)
+            { return spec; },
+            [](Predicate predicate)
+            { return predicate; });
     };
 
     struct query
     {
         static constexpr auto whitespace = dsl::ascii::space | dsl::ascii::newline;
-        static constexpr auto rule = dsl::p<predicates> + dsl::p<functions>;
-        static constexpr auto value = lexy::construct<Query>;
+        static constexpr auto rule = dsl::terminator(dsl::eof).list(dsl::p<function_or_predicate>);
+        static constexpr auto value =
+            lexy::as_list<std::vector<FunctionOrPredicate>> >>
+            lexy::callback<Query>(
+                [](std::vector<FunctionOrPredicate> functions_and_predicates)
+                {
+                    std::vector<FunctionSpecification> functions;
+                    std::unordered_map<Identifier, Predicate> predicates;
+                    for (auto &function_or_predicate : functions_and_predicates)
+                    {
+                        std::visit(
+                            overloaded{
+                                [&functions](FunctionSpecification spec)
+                                { functions.push_back(std::move(spec)); },
+                                [&predicates](Predicate predicate)
+                                { predicates.emplace(predicate.name, std::move(predicate)); }},
+                            std::move(function_or_predicate));
+                    }
+                    return Query{std::move(predicates), std::move(functions)};
+                });
     };
 
     Query parse_query(std::string const &input)
