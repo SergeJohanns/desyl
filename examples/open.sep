@@ -1,0 +1,7 @@
+predicate nothing(loc x) {
+| true |=> {true; emp;}
+}
+
+{true; nothing(x);}
+open(loc x)
+{true; emp;}
