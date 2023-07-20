@@ -168,7 +168,7 @@ namespace desyl
 
     struct array_declaration
     {
-        static constexpr auto rule = dsl::lit_c<'['> >> (dsl::p<identifier> + dsl::p<literal> + dsl::lit_c<']'>);
+        static constexpr auto rule = dsl::lit_c<'['> >> (dsl::p<identifier> + dsl::lit_c<','> + dsl::p<literal> + dsl::lit_c<']'>);
         static constexpr auto value = lexy::callback<ArrayDeclaration>(
             [](std::string identifier, int size)
             { return ArrayDeclaration{std::move(identifier), size}; });
