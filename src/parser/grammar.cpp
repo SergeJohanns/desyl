@@ -188,13 +188,13 @@ namespace desyl
     struct predicate_argument_list
     {
         // Normally we'd use a list of expressions, but the paper specifies that the arguments can only be identifiers.
-        static constexpr auto rule = dsl::list(dsl::p<identifier>, dsl::sep(dsl::comma));
+        static constexpr auto rule = dsl::parenthesized.list(dsl::p<identifier>, dsl::sep(dsl::comma));
         static constexpr auto value = lexy::as_list<std::vector<Identifier>>;
     };
 
     struct predicate_call
     {
-        static constexpr auto rule = dsl::p<identifier> + dsl::lit_c<'('> + dsl::p<predicate_argument_list> + dsl::lit_c<')'>;
+        static constexpr auto rule = dsl::p<identifier> + dsl::p<predicate_argument_list>;
         static constexpr auto value = lexy::callback<PredicateCall>(
             [](std::string identifier, std::vector<Identifier> parameters)
             { return PredicateCall{std::move(identifier), std::move(parameters)}; });
