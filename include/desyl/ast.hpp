@@ -137,10 +137,17 @@ namespace desyl
         Identifier name;
     };
 
+    struct Clause
+    {
+        Expression condition;
+        Assertion assertion;
+    };
+
     struct Predicate
     {
         Identifier name;
         std::vector<AlgebraicTypedVariable> args;
+        std::vector<Clause> clauses;
     };
 
     struct Query
