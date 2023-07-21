@@ -56,6 +56,7 @@ namespace desyl
     {
         std::vector<Derivation> derivations;
         Vars const &environment = goal.environment;
+        VariableClassification old_classification = goal.variables().classification;
         for (size_t i = 0; i < goal.spec.precondition.heap.predicate_calls.size(); ++i)
         {
             auto const &predicate_call = goal.spec.precondition.heap.predicate_calls[i];
@@ -81,18 +82,36 @@ namespace desyl
             std::vector<Goal> goals;
             for (auto const &clause : predicate.clauses)
             {
-                Goal new_goal(goal);
+                FunctionSpecification new_spec = goal.spec;
 
-                new_goal.spec.precondition.proposition.push_back(substitute(clause.condition, substitution));
+                new_spec.precondition.proposition.push_back(substitute(clause.condition, substitution));
                 Proposition consequent = substitute(clause.assertion.proposition, substitution);
-                new_goal.spec.precondition.proposition.insert(new_goal.spec.precondition.proposition.end(), consequent.begin(), consequent.end());
+                new_spec.precondition.proposition.insert(new_spec.precondition.proposition.end(), consequent.begin(), consequent.end());
 
                 Heap heap = substitute(clause.assertion.heap, substitution);
-                new_goal.spec.precondition.heap.pointer_declarations.insert(new_goal.spec.precondition.heap.pointer_declarations.end(), heap.pointer_declarations.begin(), heap.pointer_declarations.end());
-                new_goal.spec.precondition.heap.array_declarations.insert(new_goal.spec.precondition.heap.array_declarations.end(), heap.array_declarations.begin(), heap.array_declarations.end());
-                new_goal.spec.precondition.heap.predicate_calls.insert(new_goal.spec.precondition.heap.predicate_calls.end(), heap.predicate_calls.begin(), heap.predicate_calls.end());
+                new_spec.precondition.heap.pointer_declarations.insert(new_spec.precondition.heap.pointer_declarations.end(), heap.pointer_declarations.begin(), heap.pointer_declarations.end());
+                new_spec.precondition.heap.array_declarations.insert(new_spec.precondition.heap.array_declarations.end(), heap.array_declarations.begin(), heap.array_declarations.end());
+                new_spec.precondition.heap.predicate_calls.insert(new_spec.precondition.heap.predicate_calls.end(), heap.predicate_calls.begin(), heap.predicate_calls.end());
 
-                new_goal.spec.precondition.heap.predicate_calls.erase(new_goal.spec.precondition.heap.predicate_calls.begin() + i);
+                new_spec.precondition.heap.predicate_calls.erase(new_spec.precondition.heap.predicate_calls.begin() + i);
+                Goal new_goal(std::move(new_spec), goal.predicates);
+                VariableClassification new_classification = new_goal.variables().classification;
+                Vars difference;
+
+                // Make sure that the old classification is a subset of the new classification
+                std::set_difference(new_classification.ghosts.begin(), new_classification.ghosts.end(),
+                                    old_classification.existentials.begin(), old_classification.existentials.end(),
+                                    std::inserter(difference, difference.begin()));
+                std::set_difference(difference.begin(), difference.end(),
+                                    environment.begin(), environment.end(),
+                                    std::inserter(new_classification.ghosts, new_classification.ghosts.begin()));
+                std::set_difference(new_classification.existentials.begin(), new_classification.existentials.end(),
+                                    old_classification.ghosts.begin(), old_classification.ghosts.end(),
+                                    std::inserter(difference, difference.begin()));
+                std::set_difference(difference.begin(), difference.end(),
+                                    environment.begin(), environment.end(),
+                                    std::inserter(new_classification.existentials, new_classification.existentials.begin()));
+
                 goals.push_back(new_goal);
             }
             derivations.push_back(Derivation{
