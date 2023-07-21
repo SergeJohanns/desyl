@@ -4,6 +4,8 @@
 
 namespace desyl
 {
+    constexpr int MAX_UNFOLDS = 1;
+
     class OpenContinuation : public Continuation
     {
         std::vector<Clause> clauses;

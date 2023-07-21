@@ -81,6 +81,7 @@ namespace desyl
     struct PredicateCall
     {
         Identifier name;
+        int label;
         std::vector<Identifier> args;
         bool operator==(PredicateCall const &other) const = default;
     };

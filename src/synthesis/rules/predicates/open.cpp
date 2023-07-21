@@ -18,8 +18,11 @@ namespace desyl
             stream << "else if (" << stringify_expression(clauses[i].condition) << ")" << std::endl;
             stream << results[i];
         }
-        stream << "else" << std::endl;
-        stream << results[clauses.size() - 1];
+        if (clauses.size() > 1)
+        {
+            stream << "else" << std::endl;
+            stream << results[clauses.size() - 1];
+        }
         Program program("");
         return program.add_lines(stream.str());
     }
@@ -40,10 +43,11 @@ namespace desyl
     {
         std::vector<Derivation> derivations;
         Vars const &environment = goal.environment;
-        for (auto const &predicate_call : goal.spec.precondition.heap.predicate_calls)
+        for (size_t i = 0; i < goal.spec.precondition.heap.predicate_calls.size(); ++i)
         {
+            auto const &predicate_call = goal.spec.precondition.heap.predicate_calls[i];
             const bool predicate_exists = goal.predicates.find(predicate_call.name) != goal.predicates.end();
-            if (!predicate_exists || !all_program_variables(predicate_call.args, environment))
+            if (predicate_call.label >= MAX_UNFOLDS || !predicate_exists || !all_program_variables(predicate_call.args, environment))
             {
                 continue;
             }
@@ -61,13 +65,17 @@ namespace desyl
             for (auto const &clause : predicate.clauses)
             {
                 Goal new_goal(goal);
+
                 new_goal.spec.precondition.proposition.push_back(substitute(clause.condition, substitution));
                 Proposition consequent = substitute(clause.assertion.proposition, substitution);
                 new_goal.spec.precondition.proposition.insert(new_goal.spec.precondition.proposition.end(), consequent.begin(), consequent.end());
+
                 Heap heap = substitute(clause.assertion.heap, substitution);
                 new_goal.spec.precondition.heap.pointer_declarations.insert(new_goal.spec.precondition.heap.pointer_declarations.end(), heap.pointer_declarations.begin(), heap.pointer_declarations.end());
                 new_goal.spec.precondition.heap.array_declarations.insert(new_goal.spec.precondition.heap.array_declarations.end(), heap.array_declarations.begin(), heap.array_declarations.end());
                 new_goal.spec.precondition.heap.predicate_calls.insert(new_goal.spec.precondition.heap.predicate_calls.end(), heap.predicate_calls.begin(), heap.predicate_calls.end());
+
+                new_goal.spec.precondition.heap.predicate_calls.erase(new_goal.spec.precondition.heap.predicate_calls.begin() + i);
                 goals.push_back(new_goal);
             }
             derivations.push_back(Derivation{

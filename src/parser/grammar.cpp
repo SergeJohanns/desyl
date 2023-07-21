@@ -197,7 +197,7 @@ namespace desyl
         static constexpr auto rule = dsl::p<identifier> + dsl::p<predicate_argument_list>;
         static constexpr auto value = lexy::callback<PredicateCall>(
             [](std::string identifier, std::vector<Identifier> parameters)
-            { return PredicateCall{std::move(identifier), std::move(parameters)}; });
+            { return PredicateCall{std::move(identifier), 0, std::move(parameters)}; });
     };
 
     struct emp
