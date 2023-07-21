@@ -10,6 +10,10 @@ namespace desyl
 {
     Program OpenContinuation::join(std::vector<Program> const &results) const
     {
+        if (clauses.size() == 1)
+        {
+            return results[0];
+        }
         std::ostringstream stream;
         stream << "if (" << stringify_expression(clauses[0].condition) << ")" << std::endl;
         stream << results[0];
@@ -18,11 +22,8 @@ namespace desyl
             stream << "else if (" << stringify_expression(clauses[i].condition) << ")" << std::endl;
             stream << results[i];
         }
-        if (clauses.size() > 1)
-        {
-            stream << "else" << std::endl;
-            stream << results[clauses.size() - 1];
-        }
+        stream << "else" << std::endl;
+        stream << results[clauses.size() - 1];
         Program program("");
         return program.add_lines(stream.str());
     }
