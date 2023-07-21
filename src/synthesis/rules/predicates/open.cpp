@@ -28,13 +28,25 @@ namespace desyl
         return program.add_lines(stream.str());
     }
 
-    bool all_program_variables(std::vector<Identifier> const &args, Vars const &program_variables)
+    bool all_program_variables(Substitutions const &substitutions, std::vector<Clause> const &clauses, Vars const &program_variables)
     {
-        for (auto const &arg : args)
+        for (auto const &clause : clauses)
         {
-            if (program_variables.find(arg) == program_variables.end())
+            Vars clause_variables;
+            vars(clause.condition, clause_variables);
+            for (auto const &variable : clause_variables)
             {
-                return false;
+                if (substitutions.find(variable) == substitutions.end())
+                {
+                    continue;
+                }
+                Vars variable_variables, difference;
+                vars(substitutions.at(variable), variable_variables);
+                std::set_difference(variable_variables.begin(), variable_variables.end(), program_variables.begin(), program_variables.end(), std::inserter(difference, difference.begin()));
+                if (difference.size() > 0)
+                {
+                    return false;
+                }
             }
         }
         return true;
@@ -48,7 +60,7 @@ namespace desyl
         {
             auto const &predicate_call = goal.spec.precondition.heap.predicate_calls[i];
             const bool predicate_exists = goal.predicates.find(predicate_call.name) != goal.predicates.end();
-            if (predicate_call.label >= MAX_UNFOLDS || !predicate_exists || !all_program_variables(predicate_call.args, environment))
+            if (predicate_call.label >= MAX_UNFOLDS || !predicate_exists)
             {
                 continue;
             }
@@ -61,6 +73,10 @@ namespace desyl
             for (size_t i = 0; i < predicate.args.size(); i++)
             {
                 substitution[predicate.args[i].name] = predicate_call.args[i];
+            }
+            if (!all_program_variables(substitution, predicate.clauses, environment))
+            {
+                continue;
             }
             std::vector<Goal> goals;
             for (auto const &clause : predicate.clauses)
