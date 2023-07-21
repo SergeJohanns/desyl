@@ -21,12 +21,12 @@
 
 namespace desyl
 {
-    constexpr size_t RULES = 16;
+    constexpr size_t ALL_RULES = 16;
 
     std::vector<Expression> learned_clauses;
 
     // Pointers because the subclasses take up different amounts of memory
-    const std::unique_ptr<Rule> all_rules[RULES] = {
+    const std::unique_ptr<Rule> all_rules[ALL_RULES] = {
         // (Early) termination rules
         std::make_unique<PostInconsistentRule>(PostInconsistentRule()),
         std::make_unique<EmpRule>(EmpRule()),

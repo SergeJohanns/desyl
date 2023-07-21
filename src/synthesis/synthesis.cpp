@@ -10,18 +10,21 @@
 namespace desyl
 {
     // Forward declaration (no header) because the function is not public but is part of mutual recursion
-    std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Goal const &goal);
+    template <typename RULES>
+    std::optional<Program> with_rules(RULES const &rules, Goal const &goal);
 
     /// @brief Try to synthesize programs for a list of subgoals and join them
+    /// @tparam RULES The rules array to use for each subgoal
     /// @param goals The subgoals to synthesize
     /// @param continuation The continuation to join the synthesized programs
     /// @return The synthesized program, if any
-    std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation)
+    template <typename RULES>
+    std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation, RULES const &rules)
     {
         auto result = std::vector<Program>{};
         for (auto const &goal : goals)
         {
-            auto sub = with_rules(all_rules, std::move(goal));
+            auto sub = with_rules(rules, std::move(goal));
             if (!sub.has_value())
             {
                 return std::nullopt;
@@ -32,14 +35,16 @@ namespace desyl
     }
 
     /// @brief Try to synthesize a program from a list of subderivations of a rule
+    /// @tparam RULES The rules array to use for each derivation
     /// @param subderivs The subderivations to try
     /// @param rule The rule that was applied to get the subderivations
     /// @return The synthesized program, if any
-    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &)
+    template <typename RULES>
+    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &, RULES const &rules)
     {
         for (auto const &deriv : subderivs)
         {
-            auto sub = solve_subgoals(deriv.goals, *deriv.continuation);
+            auto sub = solve_subgoals(deriv.goals, *deriv.continuation, rules);
             if (sub.has_value())
             {
                 return sub.value();
@@ -52,7 +57,8 @@ namespace desyl
     /// @param rules The rules to use
     /// @param goal The specification to synthesize
     /// @return The synthesized program, if any
-    std::optional<Program> with_rules(std::unique_ptr<Rule> const (&rules)[RULES], Goal const &goal)
+    template <typename RULES>
+    std::optional<Program> with_rules(RULES const &rules, Goal const &goal)
     {
         for (auto &rule : rules)
         {
@@ -65,7 +71,7 @@ namespace desyl
             {
                 return std::nullopt;
             }
-            auto sub = try_alts(subderivs, rule);
+            auto sub = try_alts(subderivs, rule, rules);
             if (sub.has_value())
             {
                 return sub.value();
