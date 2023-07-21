@@ -24,7 +24,7 @@ the current version of DeSyL is able to synthesize it.
 | `urk.sep`             | Should fail       | :x:                      |
 | `max.sep`             | Branch            | :heavy_check_mark:       |
 | `maxx.sep`            | Branch            | :heavy_check_mark:       |
-| `hilo.sep`            | Branch            | :hourglass_flowing_sand: |
+| `hilo.sep`            | Branch            | :x:                      |
 | `hilodif.sep`         | Branch            | :hourglass_flowing_sand: |
 | `three_max.sep`       | Should fail       | :x:                      |
 | `predicate_parse.sep` | Predicate parsing | :heavy_check_mark:       |
