@@ -42,7 +42,7 @@ namespace desyl
         // Expensive but nongenerating rules
         std::make_unique<ExpandImpliedRule>(ExpandImpliedRule()),            // Can add massive amount of pure clauses
         std::make_unique<PostInvalidRule>(PostInvalidRule(learned_clauses)), // Not expensive to run but adds branching targets
-        // Invertable generation rules (at the end to avoid generating code that is not used)
+        // Desctructive generation rules (at the end to avoid generating code that is not used)
         std::make_unique<WriteRule>(WriteRule()),
         std::make_unique<FreeRule>(FreeRule()),
         std::make_unique<BranchRule>(BranchRule(learned_clauses)),
