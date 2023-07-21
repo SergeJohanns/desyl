@@ -50,21 +50,39 @@ namespace desyl
         return substituted;
     }
 
+    Proposition substitute(Proposition const &proposition, Substitutions const &substitutions)
+    {
+        Proposition substituted(proposition);
+        for (size_t i = 0; i < substituted.size(); ++i)
+        {
+            substituted[i] = substitute(substituted[i], substitutions);
+        }
+        return substituted;
+    }
+
+    Heap substitute(Heap const &heap, Substitutions const &substitutions)
+    {
+        Heap substituted(heap);
+        for (auto &pointer_declaration : substituted.pointer_declarations)
+        {
+            pointer_declaration.base = std::make_shared<Expression>(substitute(*pointer_declaration.base, substitutions));
+            pointer_declaration.value = std::make_shared<Expression>(substitute(*pointer_declaration.value, substitutions));
+        }
+        return substituted;
+    }
+
+    Assertion substitute(Assertion const &assertion, Substitutions const &substitutions)
+    {
+        Assertion substituted(assertion);
+        substituted.proposition = substitute(substituted.proposition, substitutions);
+        substituted.heap = substitute(substituted.heap, substitutions);
+        return substituted;
+    }
+
     Goal substitute(Goal const &goal, Substitutions const &substitutions)
     {
         Goal substituted(goal);
-        for (auto const &[identifier, expression] : substitutions)
-        {
-            for (size_t i = 0; i < substituted.spec.postcondition.proposition.size(); ++i)
-            {
-                substituted.spec.postcondition.proposition[i] = substitute_expression(substituted.spec.postcondition.proposition[i], identifier, expression);
-            }
-            for (auto &pointer_declaration : substituted.spec.postcondition.heap.pointer_declarations)
-            {
-                pointer_declaration.base = std::make_shared<Expression>(substitute_expression(*pointer_declaration.base, identifier, expression));
-                pointer_declaration.value = std::make_shared<Expression>(substitute_expression(*pointer_declaration.value, identifier, expression));
-            }
-        }
+        substituted.spec.postcondition = substitute(goal.spec.postcondition, substitutions);
         return substituted;
     }
 }

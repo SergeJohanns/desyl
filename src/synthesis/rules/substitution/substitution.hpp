@@ -12,5 +12,11 @@ namespace desyl
 
     Expression substitute(Expression const &expression, Substitutions const &substitutions);
 
+    Proposition substitute(Proposition const &proposition, Substitutions const &substitutions);
+
+    Heap substitute(Heap const &heap, Substitutions const &substitutions);
+
+    Assertion substitute(Assertion const &assertion, Substitutions const &substitutions);
+
     Goal substitute(Goal const &goal, Substitutions const &substitutions);
 }

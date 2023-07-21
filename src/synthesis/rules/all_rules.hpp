@@ -15,11 +15,12 @@
 #include <pure_rewrites/pure_frame.hpp>
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
+#include <predicates/open.hpp>
 #include <memory>
 
 namespace desyl
 {
-    constexpr size_t RULES = 14;
+    constexpr size_t RULES = 15;
 
     std::vector<Expression> learned_clauses;
 
@@ -40,9 +41,11 @@ namespace desyl
         // Expensive but nongenerating rules
         std::make_unique<ExpandImpliedRule>(ExpandImpliedRule()),            // Can add massive amount of pure clauses
         std::make_unique<PostInvalidRule>(PostInvalidRule(learned_clauses)), // Not expensive to run but adds branching targets
-        // Code generation rules (at the end to avoid generating code that is not used)
+        // Invertable generation rules (at the end to avoid generating code that is not used)
         std::make_unique<WriteRule>(WriteRule()),
         std::make_unique<BranchRule>(BranchRule(learned_clauses)),
+        std::make_unique<OpenRule>(OpenRule()),
+        // Invertable generation rules (will *always* generate code that is not used if possible)
         std::make_unique<ReadRule>(ReadRule()),
     };
 }
