@@ -6,6 +6,7 @@
 #include <statements/write.hpp>
 #include <statements/read.hpp>
 #include <statements/branch.hpp>
+#include <statements/free.hpp>
 #include <substitution/heap_unify.hpp>
 #include <substitution/pick.hpp>
 #include <substitution/pure_unify.hpp>
@@ -20,7 +21,7 @@
 
 namespace desyl
 {
-    constexpr size_t RULES = 15;
+    constexpr size_t RULES = 16;
 
     std::vector<Expression> learned_clauses;
 
@@ -43,6 +44,7 @@ namespace desyl
         std::make_unique<PostInvalidRule>(PostInvalidRule(learned_clauses)), // Not expensive to run but adds branching targets
         // Invertable generation rules (at the end to avoid generating code that is not used)
         std::make_unique<WriteRule>(WriteRule()),
+        std::make_unique<FreeRule>(FreeRule()),
         std::make_unique<BranchRule>(BranchRule(learned_clauses)),
         std::make_unique<OpenRule>(OpenRule()),
         // Invertable generation rules (will *always* generate code that is not used if possible)

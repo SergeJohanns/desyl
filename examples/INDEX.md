@@ -29,5 +29,5 @@ the current version of DeSyL is able to synthesize it.
 | `three_max.sep`       | Should fail       | :x:                      |
 | `predicate_parse.sep` | Predicate parsing | :heavy_check_mark:       |
 | `open.sep`            | Open              | :heavy_check_mark:       |
-| `free.sep`            | Free              | :x:                      |
+| `free.sep`            | Free              | :heavy_check_mark:       |
 | `listfree.sep`        | Call              | :x:                      |
