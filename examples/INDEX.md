@@ -28,5 +28,6 @@ the current version of DeSyL is able to synthesize it.
 | `hilodif.sep`         | Branch            | :hourglass_flowing_sand: |
 | `three_max.sep`       | Should fail       | :x:                      |
 | `predicate_parse.sep` | Predicate parsing | :heavy_check_mark:       |
-| `open.sep`            | Open              | :x:                      |
-| `listfree.sep`        | Free              | :x:                      |
+| `open.sep`            | Open              | :heavy_check_mark:       |
+| `free.sep`            | Free              | :x:                      |
+| `listfree.sep`        | Call              | :x:                      |

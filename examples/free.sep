@@ -1,0 +1,3 @@
+{true; [x, 2] | <x, 0> -> null | <x, 1> -> null;}
+free(loc x)
+{true; emp;}
