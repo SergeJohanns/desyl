@@ -18,7 +18,7 @@ namespace desyl
     class OpenRule : public Rule
     {
     public:
-        bool is_invertible() { return true; };
+        bool is_invertible() const { return true; };
         std::vector<Derivation> apply(Goal const &goal) const;
     };
 }

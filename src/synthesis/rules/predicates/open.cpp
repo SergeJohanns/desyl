@@ -92,6 +92,10 @@ namespace desyl
                 new_spec.precondition.heap.pointer_declarations.insert(new_spec.precondition.heap.pointer_declarations.end(), heap.pointer_declarations.begin(), heap.pointer_declarations.end());
                 new_spec.precondition.heap.array_declarations.insert(new_spec.precondition.heap.array_declarations.end(), heap.array_declarations.begin(), heap.array_declarations.end());
                 new_spec.precondition.heap.predicate_calls.insert(new_spec.precondition.heap.predicate_calls.end(), heap.predicate_calls.begin(), heap.predicate_calls.end());
+                for (auto &predicate_call : new_spec.precondition.heap.predicate_calls)
+                {
+                    predicate_call.label++;
+                }
 
                 new_spec.precondition.heap.predicate_calls.erase(new_spec.precondition.heap.predicate_calls.begin() + i);
                 Goal new_goal(std::move(new_spec), goal.predicates);

@@ -38,7 +38,7 @@ namespace desyl
     class Rule
     {
     public:
-        bool is_invertible() { return false; };
+        virtual bool is_invertible() const = 0;
         virtual std::vector<Derivation> apply(Goal const &goal) const = 0;
     };
 }
