@@ -27,9 +27,21 @@ namespace desyl
         }
     }
 
-    void add_predicate_substitutions(Goal const &, std::vector<Substitutions> &)
+    void add_predicate_substitutions(Goal const &goal, std::vector<Substitutions> &substitutions)
     {
-        // TODO
+        auto const &existentials = goal.variables().existentials();
+        for (auto const &precondition : goal.spec.precondition.heap.predicate_calls)
+        {
+            for (auto const &postcondition : goal.spec.postcondition.heap.predicate_calls)
+            {
+                auto const &unified = unify(postcondition, precondition, existentials);
+                // If both are trivially equal, then we don't need to add the substitution
+                if (unified.has_value() && unified.value().size() != 0)
+                {
+                    substitutions.push_back(unified.value());
+                }
+            }
+        }
     }
 
     std::vector<Derivation> HeapUnifyRule::apply(Goal const &goal) const

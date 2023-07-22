@@ -77,4 +77,27 @@ namespace desyl
         unified.insert(unified_value->begin(), unified_value->end());
         return unified;
     }
+
+    std::optional<Substitutions> unify(PredicateCall const &domain, PredicateCall const &codomain, Vars const &variables)
+    {
+        if (domain.name != codomain.name)
+        {
+            return {};
+        }
+        if (domain.args.size() != codomain.args.size())
+        {
+            return {};
+        }
+        Substitutions unified;
+        for (size_t i = 0; i < domain.args.size(); i++)
+        {
+            auto const &unified_arg = unify(domain.args[i], codomain.args[i], variables);
+            if (!unified_arg)
+            {
+                return {};
+            }
+            unified.insert(unified_arg->begin(), unified_arg->end());
+        }
+        return unified;
+    }
 }
