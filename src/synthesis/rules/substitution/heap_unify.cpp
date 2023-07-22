@@ -17,23 +17,11 @@ namespace desyl
         {
             for (auto const &postcondition : goal.spec.postcondition.heap.pointer_declarations)
             {
-                auto const &unified_base = unify(*postcondition.base, *precondition.base, existentials);
-                if (!unified_base)
-                {
-                    continue;
-                }
-                auto const &unified_value = unify(*postcondition.value, *precondition.value, existentials);
-                if (!unified_value || subtitutions_conflict(*unified_base, *unified_value))
-                {
-                    continue;
-                }
-                Substitutions unified;
-                unified.insert(unified_base->begin(), unified_base->end());
-                unified.insert(unified_value->begin(), unified_value->end());
+                auto const &unified = unify(postcondition, precondition, existentials);
                 // If both are trivially equal, then we don't need to add the substitution
-                if (unified.size() != 0)
+                if (unified.has_value() && unified.value().size() != 0)
                 {
-                    substitutions.push_back(unified);
+                    substitutions.push_back(unified.value());
                 }
             }
         }

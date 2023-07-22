@@ -59,4 +59,22 @@ namespace desyl
         }
         return {};
     }
+
+    std::optional<Substitutions> unify(PointerDeclaration const &domain, PointerDeclaration const &codomain, Vars const &variables)
+    {
+        auto const &unified_base = unify(*domain.base, *codomain.base, variables);
+        if (!unified_base)
+        {
+            return {};
+        }
+        auto const &unified_value = unify(*domain.value, *codomain.value, variables);
+        if (!unified_value || subtitutions_conflict(*unified_base, *unified_value))
+        {
+            return {};
+        }
+        Substitutions unified;
+        unified.insert(unified_base->begin(), unified_base->end());
+        unified.insert(unified_value->begin(), unified_value->end());
+        return unified;
+    }
 }
