@@ -17,11 +17,12 @@
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
 #include <recursion/open.hpp>
+#include <recursion/call.hpp>
 #include <memory>
 
 namespace desyl
 {
-    constexpr size_t ALL_RULES = 16;
+    constexpr size_t ALL_RULES = 17;
 
     std::vector<Expression> learned_clauses;
 
@@ -47,6 +48,7 @@ namespace desyl
         std::make_unique<FreeRule>(FreeRule()),
         std::make_unique<BranchRule>(BranchRule(learned_clauses)),
         std::make_unique<OpenRule>(OpenRule()),
+        std::make_unique<CallRule>(CallRule()),
         // Invertable generation rules (will *always* generate code that is not used if possible)
         std::make_unique<ReadRule>(ReadRule()),
     };

@@ -1,8 +1,9 @@
-add_library(recursion open.cpp)
+add_library(recursion open.cpp call.cpp)
 
 target_include_directories(recursion
     PUBLIC "${PROJECT_SOURCE_DIR}/include"
     PRIVATE "${PROJECT_SOURCE_DIR}/src/include"
     PRIVATE ..
     PRIVATE .
+    PRIVATE ../substitution
 )
