@@ -32,8 +32,9 @@ namespace desyl
         VariableClassification classification;
 
     public:
-        Goal(FunctionSpecification spec, std::unordered_map<Identifier, Predicate> predicates);
+        Goal(FunctionSpecification spec, std::unordered_map<Identifier, FunctionSpecification> functions, std::unordered_map<Identifier, Predicate> predicates);
         FunctionSpecification spec;
+        std::unordered_map<Identifier, FunctionSpecification> functions;
         std::unordered_map<Identifier, Predicate> predicates;
         Vars environment;
         VariableSnapshot variables() const;

@@ -417,14 +417,14 @@ namespace desyl
             lexy::callback<Query>(
                 [](std::vector<FunctionOrPredicate> functions_and_predicates)
                 {
-                    std::vector<FunctionSpecification> functions;
+                    std::unordered_map<Identifier, FunctionSpecification> functions;
                     std::unordered_map<Identifier, Predicate> predicates;
                     for (auto &function_or_predicate : functions_and_predicates)
                     {
                         std::visit(
                             overloaded{
                                 [&functions](FunctionSpecification spec)
-                                { functions.push_back(std::move(spec)); },
+                                { functions.emplace(spec.signature.name, std::move(spec)); },
                                 [&predicates](Predicate predicate)
                                 { predicates.emplace(predicate.name, std::move(predicate)); }},
                             std::move(function_or_predicate));

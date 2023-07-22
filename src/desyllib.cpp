@@ -13,7 +13,10 @@ namespace desyl
 
     void synthesize(Query query)
     {
-        synthesize_query(Goal(std::move(query.functions[0]), std::move(query.predicates)));
+        for (auto const &function : query.functions)
+        {
+            synthesize_query(Goal(function.second, query.functions, query.predicates));
+        }
     }
 
     std::string

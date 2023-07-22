@@ -155,6 +155,6 @@ namespace desyl
     struct Query
     {
         std::unordered_map<Identifier, Predicate> predicates;
-        std::vector<FunctionSpecification> functions;
+        std::unordered_map<Identifier, FunctionSpecification> functions;
     };
 }
