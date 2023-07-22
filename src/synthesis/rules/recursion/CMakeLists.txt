@@ -1,6 +1,6 @@
-add_library(predicates open.cpp)
+add_library(recursion open.cpp)
 
-target_include_directories(predicates
+target_include_directories(recursion
     PUBLIC "${PROJECT_SOURCE_DIR}/include"
     PRIVATE "${PROJECT_SOURCE_DIR}/src/include"
     PRIVATE ..

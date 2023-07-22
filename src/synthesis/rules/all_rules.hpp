@@ -16,7 +16,7 @@
 #include <pure_rewrites/pure_frame.hpp>
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
-#include <predicates/open.hpp>
+#include <recursion/open.hpp>
 #include <memory>
 
 namespace desyl
