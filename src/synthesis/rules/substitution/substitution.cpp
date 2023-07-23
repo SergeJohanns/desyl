@@ -68,6 +68,17 @@ namespace desyl
             pointer_declaration.base = std::make_shared<Expression>(substitute(*pointer_declaration.base, substitutions));
             pointer_declaration.value = std::make_shared<Expression>(substitute(*pointer_declaration.value, substitutions));
         }
+        for (auto &array_declaration : substituted.array_declarations)
+        {
+            array_declaration.name = std::get<Identifier>(substitute(array_declaration.name, substitutions));
+        }
+        for (auto &predicate_call : substituted.predicate_calls)
+        {
+            for (auto &argument : predicate_call.args)
+            {
+                argument = std::get<Identifier>(substitute(argument, substitutions));
+            }
+        }
         return substituted;
     }
 
