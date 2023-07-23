@@ -74,9 +74,9 @@ namespace desyl
         }
         for (auto &predicate_call : substituted.predicate_calls)
         {
-            for (auto &argument : predicate_call.args)
+            for (size_t i = 0; i < predicate_call.args.size(); ++i)
             {
-                argument = std::get<Identifier>(substitute(argument, substitutions));
+                predicate_call.args[i] = std::get<Identifier>(substitute(predicate_call.args[i], substitutions));
             }
         }
         return substituted;
