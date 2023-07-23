@@ -190,26 +190,26 @@ namespace desyl
             return std::nullopt;
         }
 
-        Goal new_goal(goal);
+        FunctionSpecification new_spec(goal.spec);
         std::vector<size_t> pointer_indices(unification.pointer_indices.begin(), unification.pointer_indices.end());
         std::sort(pointer_indices.begin(), pointer_indices.end(), std::greater<size_t>());
         for (auto const &index : pointer_indices)
         {
-            new_goal.spec.precondition.heap.pointer_declarations.erase(new_goal.spec.precondition.heap.pointer_declarations.begin() + index);
+            new_spec.precondition.heap.pointer_declarations.erase(new_spec.precondition.heap.pointer_declarations.begin() + index);
         }
         std::vector<size_t> predicate_indices(unification.predicate_indices.begin(), unification.predicate_indices.end());
         std::sort(predicate_indices.begin(), predicate_indices.end(), std::greater<size_t>());
         for (auto const &index : predicate_indices)
         {
-            new_goal.spec.precondition.heap.predicate_calls.erase(new_goal.spec.precondition.heap.predicate_calls.begin() + index);
+            new_spec.precondition.heap.predicate_calls.erase(new_spec.precondition.heap.predicate_calls.begin() + index);
         }
         auto const &consequent = substitute(spec.postcondition, unification.substitutions);
-        new_goal.spec.precondition.proposition.insert(new_goal.spec.precondition.proposition.end(), consequent.proposition.begin(), consequent.proposition.end());
-        new_goal.spec.precondition.heap.pointer_declarations.insert(new_goal.spec.precondition.heap.pointer_declarations.end(), consequent.heap.pointer_declarations.begin(), consequent.heap.pointer_declarations.end());
-        new_goal.spec.precondition.heap.predicate_calls.insert(new_goal.spec.precondition.heap.predicate_calls.end(), consequent.heap.predicate_calls.begin(), consequent.heap.predicate_calls.end());
+        new_spec.precondition.proposition.insert(new_spec.precondition.proposition.end(), consequent.proposition.begin(), consequent.proposition.end());
+        new_spec.precondition.heap.pointer_declarations.insert(new_spec.precondition.heap.pointer_declarations.end(), consequent.heap.pointer_declarations.begin(), consequent.heap.pointer_declarations.end());
+        new_spec.precondition.heap.predicate_calls.insert(new_spec.precondition.heap.predicate_calls.end(), consequent.heap.predicate_calls.begin(), consequent.heap.predicate_calls.end());
 
         return Derivation{
-            .goals = std::vector<Goal>{new_goal},
+            .goals = std::vector<Goal>{Goal(std::move(new_spec), goal.functions, goal.predicates)},
             .continuation = std::make_unique<CallContinuation>(spec.signature.name, args),
         };
     }
