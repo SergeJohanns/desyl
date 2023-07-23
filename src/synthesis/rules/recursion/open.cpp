@@ -83,7 +83,7 @@ namespace desyl
             std::vector<Goal> goals;
             for (auto const &clause : predicate.clauses)
             {
-                FunctionSpecification new_spec = goal.spec;
+                FunctionSpecification new_spec(goal.spec);
 
                 new_spec.precondition.proposition.push_back(substitute(clause.condition, substitution));
                 Proposition consequent = substitute(clause.assertion.proposition, substitution);
