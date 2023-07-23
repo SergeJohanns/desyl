@@ -32,4 +32,4 @@ the current version of DeSyL is able to synthesize it.
 | `free.sep`            | Free              | :heavy_check_mark:       |
 | `listfree.sep`        | Call              | :heavy_check_mark:       |
 | `malloc.sep`          | Alloc             | :heavy_check_mark:       |
-| `listmorph.sep`       | Close             | :x:                      |
+| `listmorph.sep`       | Close             | :hourglass_flowing_sand: |
