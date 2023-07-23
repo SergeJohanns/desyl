@@ -17,6 +17,7 @@ namespace desyl
     {
     public:
         bool is_invertible() const { return true; };
+        std::string name() const { return "Read"; };
         std::vector<Derivation> apply(Goal const &goal) const;
     };
 }

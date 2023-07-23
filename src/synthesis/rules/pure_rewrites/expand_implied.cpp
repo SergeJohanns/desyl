@@ -255,7 +255,6 @@ namespace desyl
         {
             return {};
         }
-        std::cout << "Using EXPANDIMPLIED" << std::endl;
         std::vector<Derivation> derivations;
         auto new_goal(goal);
         for (auto const &clause : added_clauses)

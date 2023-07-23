@@ -61,11 +61,6 @@ namespace desyl
                                        [](Heap &heap) -> std::vector<PredicateCall> &
                                        { return heap.predicate_calls; });
 
-        if (derivations.size() > 0)
-        {
-            std::cout << "Using FRAME" << std::endl;
-        }
-
         return derivations;
     }
 }

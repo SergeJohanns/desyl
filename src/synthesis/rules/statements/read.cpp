@@ -88,7 +88,6 @@ namespace desyl
             {
                 continue;
             }
-            std::cout << "Using READ" << std::endl;
             Identifier new_var;
             for (int i = 0;; ++i)
             {

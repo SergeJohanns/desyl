@@ -19,6 +19,7 @@ namespace desyl
 
     public:
         bool is_invertible() const { return true; };
+        std::string name() const { return "Branch"; };
         BranchRule(std::vector<Expression> const &learned_clauses) : learned_clauses(learned_clauses){};
         std::vector<Derivation> apply(Goal const &goal) const;
     };

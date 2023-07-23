@@ -10,6 +10,7 @@ namespace desyl
 
     public:
         bool is_invertible() const { return false; };
+        std::string name() const { return "PostInvalid"; };
         PostInvalidRule(std::vector<Expression> &learned_clauses) : learned_clauses(learned_clauses){};
         std::vector<Derivation> apply(Goal const &goal) const;
     };

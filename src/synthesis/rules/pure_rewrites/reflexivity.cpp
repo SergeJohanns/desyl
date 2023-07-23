@@ -25,7 +25,6 @@ namespace desyl
             case BinaryOperator::Eq:
             case BinaryOperator::Leq:
             case BinaryOperator::Geq:
-                std::cout << "Using REFLEXIVE" << std::endl;
                 new_goal.spec.postcondition.proposition.erase(new_goal.spec.postcondition.proposition.begin() + i);
                 derivations.push_back(Derivation{
                     .goals = {new_goal},

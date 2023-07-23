@@ -26,10 +26,6 @@ namespace desyl
     {
         std::vector<Substitutions> substitutions;
         add_substitutions(goal, substitutions);
-        if (substitutions.size() > 0)
-        {
-            std::cout << "Using PUREUNIFY" << std::endl;
-        }
         std::vector<Derivation> derivations;
         for (auto const &substitution : substitutions)
         {

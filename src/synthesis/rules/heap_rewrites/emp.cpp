@@ -14,7 +14,6 @@ namespace desyl
         auto const &proposition_tautology = post.proposition.size() == 0;
         if (precondition_empty && postcondition_empty && proposition_tautology)
         {
-            std::cout << "Using EMP" << std::endl;
             auto deriv = Derivation{
                 .goals = std::vector<Goal>{},
                 .continuation = std::make_unique<EmptyContinuation>(std::move(EmptyContinuation{})),

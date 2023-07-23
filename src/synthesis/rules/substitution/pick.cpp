@@ -42,10 +42,6 @@ namespace desyl
                 });
             }
         }
-        if (derivations.size() > 0)
-        {
-            std::cout << "Using PICK" << std::endl;
-        }
         return derivations;
     }
 }

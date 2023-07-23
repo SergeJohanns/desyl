@@ -123,10 +123,6 @@ namespace desyl
                 .continuation = std::make_unique<OpenContinuation>(OpenContinuation{predicate.clauses}),
             });
         }
-        if (!derivations.empty())
-        {
-            std::cout << "Using OPEN" << std::endl;
-        }
         return derivations;
     }
 }

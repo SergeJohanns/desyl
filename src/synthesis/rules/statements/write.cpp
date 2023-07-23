@@ -38,7 +38,6 @@ namespace desyl
                     {
                         continue;
                     }
-                    std::cout << "Using WRITE" << std::endl;
                     auto new_goal(goal);
                     auto new_declaration = PointerDeclaration{
                         .base = preconditions[i].base,

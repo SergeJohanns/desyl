@@ -39,7 +39,6 @@ namespace desyl
         {
             return {};
         }
-        std::cout << "Using SUBSTRIGHT" << std::endl;
         std::vector<Derivation> derivations;
         derivations.push_back(Derivation{
             .goals = std::vector<Goal>{substitute(goal, substitutions)},

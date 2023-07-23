@@ -19,7 +19,6 @@ namespace desyl
             {
                 if (negated_a == b)
                 {
-                    std::cout << "Using POSTINCONSISTENT" << std::endl;
                     throw Failure();
                 }
             }
@@ -27,7 +26,6 @@ namespace desyl
             {
                 if (negated_a == b)
                 {
-                    std::cout << "Using POSTINCONSISTENT" << std::endl;
                     throw Failure();
                 }
             }
@@ -42,7 +40,6 @@ namespace desyl
             {
                 if (negated_a == b)
                 {
-                    std::cout << "Using POSTINCONSISTENT" << std::endl;
                     throw Failure();
                 }
             }

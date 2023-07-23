@@ -86,10 +86,6 @@ namespace desyl
                 .continuation = std::make_unique<FreeContinuation>(FreeContinuation(block.name)),
             });
         }
-        if (!derivations.empty())
-        {
-            std::cout << "Using FREE" << std::endl;
-        }
         return derivations;
     }
 }

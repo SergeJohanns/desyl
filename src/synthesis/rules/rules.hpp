@@ -39,6 +39,7 @@ namespace desyl
     {
     public:
         virtual bool is_invertible() const = 0;
+        virtual std::string name() const = 0;
         virtual std::vector<Derivation> apply(Goal const &goal) const = 0;
     };
 }

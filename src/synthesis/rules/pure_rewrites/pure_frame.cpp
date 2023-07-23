@@ -15,7 +15,6 @@ namespace desyl
             {
                 if (goal.spec.precondition.proposition[i] == goal.spec.postcondition.proposition[j])
                 {
-                    std::cout << "Using PUREFRAME" << std::endl;
                     auto new_goal(goal);
                     new_goal.spec.postcondition.proposition.erase(new_goal.spec.postcondition.proposition.begin() + j);
                     derivations.push_back(Derivation{

@@ -71,12 +71,17 @@ namespace desyl
             {
                 return std::nullopt;
             }
+            if (subderivs.empty())
+            {
+                continue;
+            }
+            std::cout << "Using " << rule->name() << std::endl;
             auto sub = try_alts(subderivs, rule, rules);
             if (sub.has_value())
             {
                 return sub.value();
             }
-            if (rule->is_invertible() && !subderivs.empty())
+            if (rule->is_invertible())
             {
                 return std::nullopt;
             }

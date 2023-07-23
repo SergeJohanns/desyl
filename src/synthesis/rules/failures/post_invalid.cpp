@@ -11,7 +11,6 @@ namespace desyl
         if (goal.spec.postcondition.proposition.size() == 1 &&
             std::find(learned_clauses.begin(), learned_clauses.end(), goal.spec.postcondition.proposition[0]) == learned_clauses.end())
         {
-            std::cout << "Using POSTINVALID" << std::endl;
             learned_clauses.push_back(goal.spec.postcondition.proposition[0]);
         }
         return {};

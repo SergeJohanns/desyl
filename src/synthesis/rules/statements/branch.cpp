@@ -33,7 +33,6 @@ namespace desyl
             {
                 continue;
             }
-            std::cout << "Using BRANCH" << std::endl;
             Goal ifgoal(goal);
             ifgoal.spec.precondition.proposition.push_back(clause);
             Goal elsegoal(goal);

@@ -239,10 +239,6 @@ namespace desyl
                 }
             }
         }
-        if (!derivations.empty())
-        {
-            std::cout << "Using CALL" << std::endl;
-        }
         return derivations;
     }
 }
