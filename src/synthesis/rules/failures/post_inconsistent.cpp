@@ -36,6 +36,13 @@ namespace desyl
                 .type = UnaryOperator::Not,
                 .operand = std::make_shared<Expression>(a),
             };
+            for (auto const &b : goal.spec.precondition.proposition)
+            {
+                if (negated_a == b)
+                {
+                    throw Failure();
+                }
+            }
             for (auto const &b : goal.spec.postcondition.proposition)
             {
                 if (negated_a == b)
