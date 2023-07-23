@@ -354,13 +354,6 @@ namespace desyl
 
     std::vector<Derivation> ExpandImpliedRule::apply(Goal const &goal) const
     {
-        // Expanding implications is meant for dispatching the final pure goal to replace the prover, so we don't want to expand implications before finishing the heap.
-        auto const &precondition_empty = goal.spec.precondition.heap.array_declarations.empty() && goal.spec.precondition.heap.array_declarations.empty() && goal.spec.precondition.heap.pointer_declarations.empty();
-        auto const &postcondition_empty = goal.spec.postcondition.heap.array_declarations.empty() && goal.spec.postcondition.heap.array_declarations.empty() && goal.spec.postcondition.heap.pointer_declarations.empty();
-        if (!precondition_empty || !postcondition_empty)
-        {
-            return {};
-        }
         std::vector<Expression> added_clauses;
         for (auto const &precondition : goal.spec.precondition.proposition)
         {
