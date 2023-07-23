@@ -23,8 +23,11 @@ namespace desyl
             switch (call.type)
             {
             case BinaryOperator::Eq:
+            case BinaryOperator::Iso:
             case BinaryOperator::Leq:
             case BinaryOperator::Geq:
+            case BinaryOperator::Subs:
+            case BinaryOperator::Sups:
                 new_goal.spec.postcondition.proposition.erase(new_goal.spec.postcondition.proposition.begin() + i);
                 derivations.push_back(Derivation{
                     .goals = {new_goal},

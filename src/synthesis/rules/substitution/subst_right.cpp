@@ -16,7 +16,7 @@ namespace desyl
             if (std::holds_alternative<BinaryOperatorCall>(clause))
             {
                 auto const &call = std::get<BinaryOperatorCall>(clause);
-                if (call.type != BinaryOperator::Eq || !std::holds_alternative<Identifier>(*call.lhs))
+                if (!(call.type == BinaryOperator::Eq || call.type == BinaryOperator::Iso) || !std::holds_alternative<Identifier>(*call.lhs))
                 {
                     continue;
                 }

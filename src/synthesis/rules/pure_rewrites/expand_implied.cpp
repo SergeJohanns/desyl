@@ -34,13 +34,41 @@ namespace desyl
                 .operand = std::make_shared<Expression>(implied),
             });
         }
-        if (unary_operation.type == UnaryOperator::Neg || !std::holds_alternative<BinaryOperatorCall>(*unary_operation.operand))
+        if (unary_operation.type != UnaryOperator::Not || !std::holds_alternative<BinaryOperatorCall>(*unary_operation.operand))
         {
             return result;
         }
         auto const &binary_operation(std::get<BinaryOperatorCall>(*unary_operation.operand));
         switch (binary_operation.type)
         {
+        case BinaryOperator::PSubs:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Sups,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            break;
+        case BinaryOperator::Subs:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::PSups,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            break;
+        case BinaryOperator::PSups:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Subs,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            break;
+        case BinaryOperator::Sups:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::PSubs,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            break;
         case BinaryOperator::Lt:
             result.push_back(BinaryOperatorCall{
                 .type = BinaryOperator::Geq,
@@ -143,81 +171,167 @@ namespace desyl
         }
         switch (binary_operation.type)
         {
+        case BinaryOperator::PSubs:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Sups,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::PSups,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
+        case BinaryOperator::Subs:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Sups,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
+        case BinaryOperator::PSups:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Sups,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::PSubs,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
+        case BinaryOperator::Sups:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Subs,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
         case BinaryOperator::Lt:
-            return {BinaryOperatorCall{
-                        .type = BinaryOperator::Leq,
-                        .lhs = binary_operation.lhs,
-                        .rhs = binary_operation.rhs,
-                    },
-                    BinaryOperatorCall{
-                        .type = BinaryOperator::Gt,
-                        .lhs = binary_operation.rhs,
-                        .rhs = binary_operation.lhs,
-                    }};
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Leq,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Gt,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
         case BinaryOperator::Leq:
-            return {
+            result.push_back(
                 BinaryOperatorCall{
                     .type = BinaryOperator::Geq,
                     .lhs = binary_operation.rhs,
                     .rhs = binary_operation.lhs,
-                }};
+                });
+            break;
         case BinaryOperator::Gt:
-            return {BinaryOperatorCall{
-                        .type = BinaryOperator::Geq,
-                        .lhs = binary_operation.lhs,
-                        .rhs = binary_operation.rhs,
-                    },
-                    BinaryOperatorCall{
-                        .type = BinaryOperator::Lt,
-                        .lhs = binary_operation.rhs,
-                        .rhs = binary_operation.lhs,
-                    }};
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Geq,
+                .lhs = binary_operation.lhs,
+                .rhs = binary_operation.rhs,
+            });
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Lt,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
         case BinaryOperator::Geq:
-            return {
-                BinaryOperatorCall{
-                    .type = BinaryOperator::Leq,
-                    .lhs = binary_operation.rhs,
-                    .rhs = binary_operation.lhs,
-                }};
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Leq,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
+        case BinaryOperator::Iso:
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::Iso,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            if (std::holds_alternative<BinaryOperatorCall>(*binary_operation.rhs))
+            {
+                auto const &rhs(std::get<BinaryOperatorCall>(*binary_operation.rhs));
+                switch (rhs.type)
+                {
+                case BinaryOperator::Union:
+                    result.push_back(BinaryOperatorCall{
+                        .type = BinaryOperator::Sups,
+                        .lhs = binary_operation.lhs,
+                        .rhs = rhs.lhs,
+                    });
+                    result.push_back(BinaryOperatorCall{
+                        .type = BinaryOperator::Sups,
+                        .lhs = binary_operation.lhs,
+                        .rhs = rhs.rhs,
+                    });
+                    break;
+                case BinaryOperator::Intersect:
+                    result.push_back(BinaryOperatorCall{
+                        .type = BinaryOperator::Subs,
+                        .lhs = binary_operation.lhs,
+                        .rhs = rhs.lhs,
+                    });
+                    result.push_back(BinaryOperatorCall{
+                        .type = BinaryOperator::Subs,
+                        .lhs = binary_operation.lhs,
+                        .rhs = rhs.rhs,
+                    });
+                    break;
+                default:
+                    break;
+                }
+            }
+            break;
         case BinaryOperator::Eq:
-            return {BinaryOperatorCall{
+            result.push_back(BinaryOperatorCall{
                 .type = BinaryOperator::Eq,
                 .lhs = binary_operation.rhs,
                 .rhs = binary_operation.lhs,
-            }};
+            });
+            break;
         case BinaryOperator::Neq:
-            return {BinaryOperatorCall{
+            result.push_back(BinaryOperatorCall{
                 .type = BinaryOperator::Neq,
                 .lhs = binary_operation.rhs,
                 .rhs = binary_operation.lhs,
-            }};
+            });
+            break;
         case BinaryOperator::And:
-            return {
-                *binary_operation.lhs,
-                *binary_operation.rhs,
-                BinaryOperatorCall{
-                    .type = BinaryOperator::And,
-                    .lhs = binary_operation.rhs,
-                    .rhs = binary_operation.lhs,
-                }};
+            result.push_back(*binary_operation.lhs);
+            result.push_back(*binary_operation.rhs);
+            result.push_back(BinaryOperatorCall{
+                .type = BinaryOperator::And,
+                .lhs = binary_operation.rhs,
+                .rhs = binary_operation.lhs,
+            });
+            break;
         case BinaryOperator::Or:
-            return {BinaryOperatorCall{
+            result.push_back(BinaryOperatorCall{
                 .type = BinaryOperator::Or,
                 .lhs = binary_operation.rhs,
                 .rhs = binary_operation.lhs,
-            }};
+            });
+            break;
         case BinaryOperator::Implies:
-            return {BinaryOperatorCall{
+            result.push_back(BinaryOperatorCall{
                 .type = BinaryOperator::Or,
                 .lhs = std::make_shared<Expression>(UnaryOperatorCall{
                     .type = UnaryOperator::Neg,
                     .operand = binary_operation.lhs,
                 }),
                 .rhs = binary_operation.rhs,
-            }};
+            });
+            break;
         default:
-            return {};
+            break;
         }
+        return result;
     }
 
     std::vector<Expression> implied(Expression const &expression)
