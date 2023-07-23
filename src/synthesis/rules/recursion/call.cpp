@@ -24,6 +24,7 @@ namespace desyl
     struct TermUnification
     {
         std::set<size_t> term_indices;
+        std::vector<size_t> term_index_mapping;
         Substitutions substitutions;
 
         /// @brief Merge two unifications
@@ -42,10 +43,13 @@ namespace desyl
             }
             std::set<size_t> new_term_indices(term_indices);
             new_term_indices.insert(other.term_indices.begin(), other.term_indices.end());
+            std::vector<size_t> new_term_index_mapping(term_index_mapping);
+            new_term_index_mapping.insert(new_term_index_mapping.end(), other.term_index_mapping.begin(), other.term_index_mapping.end());
             Substitutions new_substitutions(substitutions);
             new_substitutions.insert(other.substitutions.begin(), other.substitutions.end());
             return TermUnification{
                 .term_indices = new_term_indices,
+                .term_index_mapping = new_term_index_mapping,
                 .substitutions = new_substitutions,
             };
         }
@@ -73,6 +77,7 @@ namespace desyl
                 {
                     term_unifications.push_back(TermUnification{
                         .term_indices = {i},
+                        .term_index_mapping = {i},
                         .substitutions = unification.value(),
                     });
                 }
@@ -125,21 +130,6 @@ namespace desyl
         Substitutions substitutions;
     };
 
-    /// @brief Unify two predicate calls, but only if the domain is labelled with a higher label than the codomain
-    /// @param domain The domain predicate call
-    /// @param codomain The codomain predicate call
-    /// @param variables The variables to substitute
-    /// @return The substitutions, if any
-    /// @note The label requirement is imposed to ensure well-foundedness of the recursion to avoid infinite loops
-    std::optional<Substitutions> labelled_unify(PredicateCall const &domain, PredicateCall const &codomain, Vars const &variables)
-    {
-        if (domain.label >= codomain.label)
-        {
-            return {};
-        }
-        return unify(domain, codomain, variables);
-    }
-
     /// @brief Unify two subheaps
     /// @param domain The domain subheap where variables can be substituted
     /// @param codomain The codomain subheap
@@ -148,14 +138,24 @@ namespace desyl
     std::vector<SubHeapUnification> unify_subheaps(Heap const &domain, Heap const &codomain, Vars const &variables)
     {
         std::vector<TermUnification> pointer_unifications = unify_all_clauses(domain.pointer_declarations, codomain.pointer_declarations, variables, unify);
-        std::vector<TermUnification> predicate_unifications = unify_all_clauses(domain.predicate_calls, codomain.predicate_calls, variables, labelled_unify);
+        std::vector<TermUnification> predicate_unifications = unify_all_clauses(domain.predicate_calls, codomain.predicate_calls, variables, unify);
         std::vector<SubHeapUnification> result;
 
         for (auto const &pointer : pointer_unifications)
         {
             for (auto const &predicate : predicate_unifications)
             {
-                if (!subtitutions_conflict(pointer.substitutions, predicate.substitutions))
+                bool any_predicate_label_higher = false;
+                for (size_t i = 0; i < domain.predicate_calls.size(); i++)
+                {
+                    if (codomain.predicate_calls[predicate.term_index_mapping[i]].label > domain.predicate_calls[i].label)
+                    {
+                        any_predicate_label_higher = true;
+                        break;
+                    }
+                }
+
+                if (any_predicate_label_higher && !subtitutions_conflict(pointer.substitutions, predicate.substitutions))
                 {
                     Substitutions unified;
                     unified.insert(pointer.substitutions.begin(), pointer.substitutions.end());
