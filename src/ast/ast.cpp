@@ -1,5 +1,8 @@
 #include <desyl/ast.hpp>
 
+#include <sstream>
+#include <iostream>
+
 namespace desyl
 {
     std::string stringify_op(UnaryOperator const &op)
@@ -74,6 +77,79 @@ namespace desyl
     std::string stringify_expression(Expression const &expression)
     {
         return std::visit(stringify, expression);
+    }
+
+    std::string stringify_heap(Heap const &heap)
+    {
+        std::vector<std::string> heaplets;
+        for (auto const &array : heap.array_declarations)
+        {
+            heaplets.push_back("[" + array.name + ", " + std::to_string(array.size) + "]");
+        }
+        for (auto const &pointer : heap.pointer_declarations)
+        {
+            heaplets.push_back("<" + stringify_expression(*pointer.base) + ", " + std::to_string(pointer.offset) + "> -> " + stringify_expression(*pointer.value));
+        }
+        for (auto const &predicate : heap.predicate_calls)
+        {
+            std::string args;
+            for (size_t i = 0; i + 1 < predicate.args.size(); ++i)
+            {
+                args += predicate.args[i] + ", ";
+            }
+            if (!predicate.args.empty())
+            {
+                args += predicate.args.back();
+            }
+            heaplets.push_back(predicate.name + "(" + args + ")");
+        }
+        std::stringstream stream;
+        for (size_t i = 0; i + 1 < heaplets.size(); ++i)
+        {
+            stream << heaplets[i] << ", ";
+        }
+        if (!heaplets.empty())
+        {
+            stream << heaplets.back();
+        }
+        else
+        {
+            stream << "emp";
+        }
+        stream << ";";
+        return stream.str();
+    }
+
+    std::string stringify_proposition(Proposition const &prop)
+    {
+        std::stringstream stream;
+        for (size_t i = 0; i + 1 < prop.size(); ++i)
+        {
+            stream << stringify_expression(prop[i]) << " && ";
+        }
+        if (!prop.empty())
+        {
+            stream << stringify_expression(prop.back());
+        }
+        else
+        {
+            stream << "true";
+        }
+        stream << ";";
+        return stream.str();
+    }
+
+    std::string stringify_function_spec(FunctionSpecification const &spec)
+    {
+        std::stringstream stream;
+        stream << "{";
+        stream << stringify_proposition(spec.precondition.proposition) << " ";
+        stream << stringify_heap(spec.precondition.heap);
+        stream << "} -> {";
+        stream << stringify_proposition(spec.postcondition.proposition) << " ";
+        stream << stringify_heap(spec.postcondition.heap);
+        stream << "}";
+        return stream.str();
     }
 
     bool UnaryOperatorCall::operator==(UnaryOperatorCall const &other) const

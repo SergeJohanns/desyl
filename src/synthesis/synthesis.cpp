@@ -84,6 +84,16 @@ namespace desyl
             {
                 std::cout << "Using " << rule->name() << std::endl;
             }
+            // if (verbose)
+            // {
+            //     for (auto const &deriv : subderivs)
+            //     {
+            //         for (auto const &goal : deriv.goals)
+            //         {
+            //             std::cout << stringify_function_spec(goal.spec) << std::endl;
+            //         }
+            //     }
+            // }
             auto sub = try_alts(subderivs, rule, rules, verbose);
             if (sub.has_value())
             {

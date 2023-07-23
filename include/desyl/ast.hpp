@@ -126,6 +126,8 @@ namespace desyl
         Assertion postcondition;
     };
 
+    std::string stringify_function_spec(FunctionSpecification const &spec);
+
     enum class AlgebraicType
     {
         Int,
