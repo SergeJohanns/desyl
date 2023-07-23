@@ -11,7 +11,5 @@ namespace desyl
 
     /// @brief Synthesize a program from a specification
     /// @param query The specification to synthesize
-    void synthesize(Query query);
-
-    std::string example(std::string const &input);
+    void synthesize(Query query, bool verbose);
 }

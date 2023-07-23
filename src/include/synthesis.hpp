@@ -40,5 +40,5 @@ namespace desyl
         VariableSnapshot variables() const;
     };
 
-    void synthesize_query(Goal const &query);
+    void synthesize_query(Goal const &query, bool verbose);
 }

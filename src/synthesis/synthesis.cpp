@@ -11,20 +11,22 @@ namespace desyl
 {
     // Forward declaration (no header) because the function is not public but is part of mutual recursion
     template <typename RULES>
-    std::optional<Program> with_rules(RULES const &rules, Goal const &goal);
+    std::optional<Program> with_rules(RULES const &rules, Goal const &goal, bool verbose);
 
     /// @brief Try to synthesize programs for a list of subgoals and join them
     /// @tparam RULES The rules array to use for each subgoal
     /// @param goals The subgoals to synthesize
     /// @param continuation The continuation to join the synthesized programs
+    /// @param rules The rules array to use for each subgoal
+    /// @param verbose Whether to print debug information
     /// @return The synthesized program, if any
     template <typename RULES>
-    std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation, RULES const &rules)
+    std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation, RULES const &rules, bool verbose)
     {
         auto result = std::vector<Program>{};
         for (auto const &goal : goals)
         {
-            auto sub = with_rules(rules, std::move(goal));
+            auto sub = with_rules(rules, std::move(goal), verbose);
             if (!sub.has_value())
             {
                 return std::nullopt;
@@ -38,13 +40,15 @@ namespace desyl
     /// @tparam RULES The rules array to use for each derivation
     /// @param subderivs The subderivations to try
     /// @param rule The rule that was applied to get the subderivations
+    /// @param rules The rules array to use for each derivation
+    /// @param verbose Whether to print debug information
     /// @return The synthesized program, if any
     template <typename RULES>
-    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &, RULES const &rules)
+    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &, RULES const &rules, bool verbose)
     {
         for (auto const &deriv : subderivs)
         {
-            auto sub = solve_subgoals(deriv.goals, *deriv.continuation, rules);
+            auto sub = solve_subgoals(deriv.goals, *deriv.continuation, rules, verbose);
             if (sub.has_value())
             {
                 return sub.value();
@@ -56,9 +60,10 @@ namespace desyl
     /// @brief Synthesize a program from a specification using a set of rules
     /// @param rules The rules to use
     /// @param goal The specification to synthesize
+    /// @param verbose Whether to print debug information
     /// @return The synthesized program, if any
     template <typename RULES>
-    std::optional<Program> with_rules(RULES const &rules, Goal const &goal)
+    std::optional<Program> with_rules(RULES const &rules, Goal const &goal, bool verbose)
     {
         for (auto &rule : rules)
         {
@@ -75,8 +80,11 @@ namespace desyl
             {
                 continue;
             }
-            std::cout << "Using " << rule->name() << std::endl;
-            auto sub = try_alts(subderivs, rule, rules);
+            if (verbose)
+            {
+                std::cout << "Using " << rule->name() << std::endl;
+            }
+            auto sub = try_alts(subderivs, rule, rules, verbose);
             if (sub.has_value())
             {
                 return sub.value();
@@ -91,10 +99,14 @@ namespace desyl
 
     /// @brief Synthesize a function from a specification
     /// @param spec The specification to synthesize
-    void synthesize_query(Goal const &spec)
+    /// @param verbose Whether to print debug information
+    void synthesize_query(Goal const &spec, bool verbose)
     {
-        auto res = with_rules(all_rules, spec);
-        std::cout << std::endl;
+        auto res = with_rules(all_rules, spec, verbose);
+        if (verbose)
+        {
+            std::cout << std::endl;
+        }
         if (res.has_value())
         {
             std::cout << "void " << spec.spec.signature.name << "(";
