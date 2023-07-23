@@ -74,6 +74,10 @@ namespace desyl
             }
             catch (Failure const &)
             {
+                if (verbose)
+                {
+                    std::cout << "Using " << rule->name() << std::endl;
+                }
                 return std::nullopt;
             }
             if (subderivs.empty())
