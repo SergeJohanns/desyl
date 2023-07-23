@@ -23,7 +23,6 @@ namespace desyl
     {
         for (auto const &precondition_block : goal.spec.precondition.heap.array_declarations)
         {
-            std::cout << "Comparing " << precondition_block.name << " and " << block.name << std::endl;
             // Unlike with the FreeRule, we keep in mind we can't allocate if the pointer already
             // has a block, even if it's not the same size, because of the separating conjunction
             if (block.name == precondition_block.name)
