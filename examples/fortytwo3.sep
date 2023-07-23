@@ -1,0 +1,7 @@
+predicate fortytwo(loc r) {
+|  true |=> {true; <r, 0> -> 42;}
+}
+
+{true; <r, 0> -> null;}
+fortytwo(loc r)
+{true; fortytwo(r);}

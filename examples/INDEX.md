@@ -33,4 +33,5 @@ the current version of DeSyL is able to synthesize it.
 | `listfree.sep`        | Call              | :heavy_check_mark:       |
 | `malloc.sep`          | Alloc             | :heavy_check_mark:       |
 | `mk_empty.sep`        | Close             | :heavy_check_mark:       |
+| `fortytwo3.sep`       | TrueElision       | :heavy_check_mark:       |
 | `listmorph.sep`       | Close             | :hourglass_flowing_sand: |
