@@ -36,15 +36,15 @@ namespace desyl
         std::make_unique<PostInconsistentRule>(PostInconsistentRule()),
         std::make_unique<SetSizeRule>(SetSizeRule()),
         std::make_unique<EmpRule>(EmpRule()),
+        // Unfolding phase rules
+        std::make_unique<OpenRule>(OpenRule()),
+        std::make_unique<CloseRule>(CloseRule()), // Complicates heap and adds backtracking targets
         // Strictly simplifying lossless rules
         std::make_unique<TrueElisionRule>(TrueElisionRule()),
         std::make_unique<FrameRule>(FrameRule()),
         std::make_unique<PureFrameRule>(PureFrameRule()),
         std::make_unique<ReflexiveRule>(ReflexiveRule()),
         std::make_unique<ExpandImpliedRule>(ExpandImpliedRule()),
-        // Unfolding phase rules
-        std::make_unique<OpenRule>(OpenRule()),
-        std::make_unique<CloseRule>(CloseRule()), // Complicates heap and adds backtracking targets
         // Substitution rules
         std::make_unique<HeapUnifyRule>(HeapUnifyRule()),
         std::make_unique<PickRule>(PickRule()),
