@@ -55,25 +55,31 @@ namespace desyl
             using operand = dsl::atom;
         };
 
+        static constexpr auto isect = dsl::op(LEXY_LIT("**"));
         static constexpr auto mul = dsl::op(dsl::lit_c<'*'>);
         static constexpr auto div = dsl::op(dsl::lit_c<'/'>);
         static constexpr auto mod = dsl::op(dsl::lit_c<'%'>);
 
         struct multiplication : dsl::infix_op_left
         {
-            static constexpr auto op = mul / div / mod;
+            static constexpr auto op = isect / mul / div / mod;
             using operand = prefix;
         };
 
+        static constexpr auto union_ = dsl::op(LEXY_LIT("++"));
         static constexpr auto add = dsl::op(dsl::lit_c<'+'>);
         static constexpr auto sub = dsl::op(dsl::lit_c<'-'>);
 
         struct addition : dsl::infix_op_left
         {
-            static constexpr auto op = add / sub;
+            static constexpr auto op = union_ / add / sub;
             using operand = multiplication;
         };
 
+        static constexpr auto psubs = dsl::op(LEXY_LIT("<s"));
+        static constexpr auto subs = dsl::op(LEXY_LIT("<=s"));
+        static constexpr auto psups = dsl::op(LEXY_LIT(">s"));
+        static constexpr auto sups = dsl::op(LEXY_LIT(">=s"));
         static constexpr auto lt = dsl::op(dsl::lit_c<'<'>);
         static constexpr auto leq = dsl::op(LEXY_LIT("<="));
         static constexpr auto gt = dsl::op(dsl::lit_c<'>'>);
@@ -81,16 +87,17 @@ namespace desyl
 
         struct ordering : dsl::infix_op_left
         {
-            static constexpr auto op = leq / lt / geq / gt;
+            static constexpr auto op = psubs / subs / psups / sups / leq / lt / geq / gt;
             using operand = addition;
         };
 
+        static constexpr auto iso = dsl::op(LEXY_LIT("=i"));
         static constexpr auto eq = dsl::op(LEXY_LIT("=="));
         static constexpr auto neq = dsl::op(LEXY_LIT("!="));
 
         struct equality : dsl::infix_op_left
         {
-            static constexpr auto op = eq / neq;
+            static constexpr auto op = iso / eq / neq;
             using operand = ordering;
         };
 
@@ -130,16 +137,28 @@ namespace desyl
             { return UnaryOperatorCall{UnaryOperator::Neg, std::make_unique<Expression>(std::move(operand))}; },
             [](lexy::op<neg>, Expression operand)
             { return UnaryOperatorCall{UnaryOperator::Not, std::make_unique<Expression>(std::move(operand))}; },
+            [](Expression lhs, lexy::op<isect>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Intersect, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<mul>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Mul, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<div>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Div, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<mod>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Mod, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<union_>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Union, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<add>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Add, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<sub>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Sub, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<psubs>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::PSubs, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<subs>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Subs, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<psups>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::PSups, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<sups>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Sups, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<lt>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Lt, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<leq>, Expression rhs)
@@ -148,6 +167,8 @@ namespace desyl
             { return BinaryOperatorCall{BinaryOperator::Gt, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<geq>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Geq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
+            [](Expression lhs, lexy::op<iso>, Expression rhs)
+            { return BinaryOperatorCall{BinaryOperator::Iso, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<eq>, Expression rhs)
             { return BinaryOperatorCall{BinaryOperator::Eq, std::make_unique<Expression>(std::move(lhs)), std::make_unique<Expression>(std::move(rhs))}; },
             [](Expression lhs, lexy::op<neq>, Expression rhs)

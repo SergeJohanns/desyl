@@ -37,15 +37,23 @@ namespace desyl
 
     enum class BinaryOperator
     {
+        Intersect,
+        Union,
         Mul,
         Div,
         Mod,
         Add,
         Sub,
+        Subs,
+        PSubs,
+        Sups,
+        PSups,
         Lt,
         Leq,
         Gt,
         Geq,
+        Iso,
+        Niso,
         Eq,
         Neq,
         And,
