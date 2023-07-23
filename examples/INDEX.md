@@ -36,3 +36,5 @@ the current version of DeSyL is able to synthesize it.
 | `fortytwo3.sep`       | TrueElision       | :heavy_check_mark:       |
 | `listmorph.sep`       | Close             | :hourglass_flowing_sand: |
 | `listcopy.sep`        | Close             | :hourglass_flowing_sand: |
+| `treefree.sep`        | Call              | :heavy_check_mark:       |
+| `treeflatten.sep`     | Close             | :hourglass_flowing_sand: |

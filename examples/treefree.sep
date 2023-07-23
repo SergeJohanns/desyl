@@ -1,0 +1,8 @@
+predicate tree(loc x, set s) {
+|  x == null    |=> {s =i {}; emp;}
+|  !(x == null) |=> {s =i {v} ++ sa ++ sb; [x, 3] | <x, 0> -> v | <x, 1> -> l | <x, 2> -> r | tree(l, sa) | tree(r, sb);}
+}
+
+{true; tree(x, s);}
+treefree(loc x)
+{true; emp;}
