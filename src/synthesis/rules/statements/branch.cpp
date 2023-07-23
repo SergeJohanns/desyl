@@ -33,10 +33,12 @@ namespace desyl
             {
                 continue;
             }
-            Goal ifgoal(goal);
-            ifgoal.spec.precondition.proposition.push_back(clause);
-            Goal elsegoal(goal);
-            elsegoal.spec.precondition.proposition.push_back(negated_clause);
+            FunctionSpecification ifspec(goal.spec);
+            ifspec.precondition.proposition.push_back(clause);
+            Goal ifgoal(std::move(ifspec), goal.functions, goal.predicates);
+            FunctionSpecification elsespec(goal.spec);
+            elsespec.precondition.proposition.push_back(negated_clause);
+            Goal elsegoal(std::move(elsespec), goal.functions, goal.predicates);
             derivations.push_back(Derivation{
                 .goals = {ifgoal, elsegoal},
                 .continuation = std::make_unique<BranchContinuation>(clause),
