@@ -31,3 +31,4 @@ the current version of DeSyL is able to synthesize it.
 | `open.sep`            | Open              | :heavy_check_mark:       |
 | `free.sep`            | Free              | :heavy_check_mark:       |
 | `listfree.sep`        | Call              | :heavy_check_mark:       |
+| `malloc.sep`          | Alloc             | :x:                      |
