@@ -39,21 +39,22 @@ namespace desyl
         std::make_unique<FrameRule>(FrameRule()),
         std::make_unique<PureFrameRule>(PureFrameRule()),
         std::make_unique<ReflexiveRule>(ReflexiveRule()),
+        std::make_unique<ExpandImpliedRule>(ExpandImpliedRule()),
+        // Unfolding phase rules
+        std::make_unique<OpenRule>(OpenRule()),
+        std::make_unique<CloseRule>(CloseRule()), // Complicates heap and adds backtracking targets
         // Substitution rules
         std::make_unique<HeapUnifyRule>(HeapUnifyRule()),
         std::make_unique<PickRule>(PickRule()),
         std::make_unique<PureUnifyRule>(PureUnifyRule()),
         std::make_unique<SubstRightRule>(SubstRightRule()),
         // Expensive but nongenerating rules
-        std::make_unique<CloseRule>(CloseRule()),                            // Complicates heap and adds backtracking targets
-        std::make_unique<ExpandImpliedRule>(ExpandImpliedRule()),            // Can add massive amount of pure clauses
         std::make_unique<PostInvalidRule>(PostInvalidRule(learned_clauses)), // Not expensive to run but adds branching targets
         // Desctructive generation rules (at the end to avoid generating code that is not used)
         std::make_unique<WriteRule>(WriteRule()),
         std::make_unique<FreeRule>(FreeRule()),
         std::make_unique<AllocRule>(AllocRule()),
         std::make_unique<BranchRule>(BranchRule(learned_clauses)),
-        std::make_unique<OpenRule>(OpenRule()),
         std::make_unique<CallRule>(CallRule()),
         // Invertable generation rules (will *always* generate code that is not used if possible)
         std::make_unique<ReadRule>(ReadRule()),
