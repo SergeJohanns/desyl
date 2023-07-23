@@ -14,6 +14,11 @@ namespace desyl
         return {};
     }
 
+    std::vector<Expression> implied_inner(SetLiteral const &)
+    {
+        return {};
+    }
+
     std::vector<Expression> implied_inner(Identifier const &)
     {
         return {};
@@ -221,6 +226,8 @@ namespace desyl
             overloaded{
                 [](Literal const &literal)
                 { return implied_inner(literal); },
+                [](SetLiteral const &set)
+                { return implied_inner(set); },
                 [](Identifier const &identifier)
                 { return implied_inner(identifier); },
                 [](UnaryOperatorCall const &unary_operation)

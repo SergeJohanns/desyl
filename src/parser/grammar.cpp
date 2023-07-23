@@ -41,9 +41,20 @@ namespace desyl
         static constexpr auto value = lexy::forward<Expression>;
     };
 
+    struct set_literal
+    {
+        static constexpr auto rule = dsl::curly_bracketed.opt_list(dsl::p<subexpression>, dsl::sep(dsl::comma));
+        static constexpr auto value = lexy::as_list<std::vector<Expression>> >>
+                                      lexy::callback<SetLiteral>(
+                                          [](std::vector<Expression> elements)
+                                          { return SetLiteral{std::move(elements)}; },
+                                          [](lexy::nullopt)
+                                          { return SetLiteral{}; });
+    };
+
     struct expression : lexy::expression_production
     {
-        static constexpr auto atom = dsl::p<literal> | dsl::p<identifier> | dsl::parenthesized(dsl::p<subexpression>);
+        static constexpr auto atom = dsl::p<literal> | dsl::p<identifier> | dsl::p<set_literal> | dsl::parenthesized(dsl::p<subexpression>);
         static constexpr auto whitespace = dsl::ascii::space;
 
         static constexpr auto min = dsl::op(dsl::lit_c<'-'>);

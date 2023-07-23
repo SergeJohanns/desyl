@@ -31,6 +31,15 @@ namespace desyl
                 { return Expression{substitute(expr, before, after)}; },
                 [&](Literal &expr)
                 { return Expression(expr); },
+                [&](SetLiteral &expr)
+                {
+                    std::vector<Expression> new_elements;
+                    for (auto &element : expr.elements)
+                    {
+                        new_elements.push_back(substitute(element, before, after));
+                    }
+                    return Expression{SetLiteral{new_elements}};
+                },
                 [&](UnaryOperatorCall &expr)
                 {
                     return Expression{UnaryOperatorCall{

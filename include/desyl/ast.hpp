@@ -10,8 +10,8 @@ namespace desyl
 {
     using Literal = int;
     using Identifier = std::string;
-
     // Forward declarations because definitions recursively depend on Expression
+    struct SetLiteral;
     struct UnaryOperatorCall;
     struct BinaryOperatorCall;
 
@@ -19,8 +19,15 @@ namespace desyl
     using Expression = std::variant<
         Literal,
         Identifier,
+        SetLiteral,
         UnaryOperatorCall,
         BinaryOperatorCall>;
+
+    struct SetLiteral
+    {
+        std::vector<Expression> elements;
+        bool operator==(SetLiteral const &other) const = default;
+    };
 
     enum class UnaryOperator
     {

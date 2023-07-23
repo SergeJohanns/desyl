@@ -56,6 +56,27 @@ namespace desyl
             return std::to_string(literal);
         }
 
+        const auto operator()(SetLiteral const &set) const
+        {
+            std::vector<std::string> elements;
+            for (auto const &element : set.elements)
+            {
+                elements.push_back(std::visit(*this, element));
+            }
+            std::stringstream stream;
+            stream << "{";
+            for (size_t i = 0; i + 1 < elements.size(); ++i)
+            {
+                stream << elements[i] << ", ";
+            }
+            if (!elements.empty())
+            {
+                stream << elements.back();
+            }
+            stream << "}";
+            return stream.str();
+        }
+
         const auto operator()(Identifier const &identifier) const
         {
             return identifier;
