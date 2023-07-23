@@ -8,9 +8,9 @@ namespace desyl
     Program BranchContinuation::join(std::vector<Program> const &results) const
     {
         std::ostringstream stream;
-        stream << "if (" << stringify_expression(condition) << ")" << std::endl;
+        stream << "if (" << stringify_expression(condition) << ") ";
         stream << results[0];
-        stream << "else" << std::endl;
+        stream << " else ";
         stream << results[1];
         Program program("");
         return program.add_lines(stream.str());

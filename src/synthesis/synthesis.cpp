@@ -109,7 +109,7 @@ namespace desyl
                     std::cout << ", ";
                 }
             }
-            std::cout << ")" << std::endl;
+            std::cout << ") ";
             std::cout << res.value() << std::endl;
         }
         else

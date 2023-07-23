@@ -15,14 +15,14 @@ namespace desyl
             return results[0];
         }
         std::ostringstream stream;
-        stream << "if (" << stringify_expression(clauses[0].condition) << ")" << std::endl;
+        stream << "if (" << stringify_expression(clauses[0].condition) << ") ";
         stream << results[0];
         for (size_t i = 1; i < clauses.size() - 1; i++)
         {
-            stream << "else if (" << stringify_expression(clauses[i].condition) << ")" << std::endl;
+            stream << " else if (" << stringify_expression(clauses[i].condition) << ") ";
             stream << results[i];
         }
-        stream << "else" << std::endl;
+        stream << " else ";
         stream << results[clauses.size() - 1];
         Program program("");
         return program.add_lines(stream.str());

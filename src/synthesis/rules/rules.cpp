@@ -21,9 +21,13 @@ namespace desyl
     std::ostream &operator<<(std::ostream &os, const Program &program)
     {
         os << program.outer;
-        os << "{\n";
+        os << "{";
+        if (!program.code.empty())
+        {
+            os << "\n";
+        }
         os << program.code;
-        os << "}\n";
+        os << "}";
         return os;
     }
 }
