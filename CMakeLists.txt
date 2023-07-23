@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)  # CMake version check
 project(
     desyl
-    VERSION 0.1
+    VERSION 1.0
     DESCRIPTION "A C++ library for deductive synthesis of programs using Separation Logic"
     LANGUAGES CXX
 )
