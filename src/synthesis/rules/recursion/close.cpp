@@ -42,10 +42,10 @@ namespace desyl
                 new_spec.postcondition.proposition.insert(new_spec.postcondition.proposition.end(), consequent.begin(), consequent.end());
 
                 Heap heap = substitute(clause.assertion.heap, substitution);
-                new_spec.precondition.heap.pointer_declarations.insert(new_spec.precondition.heap.pointer_declarations.end(), heap.pointer_declarations.begin(), heap.pointer_declarations.end());
-                new_spec.precondition.heap.array_declarations.insert(new_spec.precondition.heap.array_declarations.end(), heap.array_declarations.begin(), heap.array_declarations.end());
-                new_spec.precondition.heap.predicate_calls.insert(new_spec.precondition.heap.predicate_calls.end(), heap.predicate_calls.begin(), heap.predicate_calls.end());
-                for (auto &predicate_call : new_spec.precondition.heap.predicate_calls)
+                new_spec.postcondition.heap.pointer_declarations.insert(new_spec.postcondition.heap.pointer_declarations.end(), heap.pointer_declarations.begin(), heap.pointer_declarations.end());
+                new_spec.postcondition.heap.array_declarations.insert(new_spec.postcondition.heap.array_declarations.end(), heap.array_declarations.begin(), heap.array_declarations.end());
+                new_spec.postcondition.heap.predicate_calls.insert(new_spec.postcondition.heap.predicate_calls.end(), heap.predicate_calls.begin(), heap.predicate_calls.end());
+                for (auto &predicate_call : new_spec.postcondition.heap.predicate_calls)
                 {
                     predicate_call.label++;
                 }
