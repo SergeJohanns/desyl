@@ -18,12 +18,13 @@
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
 #include <recursion/open.hpp>
+#include <recursion/close.hpp>
 #include <recursion/call.hpp>
 #include <memory>
 
 namespace desyl
 {
-    constexpr size_t ALL_RULES = 18;
+    constexpr size_t ALL_RULES = 19;
 
     std::vector<Expression> learned_clauses;
 
@@ -42,6 +43,7 @@ namespace desyl
         std::make_unique<PureUnifyRule>(PureUnifyRule()),
         std::make_unique<SubstRightRule>(SubstRightRule()),
         // Expensive but nongenerating rules
+        std::make_unique<CloseRule>(CloseRule()),                            // Complicates heap and adds backtracking targets
         std::make_unique<ExpandImpliedRule>(ExpandImpliedRule()),            // Can add massive amount of pure clauses
         std::make_unique<PostInvalidRule>(PostInvalidRule(learned_clauses)), // Not expensive to run but adds branching targets
         // Desctructive generation rules (at the end to avoid generating code that is not used)
