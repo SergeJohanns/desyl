@@ -14,6 +14,7 @@
 #include <substitution/subst_right.hpp>
 #include <failures/post_invalid.hpp>
 #include <failures/post_inconsistent.hpp>
+#include <failures/set_size.hpp>
 #include <pure_rewrites/pure_frame.hpp>
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
@@ -25,7 +26,7 @@
 
 namespace desyl
 {
-    constexpr size_t ALL_RULES = 20;
+    constexpr size_t ALL_RULES = 21;
 
     std::vector<Expression> learned_clauses;
 
@@ -33,6 +34,7 @@ namespace desyl
     const std::unique_ptr<Rule> all_rules[ALL_RULES] = {
         // (Early) termination rules
         std::make_unique<PostInconsistentRule>(PostInconsistentRule()),
+        std::make_unique<SetSizeRule>(SetSizeRule()),
         std::make_unique<EmpRule>(EmpRule()),
         // Strictly simplifying lossless rules
         std::make_unique<TrueElisionRule>(TrueElisionRule()),
