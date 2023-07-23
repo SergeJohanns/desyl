@@ -7,6 +7,7 @@
 #include <statements/read.hpp>
 #include <statements/branch.hpp>
 #include <statements/free.hpp>
+#include <statements/alloc.hpp>
 #include <substitution/heap_unify.hpp>
 #include <substitution/pick.hpp>
 #include <substitution/pure_unify.hpp>
@@ -22,7 +23,7 @@
 
 namespace desyl
 {
-    constexpr size_t ALL_RULES = 17;
+    constexpr size_t ALL_RULES = 18;
 
     std::vector<Expression> learned_clauses;
 
@@ -46,6 +47,7 @@ namespace desyl
         // Desctructive generation rules (at the end to avoid generating code that is not used)
         std::make_unique<WriteRule>(WriteRule()),
         std::make_unique<FreeRule>(FreeRule()),
+        std::make_unique<AllocRule>(AllocRule()),
         std::make_unique<BranchRule>(BranchRule(learned_clauses)),
         std::make_unique<OpenRule>(OpenRule()),
         std::make_unique<CallRule>(CallRule()),
