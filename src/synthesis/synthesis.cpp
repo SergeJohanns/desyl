@@ -89,6 +89,10 @@ namespace desyl
             {
                 return sub.value();
             }
+            if (verbose)
+            {
+                std::cout << "Backtracking from " << rule->name() << std::endl;
+            }
             if (rule->is_invertible())
             {
                 return std::nullopt;
