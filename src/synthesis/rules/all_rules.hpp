@@ -17,6 +17,7 @@
 #include <pure_rewrites/pure_frame.hpp>
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
+#include <pure_rewrites/true_elision.hpp>
 #include <recursion/open.hpp>
 #include <recursion/close.hpp>
 #include <recursion/call.hpp>
@@ -24,7 +25,7 @@
 
 namespace desyl
 {
-    constexpr size_t ALL_RULES = 19;
+    constexpr size_t ALL_RULES = 20;
 
     std::vector<Expression> learned_clauses;
 
@@ -34,6 +35,7 @@ namespace desyl
         std::make_unique<PostInconsistentRule>(PostInconsistentRule()),
         std::make_unique<EmpRule>(EmpRule()),
         // Strictly simplifying lossless rules
+        std::make_unique<TrueElisionRule>(TrueElisionRule()),
         std::make_unique<FrameRule>(FrameRule()),
         std::make_unique<PureFrameRule>(PureFrameRule()),
         std::make_unique<ReflexiveRule>(ReflexiveRule()),
