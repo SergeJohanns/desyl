@@ -14,6 +14,14 @@ namespace desyl
         vars(*element.operand, target);
     }
 
+    void vars(SetLiteral const &element, Vars &target)
+    {
+        for (auto const &element : element.elements)
+        {
+            vars(element, target);
+        }
+    }
+
     void vars(BinaryOperatorCall const &element, Vars &target)
     {
         vars(*element.lhs, target);
