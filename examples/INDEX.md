@@ -35,3 +35,4 @@ the current version of DeSyL is able to synthesize it.
 | `mk_empty.sep`        | Close             | :heavy_check_mark:       |
 | `fortytwo3.sep`       | TrueElision       | :heavy_check_mark:       |
 | `listmorph.sep`       | Close             | :hourglass_flowing_sand: |
+| `listcopy.sep`        | Close             | :hourglass_flowing_sand: |
