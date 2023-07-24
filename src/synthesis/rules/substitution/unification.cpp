@@ -18,6 +18,27 @@ namespace desyl
                 return std::optional<Substitutions>{{{std::get<Identifier>(domain), codomain}}};
             }
         }
+        else if (std::holds_alternative<SetLiteral>(domain) && std::holds_alternative<SetLiteral>(codomain))
+        {
+            auto const &domain_set = std::get<SetLiteral>(domain);
+            auto const &codomain_set = std::get<SetLiteral>(codomain);
+            if (domain_set.elements.size() != codomain_set.elements.size())
+            {
+                return {};
+            }
+
+            Substitutions unified;
+            for (size_t i = 0; i < domain_set.elements.size(); i++)
+            {
+                auto const &unified_element = unify(domain_set.elements[i], codomain_set.elements[i], variables);
+                if (!unified_element || subtitutions_conflict(unified, *unified_element))
+                {
+                    return {};
+                }
+                unified.insert(unified_element->begin(), unified_element->end());
+            }
+            return unified;
+        }
         else if (std::holds_alternative<UnaryOperatorCall>(domain) && std::holds_alternative<UnaryOperatorCall>(codomain))
         {
             auto const &domain_call = std::get<UnaryOperatorCall>(domain);

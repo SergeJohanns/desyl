@@ -8,6 +8,16 @@ namespace desyl
         {
             return substitution;
         }
+        else if (std::holds_alternative<SetLiteral>(expression))
+        {
+            auto &set = std::get<SetLiteral>(expression);
+            auto substituted = SetLiteral{};
+            for (auto const &element : set.elements)
+            {
+                substituted.elements.push_back(substitute_expression(element, identifier, substitution));
+            }
+            return substituted;
+        }
         else if (std::holds_alternative<UnaryOperatorCall>(expression))
         {
             auto &call = std::get<UnaryOperatorCall>(expression);
