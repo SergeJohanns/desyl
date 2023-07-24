@@ -38,14 +38,14 @@ examples/swap.sep` produces the example above.
 ## Features
 
 Aside from synthesising basic combinations of reading from/writing to pointers,
-DeSyL can:
+the DeSyL engine can:
 
 - Unify variables in the pre- and postcondition.
-- Perform basic logical inference like concluding that `!(x <= y)` means `x > y`.
+- Perform basic logical inference with integers and sets
 - Discover candidate logical conditions and synthesise branching with an if-else
   statement.
 - Unfold conditional predicates and solve the subgoals separately.
-- Synthesise the freeing of memory blocks.
+- Synthesise the allocation and freeing of memory blocks.
 - Generate recursive calls while guaranteeing termination.
 
 See the examples folder for specifications leveraging each of these features.
@@ -69,7 +69,14 @@ proposition and heap structure after the function is called.
 
 `<pure>` is a boolean expression over the parameters `arg1, ...` and
 possibly other variables, using the standard operators such as `&&`, `||`, `!`,
-`+`, `*`, `<=`, etc. as well as the logical implication operator `=>`.
+`+`, `*`, `<=`, etc. as well as:
+
+- The logical implication operator `=>`.
+- Set literals of the form `{elem, ...}`.
+- Expressions with set operators:
+  - `=i` for isomorphism/set equality.
+  - `++` and `**` for union and intersection respectively.
+  - `<s`, `<=s`, `>s`, and `>=s` for (proper) sub- and superset relations.
 
 `<heap>` is given by a series of "heaplets" of one of three types:
 
@@ -92,8 +99,8 @@ Synthetic Seperation Logic supports inductive predicates like
 
 ```
 predicate lseg(loc x, set s) {
-|  x == null    |=> {s == 0; emp;}
-|  !(x == null) |=> {s == v + ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
+|  x == null    |=> {s =i {}; emp;}
+|  !(x == null) |=> {s =i {v} ++ ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
 }
 ```
 
@@ -102,7 +109,7 @@ which defines that `x` is a linked list containing the elements from the set
 
 ```
 predicate predicate_name(type arg1, ...) {
-| guard |=> {<pure>; <heap>;}
+|  guard |=> {<pure>; <heap>;}
 ...
 }
 ```
