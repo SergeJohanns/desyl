@@ -30,4 +30,6 @@ namespace desyl
     void vars(TypedVariable const &element, Vars &target);
 
     void vars(FunctionSignature const &element, Vars &target);
+
+    Identifier rename(Identifier const &element, Vars const &environment);
 }

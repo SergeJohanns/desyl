@@ -97,15 +97,7 @@ namespace desyl
             {
                 continue;
             }
-            Identifier new_var;
-            for (int i = 0;; ++i)
-            {
-                new_var = identifier + "_" + std::to_string(i);
-                if (all.find(new_var) == all.end())
-                {
-                    break;
-                }
-            }
+            Identifier new_var = rename(identifier, all);
             auto new_goal(goal);
             new_goal.environment.insert(new_var);
             substitute(new_goal.spec.precondition, identifier, new_var);

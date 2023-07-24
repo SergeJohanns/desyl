@@ -97,4 +97,17 @@ namespace desyl
             vars(arg, target);
         }
     }
+
+    Identifier rename(Identifier const &identifier, Vars const &environment)
+    {
+        Identifier new_var;
+        for (int i = 0;; ++i)
+        {
+            new_var = identifier + "_" + std::to_string(i);
+            if (environment.find(new_var) == environment.end())
+            {
+                return new_var;
+            }
+        }
+    }
 }
