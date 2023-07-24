@@ -6,11 +6,27 @@ int main(int argc, char **argv)
 {
     if (argc < 2)
     {
-        std::cout << "Usage: desyl [-v] <query-file>" << std::endl;
+        std::cout << "Usage: desyl [-v | -g] <query-file>" << std::endl;
         return 1;
     }
-    bool verbose = argc == 3 && std::string(argv[1]) == "-v";
+    desyl::SynthesisMode mode = desyl::SynthesisMode::Quiet;
+    if (argc == 3)
+    {
+        if (std::string(argv[1]) == "-v")
+        {
+            mode = desyl::SynthesisMode::Verbose;
+        }
+        else if (std::string(argv[1]) == "-g")
+        {
+            mode = desyl::SynthesisMode::Guided;
+        }
+        else
+        {
+            std::cout << "Usage: desyl [-v | -g] <query-file>" << std::endl;
+            return 1;
+        }
+    }
     desyl::Query query = desyl::parse(argv[argc - 1]);
-    desyl::synthesize(std::move(query), verbose);
+    desyl::synthesize(std::move(query), mode);
     return 0;
 }

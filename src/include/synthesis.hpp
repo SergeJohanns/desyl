@@ -2,6 +2,7 @@
 
 #include <optional>
 #include <desyl/ast.hpp>
+#include <desyl/desyllib.hpp>
 #include <context.hpp>
 
 namespace desyl
@@ -40,5 +41,5 @@ namespace desyl
         VariableSnapshot variables() const;
     };
 
-    void synthesize_query(Goal const &query, bool verbose);
+    void synthesize_query(Goal const &query, SynthesisMode mode);
 }

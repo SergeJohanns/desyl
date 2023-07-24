@@ -21,12 +21,12 @@ namespace desyl
     /// @param verbose Whether to print debug information
     /// @return The synthesized program, if any
     template <typename RULES>
-    std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation, RULES const &rules, bool verbose)
+    std::optional<Program> solve_subgoals(std::vector<Goal> const &goals, Continuation const &continuation, RULES const &rules, SynthesisMode mode)
     {
         auto result = std::vector<Program>{};
         for (auto const &goal : goals)
         {
-            auto sub = with_rules(rules, std::move(goal), verbose);
+            auto sub = with_rules(rules, std::move(goal), mode);
             if (!sub.has_value())
             {
                 return std::nullopt;
@@ -44,11 +44,11 @@ namespace desyl
     /// @param verbose Whether to print debug information
     /// @return The synthesized program, if any
     template <typename RULES>
-    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &, RULES const &rules, bool verbose)
+    std::optional<Program> try_alts(std::vector<Derivation> const &subderivs, std::unique_ptr<Rule> const &, RULES const &rules, SynthesisMode mode)
     {
         for (auto const &deriv : subderivs)
         {
-            auto sub = solve_subgoals(deriv.goals, *deriv.continuation, rules, verbose);
+            auto sub = solve_subgoals(deriv.goals, *deriv.continuation, rules, mode);
             if (sub.has_value())
             {
                 return sub.value();
@@ -63,10 +63,21 @@ namespace desyl
     /// @param verbose Whether to print debug information
     /// @return The synthesized program, if any
     template <typename RULES>
-    std::optional<Program> with_rules(RULES const &rules, Goal const &goal, bool verbose)
+    std::optional<Program> with_rules(RULES const &rules, Goal const &goal, SynthesisMode mode)
     {
+        // Only used for guided synthesis
+        std::string chosen_rule;
+        if (mode == SynthesisMode::Guided)
+        {
+            std::cout << "Synthesizing " << stringify_function_spec(goal.spec) << std::endl;
+            std::cin >> chosen_rule;
+        }
         for (auto &rule : rules)
         {
+            if (mode == SynthesisMode::Guided && rule->name() != chosen_rule)
+            {
+                continue;
+            }
             std::vector<Derivation> subderivs;
             try
             {
@@ -74,43 +85,46 @@ namespace desyl
             }
             catch (Failure const &)
             {
-                if (verbose)
+                if (mode == SynthesisMode::Verbose)
                 {
                     std::cout << "Using " << rule->name() << std::endl;
                 }
-                return std::nullopt;
+                break;
             }
             if (subderivs.empty())
             {
                 continue;
             }
-            if (verbose)
+            if (mode == SynthesisMode::Verbose)
             {
                 std::cout << "Using " << rule->name() << std::endl;
             }
-            // if (verbose)
-            // {
-            //     for (auto const &deriv : subderivs)
-            //     {
-            //         for (auto const &goal : deriv.goals)
-            //         {
-            //             std::cout << stringify_function_spec(goal.spec) << std::endl;
-            //         }
-            //     }
-            // }
-            auto sub = try_alts(subderivs, rule, rules, verbose);
+            if (mode == SynthesisMode::Guided)
+            {
+                std::cout << subderivs.size() << " subderivation";
+                if (subderivs.size() != 1)
+                {
+                    std::cout << "s";
+                }
+                std::cout << std::endl;
+            }
+            auto sub = try_alts(subderivs, rule, rules, mode);
             if (sub.has_value())
             {
                 return sub.value();
             }
-            if (verbose)
+            if (mode == SynthesisMode::Verbose)
             {
                 std::cout << "Backtracking from " << rule->name() << std::endl;
             }
             if (rule->is_invertible())
             {
-                return std::nullopt;
+                break;
             }
+        }
+        if (mode == SynthesisMode::Guided)
+        {
+            std::cout << "Failed, backtracking" << std::endl;
         }
         return std::nullopt;
     }
@@ -118,10 +132,10 @@ namespace desyl
     /// @brief Synthesize a function from a specification
     /// @param spec The specification to synthesize
     /// @param verbose Whether to print debug information
-    void synthesize_query(Goal const &spec, bool verbose)
+    void synthesize_query(Goal const &spec, SynthesisMode mode)
     {
-        auto res = with_rules(all_rules, spec, verbose);
-        if (verbose)
+        auto res = with_rules(all_rules, spec, mode);
+        if (mode != SynthesisMode::Quiet)
         {
             std::cout << std::endl;
         }

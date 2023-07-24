@@ -11,11 +11,11 @@ namespace desyl
         return parse_query(input);
     }
 
-    void synthesize(Query query, bool verbose)
+    void synthesize(Query query, SynthesisMode mode)
     {
         for (auto const &function : query.functions)
         {
-            synthesize_query(Goal(function.second, query.functions, query.predicates), verbose);
+            synthesize_query(Goal(function.second, query.functions, query.predicates), mode);
         }
     }
 
