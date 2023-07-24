@@ -26,6 +26,23 @@ DeSyL is an implementation of the synthesis method described in
 Programs**](https://dl.acm.org/doi/10.1145/3290385). For more details on the
 specification syntax see [Specification](#specification).
 
+The ability to synthesise programs with unrestricted pointer arithmetic is an
+advantage of Synthetic Separation Logic. Additionally, the synthesis method
+includes a restricted form of cyclic proof generation that allows synthesising
+programs with recursive calls, like the following implementation of
+`examples/listfree.sep` that deallocates a linked list rooted in `x`:
+
+```c
+void listfree(loc x) {
+    if ((x == null)) {} else {
+        v_0 = *(x + 0);
+        nxt_0 = *(x + 1);
+        free(x);
+        listfree(nxt_0);
+    }
+}
+```
+
 ## Compilation
 
 Since the CMake configuration fetches all third party dependencies compilation
