@@ -99,7 +99,7 @@ namespace desyl
                 }
 
                 new_spec.precondition.heap.predicate_calls.erase(new_spec.precondition.heap.predicate_calls.begin() + i);
-                Goal new_goal(std::move(new_spec), goal.functions, goal.predicates);
+                Goal new_goal = goal.with_spec(std::move(new_spec));
                 VariableClassification new_classification = new_goal.variables().classification;
                 Vars difference;
 

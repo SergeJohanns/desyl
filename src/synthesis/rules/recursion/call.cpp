@@ -209,7 +209,7 @@ namespace desyl
         new_spec.precondition.heap.predicate_calls.insert(new_spec.precondition.heap.predicate_calls.end(), consequent.heap.predicate_calls.begin(), consequent.heap.predicate_calls.end());
 
         return Derivation{
-            .goals = std::vector<Goal>{Goal(std::move(new_spec), goal.functions, goal.predicates)},
+            .goals = std::vector<Goal>{goal.with_spec(std::move(new_spec))},
             .continuation = std::make_unique<CallContinuation>(spec.signature.name, args),
         };
     }

@@ -22,8 +22,9 @@ namespace desyl
             std::inserter(existentials, existentials.end()));
     }
 
-    Goal::Goal(FunctionSpecification spec, std::unordered_map<Identifier, FunctionSpecification> functions, std::unordered_map<Identifier, Predicate> predicates)
+    Goal::Goal(FunctionSpecification spec, std::unordered_map<Identifier, FunctionSpecification> functions, std::unordered_map<Identifier, Predicate> predicates, Vars additional_environment)
     {
+        environment.insert(additional_environment.begin(), additional_environment.end());
         vars(spec.signature, environment);
         Vars precondition, postcondition;
         vars(spec.precondition, precondition);
@@ -32,6 +33,12 @@ namespace desyl
         this->functions = std::move(functions);
         this->predicates = std::move(predicates);
         this->classification = VariableClassification(precondition, environment, postcondition);
+    }
+
+    Goal Goal::with_spec(FunctionSpecification spec) const
+    {
+        Goal result(std::move(spec), functions, predicates, environment);
+        return result;
     }
 
     VariableSnapshot Goal::variables() const
