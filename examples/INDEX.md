@@ -27,14 +27,14 @@ the current version of DeSyL is able to synthesize it.
 | `hilo.sep`            | Branch            | :x:                      |
 | `hilodif.sep`         | Branch            | :hourglass_flowing_sand: |
 | `three_max.sep`       | Should fail       | :x:                      |
+| `free.sep`            | Free              | :heavy_check_mark:       |
+| `malloc.sep`          | Alloc             | :heavy_check_mark:       |
 | `predicate_parse.sep` | Predicate parsing | :heavy_check_mark:       |
 | `open.sep`            | Open              | :heavy_check_mark:       |
-| `free.sep`            | Free              | :heavy_check_mark:       |
-| `listfree.sep`        | Call              | :heavy_check_mark:       |
-| `malloc.sep`          | Alloc             | :heavy_check_mark:       |
-| `mk_empty.sep`        | Close             | :heavy_check_mark:       |
 | `fortytwo3.sep`       | TrueElision       | :heavy_check_mark:       |
-| `listmorph.sep`       | Close             | :hourglass_flowing_sand: |
-| `listcopy.sep`        | Close             | :hourglass_flowing_sand: |
+| `mk_empty.sep`        | Close             | :heavy_check_mark:       |
+| `listfree.sep`        | Call              | :heavy_check_mark:       |
 | `treefree.sep`        | Call              | :heavy_check_mark:       |
-| `treeflatten.sep`     | Close             | :hourglass_flowing_sand: |
+| `listmorph.sep`       | Call              | :hourglass_flowing_sand: |
+| `listcopy.sep`        | Call              | :hourglass_flowing_sand: |
+| `treeflatten.sep`     | Call              | :hourglass_flowing_sand: |
