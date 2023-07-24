@@ -98,7 +98,7 @@ namespace desyl
         Identifier name;
         int label;
         std::vector<Identifier> args;
-        bool operator==(PredicateCall const &other) const = default;
+        bool operator==(PredicateCall const &other) const;
     };
 
     struct Heap

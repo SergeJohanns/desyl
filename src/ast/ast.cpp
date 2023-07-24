@@ -201,4 +201,10 @@ namespace desyl
     {
         return *base == *other.base && offset == other.offset && *value == *other.value;
     }
+
+    bool PredicateCall::operator==(PredicateCall const &other) const
+    {
+        // Ignores label since that is only used for unfolding
+        return name == other.name && args == other.args;
+    }
 }
