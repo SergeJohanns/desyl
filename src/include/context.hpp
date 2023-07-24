@@ -31,5 +31,9 @@ namespace desyl
 
     void vars(FunctionSignature const &element, Vars &target);
 
+    void vars(Clause const &element, Vars &target);
+
+    void vars(Predicate const &element, Vars &target);
+
     Identifier rename(Identifier const &element, Vars const &environment);
 }

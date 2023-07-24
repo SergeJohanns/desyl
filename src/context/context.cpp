@@ -98,8 +98,26 @@ namespace desyl
         }
     }
 
+    void vars(Clause const &element, Vars &target)
+    {
+        vars(element.condition, target);
+        vars(element.assertion, target);
+    }
+
+    void vars(Predicate const &element, Vars &target)
+    {
+        for (auto const &clause : element.clauses)
+        {
+            vars(clause, target);
+        }
+    }
+
     Identifier rename(Identifier const &identifier, Vars const &environment)
     {
+        if (environment.find(identifier) == environment.end())
+        {
+            return identifier;
+        }
         Identifier new_var;
         for (int i = 0;; ++i)
         {
