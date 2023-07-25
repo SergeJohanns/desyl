@@ -1,3 +1,3 @@
-{true; <r, 0> -> null;}
+{true; <r, 0> -> 0;}
 max(loc r, int x, int y, int z)
 { x <= m && y <= m && z <= m; <r, 0> -> m;}

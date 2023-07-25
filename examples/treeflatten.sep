@@ -1,11 +1,11 @@
 predicate tree(loc x, set s) {
-|  x == null    |=> {s =i {}; emp;}
-|  !(x == null) |=> {s =i {v} ++ sa ++ sb; [x, 3] | <x, 0> -> v | <x, 1> -> l | <x, 2> -> r | tree(l, sa) | tree(r, sb);}
+|  x == 0    |=> {s =i {}; emp;}
+|  !(x == 0) |=> {s =i {v} ++ sa ++ sb; [x, 3] | <x, 0> -> v | <x, 1> -> l | <x, 2> -> r | tree(l, sa) | tree(r, sb);}
 }
 
 predicate lseg(loc x, set s) {
-|  x == null    |=> {s =i {}; emp;}
-|  !(x == null) |=> {s =i {v} ++ ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
+|  x == 0    |=> {s =i {}; emp;}
+|  !(x == 0) |=> {s =i {v} ++ ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
 }
 
 {true; lseg(xa, sa) | lseg(xb, sb) | ret -> xb;}
