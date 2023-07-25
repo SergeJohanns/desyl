@@ -81,10 +81,6 @@ namespace desyl
 
     Identifier VariableSnapshot::rename_var(Identifier const &var) const
     {
-        if (environment.find(var) == environment.end())
-        {
-            return var;
-        }
         Vars all_vars = all();
         for (auto const &var : classification.ghosts)
         {
