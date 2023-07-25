@@ -76,8 +76,8 @@ namespace desyl
             identifier_only.insert(predicate.args.begin(), predicate.args.end());
         }
         std::vector<Substitutions> substitutions;
-        add_pointer_substitutions(goal, substitutions, identifier_only);
         add_predicate_substitutions(goal, substitutions);
+        add_pointer_substitutions(goal, substitutions, identifier_only);
         std::vector<Derivation> derivations;
         for (auto const &substitution : substitutions)
         {
