@@ -19,11 +19,12 @@ namespace desyl
                     Vars term, intersection;
                     vars(precondition[i], term);
 
-                    auto new_goal(goal);
-                    auto &new_precondition = getter(new_goal.spec.precondition.heap);
-                    auto &new_postcondition = getter(new_goal.spec.postcondition.heap);
+                    auto new_spec(goal.spec);
+                    auto &new_precondition = getter(new_spec.precondition.heap);
+                    auto &new_postcondition = getter(new_spec.postcondition.heap);
                     new_precondition.erase(new_precondition.begin() + i);
                     new_postcondition.erase(new_postcondition.begin() + j);
+                    auto new_goal = goal.with_spec(new_spec);
 
                     auto const &existentials = new_goal.variables().existentials();
                     std::set_intersection(term.begin(), term.end(), existentials.begin(), existentials.end(), std::inserter(intersection, intersection.end()));
