@@ -193,12 +193,19 @@ namespace desyl
         VariableSnapshot const &variables = goal.variables();
         Vars const &goal_variables = variables.all();
         Substitutions substitution = unification.substitutions;
+        // Addtional check of environment because absence from the substitution can mean they have the same name on purpose
+        for (auto const &var : spec.signature.args)
+        {
+            if (substitution.find(var.name) == substitution.end())
+            {
+                substitution[var.name] = var.name;
+            }
+        }
         Vars spec_variables;
         vars(spec.postcondition, spec_variables);
         for (auto const &variable : spec_variables)
         {
-            // Addtional check of environment because absence from the substitution can mean they have the same name on purpose
-            if (substitution.find(variable) == substitution.end() && environment.find(variable) == environment.end())
+            if (substitution.find(variable) == substitution.end())
             {
                 substitution[variable] = rename(variable, spec_variables);
             }

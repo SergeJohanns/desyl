@@ -22,6 +22,7 @@ namespace desyl
         Vars variables;
         Vars environment;
         VariableClassification classification;
+        Identifier rename_var(Identifier const &var) const;
 
         Vars all() const;
         Vars ghosts() const;

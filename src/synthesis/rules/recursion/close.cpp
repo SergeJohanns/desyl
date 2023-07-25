@@ -15,7 +15,6 @@ namespace desyl
         std::vector<Derivation> derivations;
         Vars const &environment = goal.environment;
         VariableSnapshot const &variables = goal.variables();
-        Vars const &spec_variables = variables.all();
         VariableClassification old_classification = variables.classification;
         for (size_t i = 0; i < goal.spec.postcondition.heap.predicate_calls.size(); ++i)
         {
@@ -41,7 +40,7 @@ namespace desyl
             {
                 if (substitution.find(variable) == substitution.end())
                 {
-                    substitution[variable] = rename(variable, spec_variables);
+                    substitution[variable] = variables.rename_var(variable);
                 }
             }
             for (auto const &clause : predicate.clauses)

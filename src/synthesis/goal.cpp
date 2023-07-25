@@ -78,4 +78,22 @@ namespace desyl
             std::inserter(result, result.end()));
         return result;
     }
+
+    Identifier VariableSnapshot::rename_var(Identifier const &var) const
+    {
+        if (environment.find(var) == environment.end())
+        {
+            return var;
+        }
+        Vars all_vars = all();
+        for (auto const &var : classification.ghosts)
+        {
+            all_vars.emplace(var);
+        }
+        for (auto const &var : classification.existentials)
+        {
+            all_vars.emplace(var);
+        }
+        return rename(var, all_vars);
+    }
 }
