@@ -1,0 +1,8 @@
+predicate test(loc x, loc y) {
+|  x == 0    |=> {y == 0; emp;}
+|  !(x == 0) |=> {!(y == 0); emp;}
+}
+
+{true; test(x, y);}
+frametest(loc x, loc y)
+{true; test(x, y);}

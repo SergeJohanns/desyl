@@ -1,0 +1,3 @@
+{true; [x, 3];}
+nullnotlval(loc x)
+{!(x == 0); [x, 3];}
