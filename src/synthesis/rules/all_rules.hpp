@@ -19,6 +19,7 @@
 #include <pure_rewrites/reflexivity.hpp>
 #include <pure_rewrites/expand_implied.hpp>
 #include <pure_rewrites/true_elision.hpp>
+#include <pure_rewrites/null_not_lval.hpp>
 #include <recursion/open.hpp>
 #include <recursion/close.hpp>
 #include <recursion/call.hpp>
@@ -26,7 +27,7 @@
 
 namespace desyl
 {
-    constexpr size_t ALL_RULES = 21;
+    constexpr size_t ALL_RULES = 22;
 
     std::vector<Expression> learned_clauses;
 
@@ -40,6 +41,7 @@ namespace desyl
         std::make_unique<OpenRule>(OpenRule()),
         std::make_unique<CloseRule>(CloseRule()), // Complicates heap and adds backtracking targets
         // Strictly simplifying lossless rules
+        std::make_unique<NullNotLValRule>(NullNotLValRule()),
         std::make_unique<TrueElisionRule>(TrueElisionRule()),
         std::make_unique<FrameRule>(FrameRule()),
         std::make_unique<PureFrameRule>(PureFrameRule()),
