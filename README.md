@@ -52,6 +52,21 @@ the repository with `cmake --build build`. Then the tool is run as
 user-provided or one of the files in `examples/`, e.g. `build/apps/desyl
 examples/swap.sep` produces the example above.
 
+## Usage
+
+The basic synopsis of desyl is `desyl [-v | -g] <specification>`. Essentially,
+to synthesise a program for a specification in the file
+`specification-file.sep`, simply run `desyl specification-file.sep`, to get
+verbose logging use the `-v` flag, and to perform guided synthesis use the `-g`
+flag.
+
+During guided synthesis DeSyL will repeatedly output the current goal and prompt
+the user for the name of a rule. Once given, DeSyL will use said rule to perform
+the next proof step, report the number of subderivations (multiple possible
+applications of the rule that can backtrack) and proceed similarly for each
+subderivation. To skip an unsuitable subderivation that should be backtracked
+from, simply use `Skip`.
+
 ## Features
 
 Aside from synthesising basic combinations of reading from/writing to pointers,
