@@ -97,11 +97,13 @@ namespace desyl
             {
                 continue;
             }
-            Identifier new_var = rename(identifier, all);
-            auto new_goal(goal);
-            new_goal.environment.insert(new_var);
-            substitute(new_goal.spec.precondition, identifier, new_var);
-            substitute(new_goal.spec.postcondition, identifier, new_var);
+            Identifier new_var = variables.rename_var(identifier);
+            auto new_spec(goal.spec);
+            substitute(new_spec.precondition, identifier, new_var);
+            substitute(new_spec.postcondition, identifier, new_var);
+            Goal interim_goal(goal);
+            interim_goal.environment.insert(new_var); // Needed to get the environment variable in before classification
+            Goal new_goal = interim_goal.with_spec(new_spec);
             Derivation deriv{
                 .goals = std::vector<Goal>{std::move(new_goal)},
                 .continuation = std::make_unique<ReadContinuation>(ReadContinuation(new_var, pointer)),
