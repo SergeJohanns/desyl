@@ -190,6 +190,20 @@ namespace desyl
             return std::nullopt;
         }
 
+        VariableSnapshot const &variables = goal.variables();
+        Vars const &goal_variables = variables.all();
+        Substitutions substitution = unification.substitutions;
+        Vars spec_variables;
+        vars(spec.postcondition, spec_variables);
+        for (auto const &variable : spec_variables)
+        {
+            // Addtional check of environment because absence from the substitution can mean they have the same name on purpose
+            if (substitution.find(variable) == substitution.end() && environment.find(variable) == environment.end())
+            {
+                substitution[variable] = rename(variable, spec_variables);
+            }
+        }
+
         FunctionSpecification new_spec(goal.spec);
         std::vector<size_t> pointer_indices(unification.pointer_indices.begin(), unification.pointer_indices.end());
         std::sort(pointer_indices.begin(), pointer_indices.end(), std::greater<size_t>());
@@ -203,7 +217,7 @@ namespace desyl
         {
             new_spec.precondition.heap.predicate_calls.erase(new_spec.precondition.heap.predicate_calls.begin() + index);
         }
-        auto const &consequent = substitute(spec.postcondition, unification.substitutions);
+        auto const &consequent = substitute(spec.postcondition, substitution);
         new_spec.precondition.proposition.insert(new_spec.precondition.proposition.end(), consequent.proposition.begin(), consequent.proposition.end());
         new_spec.precondition.heap.pointer_declarations.insert(new_spec.precondition.heap.pointer_declarations.end(), consequent.heap.pointer_declarations.begin(), consequent.heap.pointer_declarations.end());
         new_spec.precondition.heap.predicate_calls.insert(new_spec.precondition.heap.predicate_calls.end(), consequent.heap.predicate_calls.begin(), consequent.heap.predicate_calls.end());
