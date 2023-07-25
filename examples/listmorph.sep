@@ -1,14 +1,14 @@
 predicate lseg(loc x, set s) {
-|  x == null    |=> {s =i {}; emp;}
-|  !(x == null) |=> {s =i {v} ++ ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
+|  x == 0    |=> {s =i {}; emp;}
+|  !(x == 0) |=> {s =i {v} ++ ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
 }
 
 predicate lsegtwo(loc x, set s) {
-|  x == null    |=> {s =i {}; emp;}
-|  !(x == null) |=> {s =i {v} ++ ss; [x, 3] | <x, 0> -> v | <x, 1> -> v + 1 | <x, 2> -> nxt | lsegtwo(nxt, ss);}
+|  x == 0    |=> {s =i {}; emp;}
+|  !(x == 0) |=> {s =i {v} ++ ss; [x, 3] | <x, 0> -> v | <x, 1> -> v + 1 | <x, 2> -> nxt | lsegtwo(nxt, ss);}
 }
 
-{true; <r, 0> -> null | lseg(x, s);}
-listfree(loc x, loc r)
+{true; <r, 0> -> 0 | lseg(x, s);}
+listmorph(loc x, loc r)
 {true; <r, 0> -> y | lsegtwo(y, s);}
 
