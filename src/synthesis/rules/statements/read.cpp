@@ -9,7 +9,7 @@ namespace desyl
     ReadContinuation::ReadContinuation(Identifier const &output, PointerDeclaration const &pointer)
     {
         std::ostringstream stream;
-        stream << output << " = *(" << stringify_expression(*pointer.base) << " + " << pointer.offset << ");" << std::endl;
+        stream << "let " << output << " = *(" << stringify_expression(*pointer.base) << " + " << pointer.offset << ");" << std::endl;
         line = stream.str();
     }
 
