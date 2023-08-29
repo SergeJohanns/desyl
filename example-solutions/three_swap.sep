@@ -1,8 +1,8 @@
 void swap(loc x, loc y, loc z) {
-    a_0 = *(x + 0);
-    b_0 = *(y + 0);
+    let a_0 = *(x + 0);
+    let b_0 = *(y + 0);
     *(x + 0) = b_0;
-    c_0 = *(z + 0);
+    let c_0 = *(z + 0);
     *(y + 0) = c_0;
     *(z + 0) = a_0;
 }
