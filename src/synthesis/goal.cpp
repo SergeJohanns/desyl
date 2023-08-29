@@ -38,6 +38,7 @@ namespace desyl
     Goal Goal::with_spec(FunctionSpecification spec) const
     {
         Goal result(std::move(spec), functions, predicates, environment);
+        result.classification = classification;
         return result;
     }
 
