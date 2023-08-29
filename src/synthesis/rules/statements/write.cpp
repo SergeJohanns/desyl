@@ -38,15 +38,15 @@ namespace desyl
                     {
                         continue;
                     }
-                    auto new_goal(goal);
+                    auto new_spec(goal.spec);
                     auto new_declaration = PointerDeclaration{
                         .base = preconditions[i].base,
                         .offset = preconditions[i].offset,
                         .value = postconditions[j].value,
                     };
-                    new_goal.spec.precondition.heap.pointer_declarations[i] = new_declaration;
+                    new_spec.precondition.heap.pointer_declarations[i] = new_declaration;
                     Derivation deriv{
-                        .goals = std::vector<Goal>{new_goal},
+                        .goals = std::vector<Goal>{goal.with_spec(new_spec)},
                         .continuation = std::make_unique<WriteContinuation>(WriteContinuation(new_declaration)),
                     };
                     result.push_back(std::move(deriv));
