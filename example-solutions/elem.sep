@@ -1,0 +1,3 @@
+void elem(loc x, int v) {
+    *(x + 0) = (v + 1);
+}
