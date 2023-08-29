@@ -22,6 +22,21 @@ namespace desyl
             std::inserter(existentials, existentials.end()));
     }
 
+    void VariableClassification::operator+=(const VariableClassification &other)
+    {
+        Vars interim;
+        ghosts.insert(other.ghosts.begin(), other.ghosts.end());
+        std::set_union(
+            existentials.begin(), existentials.end(),
+            other.existentials.begin(), other.existentials.end(),
+            std::inserter(interim, interim.begin()));
+        existentials.clear();
+        std::set_difference(
+            interim.begin(), interim.end(),
+            ghosts.begin(), ghosts.end(),
+            std::inserter(existentials, existentials.begin()));
+    }
+
     Goal::Goal(FunctionSpecification spec, std::unordered_map<Identifier, FunctionSpecification> functions, std::unordered_map<Identifier, Predicate> predicates, Vars additional_environment)
     {
         environment.insert(additional_environment.begin(), additional_environment.end());
@@ -38,7 +53,7 @@ namespace desyl
     Goal Goal::with_spec(FunctionSpecification spec) const
     {
         Goal result(std::move(spec), functions, predicates, environment);
-        result.classification = classification;
+        result.classification += classification;
         return result;
     }
 

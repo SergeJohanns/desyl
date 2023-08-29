@@ -15,6 +15,7 @@ namespace desyl
 
         VariableClassification() = default;
         VariableClassification(Vars const &precondition, Vars const &environment, Vars const &postcondition);
+        void operator+=(VariableClassification const &other);
     };
 
     struct VariableSnapshot
