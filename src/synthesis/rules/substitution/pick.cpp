@@ -27,7 +27,7 @@ namespace desyl
         auto const &variables = goal.variables();
         for (auto const &existential : variables.existentials())
         {
-            for (auto const &program : variables.environment)
+            for (auto const &program : goal.environment)
             {
                 Substitutions substitution = {{existential, program}};
                 Goal new_goal = substitute(goal, substitution);
