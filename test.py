@@ -6,6 +6,7 @@ EXAMPLES_DIR = 'examples'
 SOLUTIONS_DIR = 'example-solutions'
 
 solutions = os.listdir(SOLUTIONS_DIR)
+solutions.sort()
 with alive_bar(len(solutions), enrich_print=False) as bar:
     for file in solutions:
         bar.text(f'Running {file}')
