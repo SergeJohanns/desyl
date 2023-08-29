@@ -1,0 +1,5 @@
+void notsure(loc x, loc y, loc z) {
+    *(x + 0) = y;
+    *(y + 0) = 0;
+    *(z + 0) = y;
+}

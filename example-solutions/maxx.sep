@@ -1,0 +1,8 @@
+void maxx(loc r, loc s, int x, int y) {
+    *(s + 0) = x;
+    if ((y <= x)) {
+        *(r + 0) = x;
+    } else {
+        *(r + 0) = y;
+    }
+}

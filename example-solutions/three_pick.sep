@@ -1,0 +1,4 @@
+void pick(loc x, loc y, loc z) {
+    *(y + 0) = 239;
+    *(z + 0) = 239;
+}

@@ -1,0 +1,3 @@
+void fortytwo(loc r) {
+    *(r + 0) = 42;
+}

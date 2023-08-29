@@ -1,0 +1,164 @@
+Synthesizing {true; <r, 0> -> 0, lseg(x, s);} -> {true; <r, 0> -> y, lsegtwo(y, s);}
+Open
+1 subderivation
+Synthesizing {(x == 0) && (s =i {}); <r, 0> -> 0;} -> {true; <r, 0> -> y, lsegtwo(y, s);}
+Close
+2 subderivations
+Synthesizing {(x == 0) && (s =i {}); <r, 0> -> 0;} -> {(y == 0) && (s =i {}); <r, 0> -> y;}
+SubstRight
+1 subderivation
+Synthesizing {(x == 0) && (s =i {}); <r, 0> -> 0;} -> {(0 == 0) && (s =i {}); <r, 0> -> 0;}
+Reflexivity
+1 subderivation
+Synthesizing {(x == 0) && (s =i {}); <r, 0> -> 0;} -> {(s =i {}); <r, 0> -> 0;}
+PureFrame
+1 subderivation
+Synthesizing {(x == 0) && (s =i {}); <r, 0> -> 0;} -> {true; <r, 0> -> 0;}
+Frame
+1 subderivation
+Synthesizing {(x == 0) && (s =i {}); emp;} -> {true; emp;}
+Emp
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v} ++ ss)); [x, 2], <r, 0> -> 0, <x, 0> -> v, <x, 1> -> nxt, lseg(nxt, ss);} -> {true; <r, 0> -> y, lsegtwo(y, s);}
+Close
+2 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v} ++ ss)); [x, 2], <r, 0> -> 0, <x, 0> -> v, <x, 1> -> nxt, lseg(nxt, ss);} -> {(y == 0) && (s =i {}); <r, 0> -> y;}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v} ++ ss)); [x, 2], <r, 0> -> 0, <x, 0> -> v, <x, 1> -> nxt, lseg(nxt, ss);} -> {(!(y == 0)) && (s =i ({v_0} ++ ss_0)); [y, 3], <r, 0> -> y, <y, 0> -> v_0, <y, 1> -> (v_0 + 1), <y, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+Read
+2 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <r, 0> -> 0, <x, 0> -> v_1, <x, 1> -> nxt, lseg(nxt, ss);} -> {(!(y == 0)) && (s =i ({v_0} ++ ss_0)); [y, 3], <r, 0> -> y, <y, 0> -> v_0, <y, 1> -> (v_0 + 1), <y, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+Read
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <r, 0> -> 0, <x, 0> -> v_1, <x, 1> -> nxt_1, lseg(nxt_1, ss);} -> {(!(y == 0)) && (s =i ({v_0} ++ ss_0)); [y, 3], <r, 0> -> y, <y, 0> -> v_0, <y, 1> -> (v_0 + 1), <y, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+Call
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(y == 0)) && (s =i ({v_0} ++ ss_0)); [y, 3], <r, 0> -> y, <y, 0> -> v_0, <y, 1> -> (v_0 + 1), <y, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+UnifyHeaps
+8 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(x == 0)) && (s =i ({v_1} ++ ss_0)); [x, 3], <r, 0> -> x, <x, 0> -> v_1, <x, 1> -> (v_1 + 1), <x, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(x == 0)) && (s =i ({v_0} ++ ss_0)); [x, 3], <r, 0> -> x, <x, 0> -> v_0, <x, 1> -> (v_0 + 1), <x, 2> -> v_1, lsegtwo(v_1, ss_0);}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(x == 0)) && (s =i ({nxt_1} ++ ss_0)); [x, 3], <r, 0> -> x, <x, 0> -> nxt_1, <x, 1> -> (nxt_1 + 1), <x, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(x == 0)) && (s =i ({v_0} ++ ss_0)); [x, 3], <r, 0> -> x, <x, 0> -> v_0, <x, 1> -> (v_0 + 1), <x, 2> -> nxt_1, lsegtwo(nxt_1, ss_0);}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(y_0 == 0)) && (s =i ({v_0} ++ ss_0)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_0, <y_0, 1> -> (v_0 + 1), <y_0, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(r == 0)) && (s =i ({y_0} ++ ss_0)); [r, 3], <r, 0> -> r, <r, 0> -> y_0, <r, 1> -> (y_0 + 1), <r, 2> -> nxt_0, lsegtwo(nxt_0, ss_0);}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(r == 0)) && (s =i ({v_0} ++ ss_0)); [r, 3], <r, 0> -> r, <r, 0> -> v_0, <r, 1> -> (v_0 + 1), <r, 2> -> y_0, lsegtwo(y_0, ss_0);}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0, lsegtwo(y_0, ss);} -> {(!(y == 0)) && (s =i ({v_0} ++ ss)); [y, 3], <r, 0> -> y, <y, 0> -> v_0, <y, 1> -> (v_0 + 1), <y, 2> -> y_0, lsegtwo(y_0, ss);}
+Frame
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0;} -> {(!(y == 0)) && (s =i ({v_0} ++ ss)); [y, 3], <r, 0> -> y, <y, 0> -> v_0, <y, 1> -> (v_0 + 1), <y, 2> -> y_0;}
+UnifyPure
+2 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0;} -> {(!(x == 0)) && (s =i ({v_0} ++ ss)); [x, 3], <r, 0> -> x, <x, 0> -> v_0, <x, 1> -> (v_0 + 1), <x, 2> -> y_0;}
+Skip
+Failed, backtracking
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0;} -> {(!(y == 0)) && (s =i ({v_1} ++ ss)); [y, 3], <r, 0> -> y, <y, 0> -> v_1, <y, 1> -> (v_1 + 1), <y, 2> -> y_0;}
+Read
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0_0;} -> {(!(y == 0)) && (s =i ({v_1} ++ ss)); [y, 3], <r, 0> -> y, <y, 0> -> v_1, <y, 1> -> (v_1 + 1), <y, 2> -> y_0_0;}
+Alloc
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [x, 2], [y_0, 3], <x, 0> -> v_1, <x, 1> -> nxt_1, <r, 0> -> y_0_0, <y_0, 0> -> 0, <y_0, 1> -> 0, <y_0, 2> -> 0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Free
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0_0, <y_0, 0> -> 0, <y_0, 1> -> 0, <y_0, 2> -> 0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Write
+4 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> 0, <y_0, 1> -> 0, <y_0, 2> -> 0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Write
+3 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> 0, <y_0, 2> -> 0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Write
+2 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> 0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Write
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <r, 0> -> y_0, <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Frame
+5 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <y_0, 0> -> v_1, <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Frame
+4 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <y_0, 1> -> (v_1 + 1), <y_0, 2> -> y_0_0;}
+Frame
+3 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <y_0, 2> -> y_0_0;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3], <y_0, 2> -> y_0_0;}
+Frame
+2 subderivations
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3];} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3];}
+NullNotLVal
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)) && (!(y_0 == 0)) && (!(y_0 == 0)) && (!(y_0 == 0)); [y_0, 3];} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); [y_0, 3];}
+Frame
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)) && (!(y_0 == 0)) && (!(y_0 == 0)) && (!(y_0 == 0)); emp;} -> {(!(y_0 == 0)) && (s =i ({v_1} ++ ss)); emp;}
+PureFrame
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)) && (!(y_0 == 0)) && (!(y_0 == 0)) && (!(y_0 == 0)); emp;} -> {(!(y_0 == 0)); emp;}
+PureFrame
+1 subderivation
+Synthesizing {(!(x == 0)) && (s =i ({v_1} ++ ss)) && (!(y_0 == 0)) && (!(y_0 == 0)) && (!(y_0 == 0)); emp;} -> {true; emp;}
+Emp
+1 subderivation
+
+void listmorph(loc x, loc r) {
+    if ((x == 0)) {} else {
+        v_1 = *(x + 0);
+        nxt_1 = *(x + 1);
+        listmorph(nxt_1, r);
+        y_0_0 = *(r + 0);
+        y_0 = malloc(3);
+        free(x);
+        *(r + 0) = y_0;
+        *(y_0 + 0) = v_1;
+        *(y_0 + 1) = (v_1 + 1);
+        *(y_0 + 2) = y_0_0;
+    }
+}
+
+For reference: paper gives
+
+void listmorph(loc x, loc r) {
+    if (x = 0) { } else {
+        let v2 = *x;
+        let nxt2 = *(x + 1);
+        listmorph(nxt2, r);
+        let y12 = *r;
+        let y2 = malloc(3);
+        free(x);
+        *(y2 + 2) = y12;
+        *(y2 + 1) = v2 + 1;
+        *y2 = v2;
+        *r = y2;
+    }
+}
+
+With predicate unification priority it can synthesise autonomously:
+
+void listmorph(loc x, loc r) {
+    if ((x == 0)) {} else {
+        y_0 = malloc(3);
+        v_1 = *(x + 0);
+        *(y_0 + 0) = v_1;
+        *(y_0 + 1) = (v_1 + 1);
+        nxt_1 = *(x + 1);
+        free(x);
+        *(y_0 + 2) = y_0;
+        listmorph(nxt_1, r);
+    }
+}
