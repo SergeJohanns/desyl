@@ -7,7 +7,7 @@ namespace desyl
 {
     VariableClassification::VariableClassification(Vars const &precondition, Vars const &environment, Vars const &postcondition)
     {
-        Vars logic_variables;
+        Vars logic_variables, ghost_candidates;
         std::set_union(
             precondition.begin(), precondition.end(),
             postcondition.begin(), postcondition.end(),
@@ -15,11 +15,15 @@ namespace desyl
         std::set_difference(
             logic_variables.begin(), logic_variables.end(),
             environment.begin(), environment.end(),
-            std::inserter(ghosts, ghosts.end()));
+            std::inserter(ghost_candidates, ghost_candidates.end()));
         std::set_difference(
-            ghosts.begin(), ghosts.end(),
+            ghost_candidates.begin(), ghost_candidates.end(),
             precondition.begin(), precondition.end(),
             std::inserter(existentials, existentials.end()));
+        std::set_difference(
+            ghost_candidates.begin(), ghost_candidates.end(),
+            existentials.begin(), existentials.end(),
+            std::inserter(ghosts, ghosts.end()));
     }
 
     void VariableClassification::operator+=(const VariableClassification &other)
