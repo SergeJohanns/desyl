@@ -1,0 +1,8 @@
+void listfree(loc x) {
+    if ((x == 0)) {} else {
+        v_0 = *(x + 0);
+        nxt_0 = *(x + 1);
+        free(x);
+        listfree(nxt_0);
+    }
+}
