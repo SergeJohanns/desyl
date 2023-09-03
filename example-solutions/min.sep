@@ -1,0 +1,7 @@
+void min(loc r, int x, int y) {
+    if ((y >= x)) {
+        *(r + 0) = x;
+    } else {
+        *(r + 0) = y;
+    }
+}

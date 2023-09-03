@@ -1,0 +1,10 @@
+void treefree(loc x) {
+    if ((x == 0)) {} else {
+        let v_0 = *(x + 0);
+        let l_0 = *(x + 1);
+        treefree(l_0);
+        let r_0 = *(x + 2);
+        free(x);
+        treefree(r_0);
+    }
+}
