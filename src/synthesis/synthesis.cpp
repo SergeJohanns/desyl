@@ -9,6 +9,7 @@
 #include <proof_searchers/depth_first.hpp>
 #include <proof_searchers/breadth_first.hpp>
 #include <proof_searchers/whole_tree.hpp>
+#include <proof_searchers/guided.hpp>
 
 namespace desyl
 {
@@ -17,15 +18,24 @@ namespace desyl
     /// @param verbose Whether to print debug information
     void synthesize_query(Goal const &spec, SynthesisMode mode)
     {
-        auto search = WholeTreeProofSearcher();
-        auto res = search.search(spec, mode);
+        std::optional<Program> result;
+        if (mode == SynthesisMode::Guided)
+        {
+            auto search = GuidedProofSearcher();
+            result = search.search(spec, mode);
+        }
+        else
+        {
+            auto search = WholeTreeProofSearcher();
+            result = search.search(spec, mode);
+        }
 
         if (mode != SynthesisMode::Quiet)
         {
             std::cout << std::endl;
         }
 
-        if (!res.has_value())
+        if (!result.has_value())
         {
             std::cout << "No value" << std::endl;
             return;
@@ -49,6 +59,6 @@ namespace desyl
             }
         }
         std::cout << ") ";
-        std::cout << res.value() << std::endl;
+        std::cout << result.value() << std::endl;
     }
 }

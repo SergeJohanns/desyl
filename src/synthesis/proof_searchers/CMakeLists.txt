@@ -1,4 +1,4 @@
-add_library(proof_searchers proof_tree.cpp depth_first.cpp breadth_first.cpp whole_tree.cpp)
+add_library(proof_searchers proof_tree.cpp depth_first.cpp breadth_first.cpp whole_tree.cpp guided.cpp)
 
 target_include_directories(proof_searchers
     PUBLIC "${PROJECT_SOURCE_DIR}/include"
