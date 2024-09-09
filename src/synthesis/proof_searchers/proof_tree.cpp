@@ -43,21 +43,16 @@ namespace desyl
         auto derivations = rule->apply(parent->goal.value());
         this->children.reserve(derivations.size());
 
-        std::cout << "Using " << rule->name() << std::endl;
-
         for (auto &derivation : derivations)
         {
-            std::cout << "Derivation" << std::endl;
             if (derivation.goals.empty())
             {
-                std::cout << "No goals" << std::endl;
                 // Complete on successful EMP rule application
                 this->continuation = std::move(derivation.continuation);
                 this->complete();
             }
             else if (derivation.goals.size() == 1)
             {
-                std::cout << "Single goal" << std::endl;
                 // No need to create a new AND node for a single goal
                 auto child = new ProofTreeNode(this, std::move(derivation.goals[0]), true);
                 child->continuation = std::move(derivation.continuation);
@@ -66,7 +61,6 @@ namespace desyl
             }
             else
             {
-                std::cout << "Multiple goals" << std::endl;
                 auto derivation_node = new ProofTreeNode(this, std::nullopt, false);
                 derivation_node->continuation = std::move(derivation.continuation);
                 for (auto const &goal : derivation.goals)
@@ -78,7 +72,6 @@ namespace desyl
                 this->children.push_back(derivation_node);
             }
         }
-        std::cout << "Expanded" << std::endl;
     }
 
     void ProofTreeNode::make_children()
@@ -96,7 +89,6 @@ namespace desyl
 
     bool ProofTreeNode::complete()
     {
-        std::cout << "Completing leaf" << std::endl;
         // Only ever applied for an applicable EMP rule, so no need to check anything
         return this->complete_intermediate({});
     }

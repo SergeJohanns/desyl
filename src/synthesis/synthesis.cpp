@@ -7,6 +7,8 @@
 #include <all_rules.hpp> // TODO: Remove?
 #include <failures/failure.hpp>
 #include <proof_searchers/depth_first.hpp>
+#include <proof_searchers/breadth_first.hpp>
+#include <proof_searchers/whole_tree.hpp>
 
 namespace desyl
 {
@@ -15,37 +17,38 @@ namespace desyl
     /// @param verbose Whether to print debug information
     void synthesize_query(Goal const &spec, SynthesisMode mode)
     {
-        auto search = DepthFirstProofSearcher();
+        auto search = WholeTreeProofSearcher();
         auto res = search.search(spec);
+
         if (mode != SynthesisMode::Quiet)
         {
             std::cout << std::endl;
         }
-        if (res.has_value())
-        {
-            std::cout << "void " << spec.spec.signature.name << "(";
-            for (auto const &param : spec.spec.signature.args)
-            {
-                if (param.type == Type::Int)
-                {
-                    std::cout << "int ";
-                }
-                else if (param.type == Type::Loc)
-                {
-                    std::cout << "loc ";
-                }
-                std::cout << param.name;
-                if (&param != &spec.spec.signature.args.back())
-                {
-                    std::cout << ", ";
-                }
-            }
-            std::cout << ") ";
-            std::cout << res.value() << std::endl;
-        }
-        else
+
+        if (!res.has_value())
         {
             std::cout << "No value" << std::endl;
+            return;
         }
+
+        std::cout << "void " << spec.spec.signature.name << "(";
+        for (auto const &param : spec.spec.signature.args)
+        {
+            if (param.type == Type::Int)
+            {
+                std::cout << "int ";
+            }
+            else if (param.type == Type::Loc)
+            {
+                std::cout << "loc ";
+            }
+            std::cout << param.name;
+            if (&param != &spec.spec.signature.args.back())
+            {
+                std::cout << ", ";
+            }
+        }
+        std::cout << ") ";
+        std::cout << res.value() << std::endl;
     }
 }

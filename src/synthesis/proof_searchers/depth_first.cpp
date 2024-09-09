@@ -13,6 +13,7 @@ namespace desyl
             }
             if (!child->expanded)
             {
+                std::cout << "Using " << child->rule->name() << std::endl;
                 // Rules can create expanded children, so we need to check this here
                 child->expand();
             }
