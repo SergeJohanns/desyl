@@ -3,7 +3,7 @@
 
 namespace desyl
 {
-    void depth_first_search(ProofTreeNode const &root, ProofTreeNode &current)
+    void depth_first_search(ProofTreeNode const &root, ProofTreeNode &current, SynthesisMode mode)
     {
         for (auto &child : current.children)
         {
@@ -13,23 +13,26 @@ namespace desyl
             }
             if (!child->expanded)
             {
-                std::cout << "Using " << child->rule->name() << std::endl;
+                if (mode != SynthesisMode::Quiet)
+                {
+                    std::cout << "Using " << child->rule->name() << std::endl;
+                }
                 // Rules can create expanded children, so we need to check this here
                 child->expand();
             }
-            depth_first_search(root, *child);
+            depth_first_search(root, *child, mode);
         }
-        if (!current.completed)
+        if (!current.completed && mode != SynthesisMode::Quiet)
         {
             std::cout << "Backtracking" << std::endl;
         }
     }
 
-    std::optional<Program> DepthFirstProofSearcher::search(Goal const &goal) const
+    std::optional<Program> DepthFirstProofSearcher::search(Goal const &goal, SynthesisMode mode) const
     {
         auto root = ProofTreeNode(nullptr, goal, true);
         root.make_children();
-        depth_first_search(root, root);
+        depth_first_search(root, root, mode);
         return root.program;
     }
 }

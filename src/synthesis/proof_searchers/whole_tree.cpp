@@ -3,7 +3,7 @@
 
 namespace desyl
 {
-    std::optional<Program> WholeTreeProofSearcher::search(Goal const &goal) const
+    std::optional<Program> WholeTreeProofSearcher::search(Goal const &goal, SynthesisMode mode) const
     {
         auto root = ProofTreeNode(nullptr, goal, true);
         root.make_children();
@@ -11,8 +11,11 @@ namespace desyl
         std::vector<ProofTreeNode *> layer = {&root};
         while (!layer.empty())
         {
-            std::cout << "Depth: " << depth++ << std::endl;
-            std::cout << "Layer size: " << layer.size() << std::endl;
+            if (mode != SynthesisMode::Quiet)
+            {
+                std::cout << "Depth: " << depth++ << std::endl;
+                std::cout << "Layer size: " << layer.size() << std::endl;
+            }
             std::vector<ProofTreeNode *> next_layer;
             for (auto &node : layer)
             {

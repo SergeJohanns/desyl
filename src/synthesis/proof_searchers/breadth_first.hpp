@@ -7,6 +7,6 @@ namespace desyl
     class BreadthFirstProofSearcher : public ProofSearcher
     {
     public:
-        std::optional<Program> search(Goal const &goal) const override;
+        std::optional<Program> search(Goal const &goal, SynthesisMode mode) const override;
     };
 }

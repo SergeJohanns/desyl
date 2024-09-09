@@ -18,7 +18,7 @@ namespace desyl
     void synthesize_query(Goal const &spec, SynthesisMode mode)
     {
         auto search = WholeTreeProofSearcher();
-        auto res = search.search(spec);
+        auto res = search.search(spec, mode);
 
         if (mode != SynthesisMode::Quiet)
         {
