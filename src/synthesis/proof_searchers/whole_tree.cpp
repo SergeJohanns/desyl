@@ -1,8 +1,37 @@
 #include <whole_tree.hpp>
 #include <proof_tree.hpp>
+#include <fstream>
 
 namespace desyl
 {
+    void output_tree(ProofTreeNode const &node, std::ostream &os)
+    {
+        os << "{";
+        if (node.rule)
+        {
+            os << "\"rule\": \"" << node.rule->name() << "\",";
+        }
+        else if (node.goal.has_value())
+        {
+            os << "\"goal\": \"" << stringify_function_spec(node.goal->spec) << "\",";
+        }
+        if (node.completed)
+        {
+            os << "\"completed\": " << "true" << ",";
+        }
+        os << "\"children\": [";
+        for (auto &child : node.children)
+        {
+            output_tree(*child, os);
+            if (&child != &node.children.back())
+            {
+                os << ",";
+            }
+        }
+        os << "]";
+        os << "}";
+    }
+
     std::optional<Program> WholeTreeProofSearcher::search(Goal const &goal, SynthesisMode mode) const
     {
         auto root = ProofTreeNode(nullptr, goal, true);
@@ -29,6 +58,17 @@ namespace desyl
                 }
             }
             layer = next_layer;
+        }
+        if (mode != SynthesisMode::Quiet)
+        {
+            std::cout << "Output whole tree to JSON? (y/N): ";
+            char c;
+            std::cin >> c;
+            if (c == 'y')
+            {
+                std::ofstream file("proof_tree.json");
+                output_tree(root, file);
+            }
         }
         return root.program;
     }
