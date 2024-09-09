@@ -9,7 +9,7 @@ namespace desyl
         Expression condition;
 
     public:
-        BranchContinuation(Expression const &condition) : condition(condition){};
+        BranchContinuation(Expression const &condition) : condition(condition) {};
         Program join(std::vector<Program> const &results) const;
     };
 
@@ -20,7 +20,7 @@ namespace desyl
     public:
         bool is_invertible() const { return true; };
         std::string name() const { return "Branch"; };
-        BranchRule(std::vector<Expression> const &learned_clauses) : learned_clauses(learned_clauses){};
+        BranchRule(std::vector<Expression> const &learned_clauses) : learned_clauses(learned_clauses) {};
         std::vector<Derivation> apply(Goal const &goal) const;
     };
 }

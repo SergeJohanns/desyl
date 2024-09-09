@@ -1,4 +1,4 @@
-add_library(rules rules.cpp)
+add_library(rules rules.cpp all_rules.cpp)
 add_subdirectory(heap_rewrites)
 add_subdirectory(generic_continuations)
 add_subdirectory(statements)
