@@ -1,5 +1,6 @@
 #include <whole_tree.hpp>
 #include <proof_tree.hpp>
+#include <failures/failure.hpp>
 #include <fstream>
 
 namespace desyl
@@ -50,7 +51,15 @@ namespace desyl
             {
                 if (!node->expanded)
                 {
-                    node->expand();
+                    try
+                    {
+                        node->expand();
+                    }
+                    catch (Failure const &)
+                    {
+                        // Positive application of early failure rule, keep going
+                        continue;
+                    }
                 }
                 for (auto &child : node->children)
                 {

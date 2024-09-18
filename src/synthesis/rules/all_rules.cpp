@@ -32,8 +32,8 @@ namespace desyl
         // Pointers because the subclasses take up different amounts of memory
         const std::vector<std::shared_ptr<Rule>> all_rules_vector = {
             // (Early) termination rules
-            // std::make_shared<PostInconsistentRule>(PostInconsistentRule()),
-            // std::make_shared<SetSizeRule>(SetSizeRule()),
+            std::make_shared<PostInconsistentRule>(PostInconsistentRule()),
+            std::make_shared<SetSizeRule>(SetSizeRule()),
             std::make_shared<EmpRule>(EmpRule()),
             // Strictly simplifying lossless rules
             std::make_shared<NullNotLValRule>(NullNotLValRule()),
@@ -51,7 +51,7 @@ namespace desyl
             std::make_shared<PureUnifyRule>(PureUnifyRule()),
             std::make_shared<SubstRightRule>(SubstRightRule()),
             // Expensive but nongenerating rules
-            // std::make_shared<PostInvalidRule>(PostInvalidRule(*learned_clauses)), // Not expensive to run but adds branching targets
+            std::make_shared<PostInvalidRule>(PostInvalidRule(*learned_clauses)), // Not expensive to run but adds branching targets
             // Desctructive generation rules (at the end to avoid generating code that is not used)
             std::make_shared<WriteRule>(WriteRule()),
             std::make_shared<FreeRule>(FreeRule()),

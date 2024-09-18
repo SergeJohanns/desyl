@@ -40,6 +40,7 @@ namespace desyl
         }
 
         expanded = true;
+        // This could throw a Failure if an early failure rule triggers, but that's for the strategy to handle
         auto derivations = rule->apply(parent->goal.value());
         this->children.reserve(derivations.size());
 

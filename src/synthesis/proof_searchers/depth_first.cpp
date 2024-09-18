@@ -1,5 +1,6 @@
 #include <depth_first.hpp>
 #include <proof_tree.hpp>
+#include <failures/failure.hpp>
 
 namespace desyl
 {
@@ -18,7 +19,15 @@ namespace desyl
                     std::cout << "Using " << child->rule->name() << std::endl;
                 }
                 // Rules can create expanded children, so we need to check this here
-                child->expand();
+                try
+                {
+                    child->expand();
+                }
+                catch (Failure const &)
+                {
+                    // Positive application of early failure rule, force backtracking
+                    break;
+                }
             }
             depth_first_search(root, *child, mode);
         }
