@@ -30,6 +30,13 @@ namespace desyl
             auto search = WholeTreeProofSearcher();
             return search.search(spec, mode);
         }
+        else if (search_algorithm.rfind("limit-", 0) == 0)
+        {
+            // Search algorithm is of the form "limit-X" where X is the maximum depth
+            int max_depth = std::stoi(search_algorithm.substr(6));
+            auto search = WholeTreeProofSearcher(max_depth);
+            return search.search(spec, mode);
+        }
         else
         {
             std::cerr << "Unknown search algorithm: " << search_algorithm << std::endl;
@@ -37,6 +44,7 @@ namespace desyl
             std::cerr << "  - dfs: Depth-first search" << std::endl;
             std::cerr << "  - bfs: Breadth-first search" << std::endl;
             std::cerr << "  - tree: Whole tree search" << std::endl;
+            std::cerr << "  - limit-X: Whole tree up to X layers search (x is a positive integer)" << std::endl;
             return std::nullopt;
         }
     }

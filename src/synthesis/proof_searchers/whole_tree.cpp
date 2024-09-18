@@ -39,7 +39,8 @@ namespace desyl
         root.make_children();
         int depth = 0;
         std::vector<ProofTreeNode *> layer = {&root};
-        while (!layer.empty())
+        // If max_depth is -1, search until completion
+        while (!layer.empty() && depth != this->max_depth)
         {
             if (mode != SynthesisMode::Quiet)
             {
