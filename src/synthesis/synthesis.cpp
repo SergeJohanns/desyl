@@ -13,10 +13,38 @@
 
 namespace desyl
 {
+    std::optional<desyl::Program> match_algorithm_name(Goal const &spec, std::string search_algorithm, SynthesisMode mode)
+    {
+        if (search_algorithm == "dfs")
+        {
+            auto search = DepthFirstProofSearcher();
+            return search.search(spec, mode);
+        }
+        else if (search_algorithm == "bfs")
+        {
+            auto search = BreadthFirstProofSearcher();
+            return search.search(spec, mode);
+        }
+        else if (search_algorithm == "tree")
+        {
+            auto search = WholeTreeProofSearcher();
+            return search.search(spec, mode);
+        }
+        else
+        {
+            std::cerr << "Unknown search algorithm: " << search_algorithm << std::endl;
+            std::cerr << "Allowed search algorithms are: " << std::endl;
+            std::cerr << "  - dfs: Depth-first search" << std::endl;
+            std::cerr << "  - bfs: Breadth-first search" << std::endl;
+            std::cerr << "  - tree: Whole tree search" << std::endl;
+            return std::nullopt;
+        }
+    }
+
     /// @brief Synthesize a function from a specification
     /// @param spec The specification to synthesize
     /// @param verbose Whether to print debug information
-    void synthesize_query(Goal const &spec, SynthesisMode mode)
+    void synthesize_query(Goal const &spec, std::string search_algorithm, SynthesisMode mode)
     {
         std::optional<Program> result;
         if (mode == SynthesisMode::Guided)
@@ -26,8 +54,7 @@ namespace desyl
         }
         else
         {
-            auto search = WholeTreeProofSearcher();
-            result = search.search(spec, mode);
+            result = match_algorithm_name(spec, search_algorithm, mode);
         }
 
         if (mode != SynthesisMode::Quiet)

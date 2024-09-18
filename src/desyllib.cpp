@@ -11,11 +11,11 @@ namespace desyl
         return parse_query(input);
     }
 
-    void synthesize(Query query, SynthesisMode mode)
+    void synthesize(Query query, std::string search_algorithm, SynthesisMode mode)
     {
         for (auto const &function : query.functions)
         {
-            synthesize_query(Goal(function.second, query.functions, query.predicates), mode);
+            synthesize_query(Goal(function.second, query.functions, query.predicates), search_algorithm, mode);
         }
     }
 

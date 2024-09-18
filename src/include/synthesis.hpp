@@ -44,5 +44,5 @@ namespace desyl
         VariableSnapshot variables() const;
     };
 
-    void synthesize_query(Goal const &query, SynthesisMode mode);
+    void synthesize_query(Goal const &query, std::string search_algorithm, SynthesisMode mode);
 }
