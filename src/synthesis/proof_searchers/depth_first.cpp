@@ -12,33 +12,40 @@ namespace desyl
             {
                 return;
             }
-            bool applied = false;
+
+            bool rule_applied = false;
+            // Rules can create expanded children, so we need to check this here
             if (!child->expanded)
             {
-                if (mode != SynthesisMode::Quiet)
-                {
-                    std::cout << "Using " << child->rule->name() << std::endl;
-                }
-                // Rules can create expanded children, so we need to check this here
                 try
                 {
-                    applied = child->expand();
+                    rule_applied = child->expand();
+                    if (rule_applied && mode != SynthesisMode::Quiet)
+                    {
+                        std::cout << "Using " << child->rule->name() << std::endl;
+                    }
                 }
                 catch (Failure const &)
                 {
                     // Positive application of early failure rule, force backtracking
+                    if (mode != SynthesisMode::Quiet)
+                    {
+                        std::cout << "Using " << child->rule->name() << std::endl;
+                    }
                     break;
                 }
             }
             depth_first_search(root, *child, mode);
-            if (applied && child->rule->is_invertible())
+            if (rule_applied && child->rule->is_invertible())
             {
                 break;
             }
         }
-        if (!current.completed && mode != SynthesisMode::Quiet)
+
+        bool backtracked_rule = !current.completed && current.rule && !current.children.empty();
+        if (backtracked_rule && mode != SynthesisMode::Quiet)
         {
-            std::cout << "Backtracking" << std::endl;
+            std::cout << "Backtracking from " << current.rule->name() << std::endl;
         }
     }
 
