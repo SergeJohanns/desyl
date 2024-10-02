@@ -12,6 +12,7 @@ namespace desyl
             {
                 return;
             }
+            bool applied = false;
             if (!child->expanded)
             {
                 if (mode != SynthesisMode::Quiet)
@@ -21,7 +22,7 @@ namespace desyl
                 // Rules can create expanded children, so we need to check this here
                 try
                 {
-                    child->expand();
+                    applied = child->expand();
                 }
                 catch (Failure const &)
                 {
@@ -30,6 +31,10 @@ namespace desyl
                 }
             }
             depth_first_search(root, *child, mode);
+            if (applied && child->rule->is_invertible())
+            {
+                break;
+            }
         }
         if (!current.completed && mode != SynthesisMode::Quiet)
         {

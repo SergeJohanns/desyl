@@ -24,7 +24,7 @@ namespace desyl
         std::shared_ptr<Rule> rule;
         ProofTreeNode *parent;
         std::vector<ProofTreeNode *> children;
-        void expand();
+        bool expand();
         void make_children();
         bool complete(); // Returns true if the entire tree is complete
         // void error(); // TODO

@@ -32,7 +32,9 @@ namespace desyl
         }
     }
 
-    void ProofTreeNode::expand()
+    /// @brief Expand the node by applying the rule
+    /// @return True if the node was expanded, false if the rule did not apply
+    bool ProofTreeNode::expand()
     {
         if (expanded)
         {
@@ -42,6 +44,10 @@ namespace desyl
         expanded = true;
         // This could throw a Failure if an early failure rule triggers, but that's for the strategy to handle
         auto derivations = rule->apply(parent->goal.value());
+        if (derivations.empty())
+        {
+            return false;
+        }
         this->children.reserve(derivations.size());
 
         for (auto &derivation : derivations)
@@ -73,8 +79,10 @@ namespace desyl
                 this->children.push_back(derivation_node);
             }
         }
+        return true;
     }
 
+    /// @brief Create children for the node corresponding to the different rules that can be applied
     void ProofTreeNode::make_children()
     {
         if (!expanded)
@@ -88,12 +96,17 @@ namespace desyl
         }
     }
 
+    /// @brief Complete the node by combining the programs of the children, and propagate the completion up the tree
+    /// @return True if the entire tree is complete
     bool ProofTreeNode::complete()
     {
         // Only ever applied for an applicable EMP rule, so no need to check anything
         return this->complete_intermediate({});
     }
 
+    /// @brief Internal function to complete the node and propagate the partial program up the tree
+    /// @param child_program The program of the child that triggered completion
+    /// @return True if the entire tree is complete
     bool ProofTreeNode::complete_intermediate(std::vector<Program> child_program)
     {
         if (!this->is_or_node)
@@ -118,6 +131,9 @@ namespace desyl
         }
     }
 
+    /// @brief Get the program represented by this subtree given the programs of the children
+    /// @param child_program The programs of the children
+    /// @return The program represented by this subtree
     Program ProofTreeNode::get_program(std::vector<Program> child_program)
     {
         if (!this->continuation)
