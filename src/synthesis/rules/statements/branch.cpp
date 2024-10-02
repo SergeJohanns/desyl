@@ -21,7 +21,6 @@ namespace desyl
         std::vector<Derivation> derivations;
         for (auto const &clause : learned_clauses)
         {
-            std::cout << "Branching on " << stringify_expression(clause) << std::endl;
             if (std::find(goal.spec.precondition.proposition.begin(), goal.spec.precondition.proposition.end(), clause) != goal.spec.precondition.proposition.end())
             {
                 continue;
