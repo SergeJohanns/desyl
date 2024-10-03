@@ -5,7 +5,7 @@
 
 bool validate_algo(const char *, const std::string &value)
 {
-    if (value == "dfs" || value == "bfs" || value == "tree" || value.find("limit-") == 0)
+    if (value == "dfs" || value == "bfs" || value == "tree")
     {
         return true;
     }
@@ -24,9 +24,10 @@ bool validate_file(const char *, const std::string &value)
 
 DEFINE_bool(v, false, "Enable verbose output for synthesis");
 DEFINE_bool(g, false, "Enable user guided synthesis");
-DEFINE_string(algo, "dfs", "Search algorithm to use (dfs, bfs, tree, limit-X)");
+DEFINE_int32(depth, -1, "Limit the depth of the tree exploration in the search algorithm");
+DEFINE_string(algo, "dfs", "Search algorithm to use (dfs, bfs, tree)");
 DEFINE_validator(algo, &validate_algo);
-DEFINE_string(file, "", "Search algorithm to use (dfs, bfs, tree, limit-X)");
+DEFINE_string(file, "", "Search algorithm to use (dfs, bfs, tree)");
 DEFINE_validator(file, &validate_file);
 
 int main(int argc, char **argv)
@@ -42,6 +43,6 @@ int main(int argc, char **argv)
         mode = desyl::SynthesisMode::Guided;
     }
     desyl::Query query = desyl::parse(FLAGS_file);
-    desyl::synthesize(std::move(query), FLAGS_algo, mode);
+    desyl::synthesize(std::move(query), FLAGS_algo, FLAGS_depth, mode);
     return 0;
 }

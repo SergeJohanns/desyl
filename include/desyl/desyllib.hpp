@@ -20,6 +20,7 @@ namespace desyl
     /// @brief Synthesize a program from a specification
     /// @param query The specification to synthesize
     /// @param search_algorithm The name of the search algorithm to use (dfs, bfs, tree)
+    /// @param depth The maximum depth of the search tree
     /// @param mode Configuration for synthesis (Quiet, Verbose, Guided)
-    void synthesize(Query query, std::string search_algorithm, SynthesisMode mode);
+    void synthesize(Query query, std::string search_algorithm, int depth, SynthesisMode mode);
 }

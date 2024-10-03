@@ -13,7 +13,7 @@
 
 namespace desyl
 {
-    std::optional<desyl::Program> match_algorithm_name(Goal const &spec, std::string search_algorithm, SynthesisMode mode)
+    std::optional<desyl::Program> match_algorithm_name(Goal const &spec, std::string search_algorithm, int depth, SynthesisMode mode)
     {
         if (search_algorithm == "dfs")
         {
@@ -27,14 +27,7 @@ namespace desyl
         }
         else if (search_algorithm == "tree")
         {
-            auto search = WholeTreeProofSearcher();
-            return search.search(spec, mode);
-        }
-        else if (search_algorithm.rfind("limit-", 0) == 0)
-        {
-            // Search algorithm is of the form "limit-X" where X is the maximum depth
-            int max_depth = std::stoi(search_algorithm.substr(6));
-            auto search = WholeTreeProofSearcher(max_depth);
+            auto search = WholeTreeProofSearcher(depth);
             return search.search(spec, mode);
         }
         else
@@ -44,15 +37,16 @@ namespace desyl
             std::cerr << "  - dfs: Depth-first search" << std::endl;
             std::cerr << "  - bfs: Breadth-first search" << std::endl;
             std::cerr << "  - tree: Whole tree search" << std::endl;
-            std::cerr << "  - limit-X: Whole tree up to X layers search (x is a positive integer)" << std::endl;
             return std::nullopt;
         }
     }
 
     /// @brief Synthesize a function from a specification
     /// @param spec The specification to synthesize
-    /// @param verbose Whether to print debug information
-    void synthesize_query(Goal const &spec, std::string search_algorithm, SynthesisMode mode)
+    /// @param search_algorithm The name of the search algorithm to use (dfs, bfs, tree)
+    /// @param depth The maximum depth of the search tree (-1 for no limit)
+    /// @param mode Configuration for synthesis (Quiet, Verbose, Guided)
+    void synthesize_query(Goal const &spec, std::string search_algorithm, int depth, SynthesisMode mode)
     {
         std::optional<Program> result;
         if (mode == SynthesisMode::Guided)
@@ -62,7 +56,7 @@ namespace desyl
         }
         else
         {
-            result = match_algorithm_name(spec, search_algorithm, mode);
+            result = match_algorithm_name(spec, search_algorithm, depth, mode);
         }
 
         if (mode != SynthesisMode::Quiet)
