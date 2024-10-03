@@ -68,9 +68,8 @@ namespace desyl
         }
     }
 
-    std::optional<Program> GuidedProofSearcher::search(Goal const &goal, SynthesisMode) const
+    std::optional<Program> GuidedProofSearcher::search(ProofTreeNode &root, SynthesisMode) const
     {
-        auto root = ProofTreeNode(nullptr, goal, true);
         root.make_children();
         depth_first_search(root, root);
         return root.program;

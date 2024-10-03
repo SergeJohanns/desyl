@@ -33,9 +33,8 @@ namespace desyl
         os << "}";
     }
 
-    std::optional<Program> WholeTreeProofSearcher::search(Goal const &goal, SynthesisMode mode) const
+    std::optional<Program> WholeTreeProofSearcher::search(ProofTreeNode &root, SynthesisMode mode) const
     {
-        auto root = ProofTreeNode(nullptr, goal, true);
         root.make_children();
         int depth = 0;
         std::vector<ProofTreeNode *> layer = {&root};

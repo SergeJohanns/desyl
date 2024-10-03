@@ -7,9 +7,8 @@ namespace desyl
     // Each nested vector contains direct siblings, used for backtracking
     using Layer = std::vector<std::vector<ProofTreeNode *>>;
 
-    std::optional<Program> BreadthFirstProofSearcher::search(Goal const &goal, SynthesisMode mode) const
+    std::optional<Program> BreadthFirstProofSearcher::search(ProofTreeNode &root, SynthesisMode mode) const
     {
-        auto root = ProofTreeNode(nullptr, goal, true);
         root.make_children();
         int depth = 0;
         Layer layer = {{&root}};

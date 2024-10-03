@@ -10,6 +10,6 @@ namespace desyl
 
     public:
         WholeTreeProofSearcher(int max_depth = -1) : max_depth(max_depth) {}
-        std::optional<Program> search(Goal const &goal, SynthesisMode mode) const override;
+        std::optional<Program> search(ProofTreeNode &root, SynthesisMode mode) const override;
     };
 }

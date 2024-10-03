@@ -49,9 +49,8 @@ namespace desyl
         }
     }
 
-    std::optional<Program> DepthFirstProofSearcher::search(Goal const &goal, SynthesisMode mode) const
+    std::optional<Program> DepthFirstProofSearcher::search(ProofTreeNode &root, SynthesisMode mode) const
     {
-        auto root = ProofTreeNode(nullptr, goal, true);
         root.make_children();
         depth_first_search(root, root, mode);
         return root.program;

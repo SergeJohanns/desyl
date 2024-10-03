@@ -13,22 +13,22 @@
 
 namespace desyl
 {
-    std::optional<desyl::Program> match_algorithm_name(Goal const &spec, std::string search_algorithm, int depth, SynthesisMode mode)
+    std::optional<desyl::Program> match_algorithm_name(ProofTreeNode &root, std::string search_algorithm, int depth, SynthesisMode mode)
     {
         if (search_algorithm == "dfs")
         {
             auto search = DepthFirstProofSearcher();
-            return search.search(spec, mode);
+            return search.search(root, mode);
         }
         else if (search_algorithm == "bfs")
         {
             auto search = BreadthFirstProofSearcher();
-            return search.search(spec, mode);
+            return search.search(root, mode);
         }
         else if (search_algorithm == "tree")
         {
             auto search = WholeTreeProofSearcher(depth);
-            return search.search(spec, mode);
+            return search.search(root, mode);
         }
         else
         {
@@ -49,14 +49,15 @@ namespace desyl
     void synthesize_query(Goal const &spec, std::string search_algorithm, int depth, SynthesisMode mode)
     {
         std::optional<Program> result;
+        ProofTreeNode root = ProofTreeNode(nullptr, spec, true);
         if (mode == SynthesisMode::Guided)
         {
             auto search = GuidedProofSearcher();
-            result = search.search(spec, mode);
+            result = search.search(root, mode);
         }
         else
         {
-            result = match_algorithm_name(spec, search_algorithm, depth, mode);
+            result = match_algorithm_name(root, search_algorithm, depth, mode);
         }
 
         if (mode != SynthesisMode::Quiet)
