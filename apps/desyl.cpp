@@ -1,37 +1,47 @@
 #include <iostream>
 #include <desyl/desyllib.hpp>
 #include <desyl/ast.hpp>
+#include <gflags/gflags.h>
+
+bool validate_algo(const char *, const std::string &value)
+{
+    if (value == "dfs" || value == "bfs" || value == "tree" || value.find("limit-") == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool validate_file(const char *, const std::string &value)
+{
+    if (value.empty())
+    {
+        std::cerr << "Query file must be specified" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+DEFINE_bool(v, false, "Enable verbose output for synthesis");
+DEFINE_bool(g, false, "Enable user guided synthesis");
+DEFINE_string(algo, "dfs", "Search algorithm to use (dfs, bfs, tree, limit-X)");
+DEFINE_validator(algo, &validate_algo);
+DEFINE_string(file, "", "Search algorithm to use (dfs, bfs, tree, limit-X)");
+DEFINE_validator(file, &validate_file);
 
 int main(int argc, char **argv)
 {
-    if (argc < 2)
-    {
-        std::cout << "Usage: desyl [-v | -g] [search-algorithm] <query-file>" << std::endl;
-        return 1;
-    }
+    gflags::ParseCommandLineFlags(&argc, &argv, true);
     desyl::SynthesisMode mode = desyl::SynthesisMode::Quiet;
-    if (argc >= 3 && argv[1][0] == '-')
+    if (FLAGS_v)
     {
-        if (std::string(argv[1]) == "-v")
-        {
-            mode = desyl::SynthesisMode::Verbose;
-        }
-        else if (std::string(argv[1]) == "-g")
-        {
-            mode = desyl::SynthesisMode::Guided;
-        }
-        else
-        {
-            std::cout << "Usage: desyl [-v | -g] [search-algorithm] <query-file>" << std::endl;
-            return 1;
-        }
+        mode = desyl::SynthesisMode::Verbose;
     }
-    std::string search_algorithm = "dfs";
-    if ((argc == 3 && argv[1][0] != '-') || argc >= 4)
+    else if (FLAGS_g)
     {
-        search_algorithm = argv[argc - 2];
+        mode = desyl::SynthesisMode::Guided;
     }
-    desyl::Query query = desyl::parse(argv[argc - 1]);
-    desyl::synthesize(std::move(query), search_algorithm, mode);
+    desyl::Query query = desyl::parse(FLAGS_file);
+    desyl::synthesize(std::move(query), FLAGS_algo, mode);
     return 0;
 }

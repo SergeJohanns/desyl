@@ -17,7 +17,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Generate compile_commands.json
 
     # Set flags
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror -Wno-cast-function-type -Wno-error=cast-function-type")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -fsanitize=address,undefined")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O3 -g -fsanitize=address,undefined")
@@ -27,7 +27,20 @@ include(FetchContent)
 
 # Include lexing/parsing library
 FetchContent_Declare(lexy URL https://lexy.foonathan.net/download/lexy-src.zip)
-FetchContent_MakeAvailable(lexy)
+
+# Include command line flags library
+FetchContent_Declare(gflags
+	GIT_REPOSITORY	https://github.com/gflags/gflags.git
+	GIT_TAG			master
+)
+FetchContent_GetProperties(gflags)
+if(NOT gflags_POPULATED)
+	FetchContent_Populate(gflags)
+	cmake_policy(SET CMP0069 NEW)
+	add_subdirectory(${gflags_SOURCE_DIR} ${gflags_BINARY_DIR})
+endif()
+
+FetchContent_MakeAvailable(lexy gflags)
 
 add_subdirectory(src)
 add_subdirectory(apps)
