@@ -13,6 +13,12 @@
 
 namespace desyl
 {
+    /// @brief Match the search algorithm name to the correct search algorithm
+    /// @param root The root of the proof tree
+    /// @param search_algorithm The name of the search algorithm to use (dfs, bfs, tree)
+    /// @param depth The maximum depth of the search tree (-1 for no limit)
+    /// @param mode Configuration for synthesis (Quiet, Verbose, Guided)
+    /// @return The synthesized program
     std::optional<desyl::Program> match_algorithm_name(ProofTreeNode &root, std::string search_algorithm, int depth, SynthesisMode mode)
     {
         if (search_algorithm == "dfs")
@@ -32,13 +38,34 @@ namespace desyl
         }
         else
         {
-            std::cerr << "Unknown search algorithm: " << search_algorithm << std::endl;
-            std::cerr << "Allowed search algorithms are: " << std::endl;
-            std::cerr << "  - dfs: Depth-first search" << std::endl;
-            std::cerr << "  - bfs: Breadth-first search" << std::endl;
-            std::cerr << "  - tree: Whole tree search" << std::endl;
-            return std::nullopt;
+            throw std::runtime_error(search_algorithm + " is not a valid search algorithm");
         }
+    }
+
+    /// @brief Output the synthesized program
+    /// @param signature The signature of the function
+    /// @param program The synthesized program
+    void output_program(FunctionSignature const &signature, Program const &program)
+    {
+        std::cout << "void " << signature.name << "(";
+        for (auto const &param : signature.args)
+        {
+            if (param.type == Type::Int)
+            {
+                std::cout << "int ";
+            }
+            else if (param.type == Type::Loc)
+            {
+                std::cout << "loc ";
+            }
+            std::cout << param.name;
+            if (&param != &signature.args.back())
+            {
+                std::cout << ", ";
+            }
+        }
+        std::cout << ") ";
+        std::cout << program << std::endl;
     }
 
     /// @brief Synthesize a function from a specification
@@ -68,27 +95,10 @@ namespace desyl
         if (!result.has_value())
         {
             std::cout << "No value" << std::endl;
-            return;
         }
-
-        std::cout << "void " << spec.spec.signature.name << "(";
-        for (auto const &param : spec.spec.signature.args)
+        else
         {
-            if (param.type == Type::Int)
-            {
-                std::cout << "int ";
-            }
-            else if (param.type == Type::Loc)
-            {
-                std::cout << "loc ";
-            }
-            std::cout << param.name;
-            if (&param != &spec.spec.signature.args.back())
-            {
-                std::cout << ", ";
-            }
+            output_program(spec.spec.signature, result.value());
         }
-        std::cout << ") ";
-        std::cout << result.value() << std::endl;
     }
 }
