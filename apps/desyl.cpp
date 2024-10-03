@@ -27,7 +27,8 @@ DEFINE_bool(g, false, "Enable user guided synthesis");
 DEFINE_int32(depth, -1, "Limit the depth of the tree exploration in the search algorithm");
 DEFINE_string(algo, "dfs", "Search algorithm to use (dfs, bfs, tree)");
 DEFINE_validator(algo, &validate_algo);
-DEFINE_string(file, "", "Search algorithm to use (dfs, bfs, tree)");
+DEFINE_string(treeout, "", "File to write the search tree JSON to");
+DEFINE_string(file, "", "Path to the file containing the query to synthesize");
 DEFINE_validator(file, &validate_file);
 
 int main(int argc, char **argv)
@@ -43,6 +44,6 @@ int main(int argc, char **argv)
         mode = desyl::SynthesisMode::Guided;
     }
     desyl::Query query = desyl::parse(FLAGS_file);
-    desyl::synthesize(std::move(query), FLAGS_algo, FLAGS_depth, mode);
+    desyl::synthesize(std::move(query), FLAGS_algo, FLAGS_depth, FLAGS_treeout, mode);
     return 0;
 }
