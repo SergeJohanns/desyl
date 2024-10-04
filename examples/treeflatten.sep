@@ -8,10 +8,10 @@ predicate lseg(loc x, set s) {
 |  !(x == 0) |=> {s =i {v} ++ ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
 }
 
-{true; lseg(xa, sa) | lseg(xb, sb) | ret -> xb;}
+{true; lseg(xa, sa) | lseg(xb, sb) | <ret, 0> -> xb;}
 lsegappend (loc xa, loc ret)
-{s =i sa ++ sb; lseg(y, s) | ret -> y;}
+{s =i sa ++ sb; lseg(y, s) | <ret, 0> -> y;}
 
-{true; <z, 0> -> x | tree(x, s)}
+{true; <z, 0> -> x | tree(x, s);}
 flatten(loc z)
-{true; <z, 0> -> y | lseg(y, s)}
+{true; <z, 0> -> y | lseg(y, s);}
