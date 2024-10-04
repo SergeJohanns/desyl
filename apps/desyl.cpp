@@ -43,7 +43,8 @@ int main(int argc, char **argv)
     {
         mode = desyl::SynthesisMode::Guided;
     }
-    desyl::Query query = desyl::parse(FLAGS_file);
-    desyl::synthesize(std::move(query), FLAGS_algo, FLAGS_depth, FLAGS_treeout, mode);
+    desyl::Query const query = desyl::parse(FLAGS_file);
+    auto const config = desyl::SynthesisConfig{FLAGS_algo, FLAGS_depth, FLAGS_treeout, mode};
+    desyl::synthesize(query, config);
     return 0;
 }

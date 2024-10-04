@@ -107,25 +107,22 @@ namespace desyl
 
     /// @brief Synthesize a function from a specification
     /// @param spec The specification to synthesize
-    /// @param search_algorithm The name of the search algorithm to use (dfs, bfs, tree)
-    /// @param depth The maximum depth of the search tree (-1 for no limit)
-    /// @param tree_file The file to write the search tree to (empty string for no output)
-    /// @param mode Configuration for synthesis (Quiet, Verbose, Guided)
-    void synthesize_query(Goal const &spec, std::string search_algorithm, int depth, std::string tree_file, SynthesisMode mode)
+    /// @param config The configuration for synthesis
+    void synthesize_query(Goal const &spec, SynthesisConfig const &config)
     {
         std::optional<Program> result;
         ProofTreeNode root = ProofTreeNode(nullptr, spec, true);
-        if (mode == SynthesisMode::Guided)
+        if (config.mode == SynthesisMode::Guided)
         {
             auto search = GuidedProofSearcher();
-            result = search.search(root, mode);
+            result = search.search(root, config.mode);
         }
         else
         {
-            result = match_algorithm_name(root, search_algorithm, depth, mode);
+            result = match_algorithm_name(root, config.search_algorithm, config.depth, config.mode);
         }
 
-        if (mode != SynthesisMode::Quiet)
+        if (config.mode != SynthesisMode::Quiet)
         {
             std::cout << std::endl;
         }
@@ -139,9 +136,9 @@ namespace desyl
             output_program(spec.spec.signature, result.value(), std::cout);
         }
 
-        if (!tree_file.empty())
+        if (!config.tree_file.empty())
         {
-            std::ofstream file(tree_file);
+            std::ofstream file(config.tree_file);
             output_tree(root, file);
         }
     }
