@@ -84,6 +84,10 @@ namespace desyl
         {
             os << "\"goal\": \"" << stringify_function_spec(node.goal->spec) << "\",";
         }
+        if (node.expanded)
+        {
+            os << "\"expanded\": " << "true" << ",";
+        }
         if (node.completed)
         {
             os << "\"completed\": " << "true" << ",";
