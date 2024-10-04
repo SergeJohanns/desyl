@@ -8,8 +8,8 @@ namespace desyl
 {
     class ProofTreeNode
     {
-        bool complete_intermediate(std::vector<Program> child_program);
-        Program get_program(std::vector<Program> child_program); // Returns the program represented by the tree once it is complete
+        bool complete_intermediate(std::vector<Program> const &child_program);
+        Program get_program(std::vector<Program> child_program) const; // Returns the program represented by the tree once it is complete
 
     public:
         ProofTreeNode(ProofTreeNode *parent, std::optional<Goal> goal, bool is_or_node); // Already expanded node, e.g. root or subderivation

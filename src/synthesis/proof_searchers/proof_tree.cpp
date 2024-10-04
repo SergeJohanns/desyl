@@ -107,7 +107,7 @@ namespace desyl
     /// @brief Internal function to complete the node and propagate the partial program up the tree
     /// @param child_program The program of the child that triggered completion
     /// @return True if the entire tree is complete
-    bool ProofTreeNode::complete_intermediate(std::vector<Program> child_program)
+    bool ProofTreeNode::complete_intermediate(std::vector<Program> const &child_program)
     {
         if (!this->is_or_node)
         {
@@ -134,7 +134,7 @@ namespace desyl
     /// @brief Get the program represented by this subtree given the programs of the children
     /// @param child_program The programs of the children
     /// @return The program represented by this subtree
-    Program ProofTreeNode::get_program(std::vector<Program> child_program)
+    Program ProofTreeNode::get_program(std::vector<Program> child_program) const
     {
         if (!this->continuation)
         {
