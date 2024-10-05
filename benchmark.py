@@ -108,4 +108,4 @@ def benchmark_all_algorithms(algorithms: list, depth: int = 12, timeout: int = 1
             bar()
 
 
-benchmark_all_algorithms(["dfs", "bfs"])
+benchmark_all_algorithms(["dfs", "bfs", "best"])
