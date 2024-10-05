@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 alive-progress = "*"
+pandas = "*"
+matplotlib = "*"
+numpy = "*"
 
 [dev-packages]
 

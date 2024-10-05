@@ -102,7 +102,7 @@ def benchmark_all_algorithms(algorithms: list, depth: int = 12, timeout: int = 1
             for algo, synthesizer in zip(algorithms, synthesizers):
                 bar.text(f'Running {algo} algorithm')
                 result_type, result, time = synthesizer.synthesize(f'{EXAMPLES_DIR}/{file}', timeout=timeout)
-                expanded_nodes = get_expanded_nodes()
+                expanded_nodes = get_expanded_nodes() if result_type != ResultType.TIMEOUT else None
                 results.extend([result_type.value, time, expanded_nodes])
             writer.writerow(results)
             bar()
