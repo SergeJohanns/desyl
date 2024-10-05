@@ -12,6 +12,7 @@
 #include <proof_searchers/whole_tree.hpp>
 #include <proof_searchers/guided.hpp>
 #include <proof_searchers/heuristic_search.hpp>
+#include <proof_searchers/suslik_cost.hpp>
 
 namespace desyl
 {
@@ -40,9 +41,7 @@ namespace desyl
         }
         else if (search_algorithm == "best")
         {
-            // TODO: Add a heuristic function to the configuration
-            auto search = HeuristicProofSearcher([](ProofTreeNode const &node)
-                                                 { return node.goal->spec.precondition.heap.pointer_declarations.size(); });
+            auto search = HeuristicProofSearcher(suslik_cost);
             return search.search(root, mode);
         }
         else
