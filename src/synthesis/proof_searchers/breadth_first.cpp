@@ -1,5 +1,4 @@
 #include <breadth_first.hpp>
-#include <proof_tree.hpp>
 #include <failures/failure.hpp>
 
 namespace desyl

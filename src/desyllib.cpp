@@ -19,8 +19,7 @@ namespace desyl
         }
     }
 
-    std::string
-    example(std::string const &input)
+    std::string example(std::string const &input)
     {
         return stringify_expression(input);
     }

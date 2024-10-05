@@ -11,6 +11,7 @@
 #include <proof_searchers/breadth_first.hpp>
 #include <proof_searchers/whole_tree.hpp>
 #include <proof_searchers/guided.hpp>
+#include <proof_searchers/heuristic_search.hpp>
 
 namespace desyl
 {
@@ -35,6 +36,13 @@ namespace desyl
         else if (search_algorithm == "tree")
         {
             auto search = WholeTreeProofSearcher(depth);
+            return search.search(root, mode);
+        }
+        else if (search_algorithm == "best")
+        {
+            // TODO: Add a heuristic function to the configuration
+            auto search = HeuristicProofSearcher([](ProofTreeNode const &node)
+                                                 { return node.goal->spec.precondition.heap.pointer_declarations.size(); });
             return search.search(root, mode);
         }
         else
