@@ -10,7 +10,7 @@ namespace desyl
         std::vector<Expression> args;
 
     public:
-        CallContinuation(Identifier function_name, std::vector<Expression> args) : function_name(function_name), args(args){};
+        CallContinuation(Identifier function_name, std::vector<Expression> args) : function_name(function_name), args(args) {};
         Program join(std::vector<Program> const &results) const;
     };
 
