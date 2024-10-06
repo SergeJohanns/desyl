@@ -14,6 +14,12 @@ namespace desyl
 
     Proposition substitute(Proposition const &proposition, Substitutions const &substitutions);
 
+    PointerDeclaration substitute(PointerDeclaration const &pointer, Substitutions const &substitutions);
+
+    ArrayDeclaration substitute(ArrayDeclaration const &heap, Substitutions const &substitutions);
+
+    PredicateCall substitute(PredicateCall const &heap, Substitutions const &substitutions);
+
     Heap substitute(Heap const &heap, Substitutions const &substitutions);
 
     Assertion substitute(Assertion const &assertion, Substitutions const &substitutions);

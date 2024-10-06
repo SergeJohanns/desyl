@@ -70,24 +70,45 @@ namespace desyl
         return substituted;
     }
 
+    PointerDeclaration substitute(PointerDeclaration const &pointer, Substitutions const &substitutions)
+    {
+        PointerDeclaration substituted(pointer);
+        substituted.base = std::make_shared<Expression>(substitute(*substituted.base, substitutions));
+        substituted.value = std::make_shared<Expression>(substitute(*substituted.value, substitutions));
+        return substituted;
+    }
+
+    ArrayDeclaration substitute(ArrayDeclaration const &array, Substitutions const &substitutions)
+    {
+        ArrayDeclaration substituted(array);
+        substituted.name = std::get<Identifier>(substitute(substituted.name, substitutions));
+        return substituted;
+    }
+
+    PredicateCall substitute(PredicateCall const &predicate_call, Substitutions const &substitutions)
+    {
+        PredicateCall substituted(predicate_call);
+        for (size_t i = 0; i < substituted.args.size(); ++i)
+        {
+            substituted.args[i] = std::get<Identifier>(substitute(substituted.args[i], substitutions));
+        }
+        return substituted;
+    }
+
     Heap substitute(Heap const &heap, Substitutions const &substitutions)
     {
-        Heap substituted(heap);
-        for (auto &pointer_declaration : substituted.pointer_declarations)
+        Heap substituted;
+        for (auto &pointer_declaration : heap.pointer_declarations)
         {
-            pointer_declaration.base = std::make_shared<Expression>(substitute(*pointer_declaration.base, substitutions));
-            pointer_declaration.value = std::make_shared<Expression>(substitute(*pointer_declaration.value, substitutions));
+            substituted.pointer_declarations.push_back(substitute(pointer_declaration, substitutions));
         }
-        for (auto &array_declaration : substituted.array_declarations)
+        for (auto &array_declaration : heap.array_declarations)
         {
-            array_declaration.name = std::get<Identifier>(substitute(array_declaration.name, substitutions));
+            substituted.array_declarations.push_back(substitute(array_declaration, substitutions));
         }
-        for (auto &predicate_call : substituted.predicate_calls)
+        for (auto &predicate_call : heap.predicate_calls)
         {
-            for (size_t i = 0; i < predicate_call.args.size(); ++i)
-            {
-                predicate_call.args[i] = std::get<Identifier>(substitute(predicate_call.args[i], substitutions));
-            }
+            substituted.predicate_calls.push_back(substitute(predicate_call, substitutions));
         }
         return substituted;
     }
