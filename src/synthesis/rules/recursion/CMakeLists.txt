@@ -1,4 +1,4 @@
-add_library(recursion open.cpp close.cpp call.cpp)
+add_library(recursion open.cpp close.cpp call.cpp abduce_call.cpp)
 
 target_include_directories(recursion
     PUBLIC "${PROJECT_SOURCE_DIR}/include"

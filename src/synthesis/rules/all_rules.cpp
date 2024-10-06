@@ -21,6 +21,7 @@
 #include <recursion/open.hpp>
 #include <recursion/close.hpp>
 #include <recursion/call.hpp>
+#include <recursion/abduce_call.hpp>
 
 namespace desyl
 {
@@ -58,6 +59,7 @@ namespace desyl
             std::make_shared<AllocRule>(AllocRule()),
             std::make_shared<BranchRule>(BranchRule(*learned_clauses)),
             std::make_shared<CallRule>(CallRule()),
+            std::make_shared<AbduceCallRule>(AbduceCallRule()),
             // Invertable generation rules (will *always* generate code that is not used if possible)
             std::make_shared<ReadRule>(ReadRule()),
         };
