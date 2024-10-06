@@ -52,13 +52,13 @@ namespace desyl
                 new_spec.postcondition.proposition.insert(new_spec.postcondition.proposition.end(), consequent.begin(), consequent.end());
 
                 Heap heap = substitute(clause.assertion.heap, substitution);
+                for (auto &predicate_call : heap.predicate_calls)
+                {
+                    predicate_call.label++; // Increment the label of all predicate calls in the predicate definition
+                }
                 new_spec.postcondition.heap.pointer_declarations.insert(new_spec.postcondition.heap.pointer_declarations.end(), heap.pointer_declarations.begin(), heap.pointer_declarations.end());
                 new_spec.postcondition.heap.array_declarations.insert(new_spec.postcondition.heap.array_declarations.end(), heap.array_declarations.begin(), heap.array_declarations.end());
                 new_spec.postcondition.heap.predicate_calls.insert(new_spec.postcondition.heap.predicate_calls.end(), heap.predicate_calls.begin(), heap.predicate_calls.end());
-                for (auto &predicate_call : new_spec.postcondition.heap.predicate_calls)
-                {
-                    predicate_call.label++;
-                }
 
                 new_spec.postcondition.heap.predicate_calls.erase(new_spec.postcondition.heap.predicate_calls.begin() + i);
                 Goal new_goal = goal.with_spec(std::move(new_spec));
