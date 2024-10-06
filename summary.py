@@ -25,7 +25,7 @@ def nodes_expanded_bar_chart():
 nodes_expanded_bar_chart()
 
 def times_bar_chart():
-    number_of_algos = 2
+    number_of_algos = 3
     bar_width = 1 / (number_of_algos + 1)
     xs = np.arange(len(df['example']))
     dfs_time = df['dfs_time'].copy()
@@ -39,8 +39,8 @@ def times_bar_chart():
     plt.bar(xs + 2 * bar_width, bfs_time, bar_width, color='green', label='Best')
     plt.xticks(xs, df['example'], rotation=90)
     plt.yscale('log')
-    plt.ylabel('Nodes expanded (fewer is faster)')
-    plt.title('Nodes expanded for synthesis')
+    plt.ylabel('Time (s)')
+    plt.title('Time taken for synthesis')
     plt.legend()
     plt.tight_layout()
     plt.show()
