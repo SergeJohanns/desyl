@@ -35,5 +35,7 @@ namespace desyl
         Substitutions substitutions;
     };
 
+    bool predicate_label_higher(std::vector<PredicateCall> const &domain, std::vector<PredicateCall> const &codomain);
+
     std::vector<SubHeapUnification> unify_subheaps(Heap const &domain, Heap const &codomain, Vars const &variables);
 }

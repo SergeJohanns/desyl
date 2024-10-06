@@ -215,6 +215,23 @@ namespace desyl
         return result;
     }
 
+    /// @brief Check if the label of a predicate call in the codomain is higher than in the domain (needed for well-foundedness of recursive calls)
+    /// @param domain The domain predicate calls
+    /// @param codomain The codomain predicate calls
+    /// @param mapping The mapping of predicate calls from domain to codomain
+    /// @return True if the label of a predicate call in the codomain is higher than in the domain
+    bool predicate_label_higher(std::vector<PredicateCall> const &domain, std::vector<PredicateCall> const &codomain, std::vector<size_t> mapping)
+    {
+        for (size_t i = 0; i < domain.size(); i++)
+        {
+            if (codomain[mapping[i]].label > domain[i].label)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /// @brief Unify two subheaps
     /// @param domain The domain subheap where variables can be substituted
     /// @param codomain The codomain subheap
@@ -230,16 +247,7 @@ namespace desyl
         {
             for (auto const &predicate : predicate_unifications)
             {
-                bool any_predicate_label_higher = false;
-                for (size_t i = 0; i < domain.predicate_calls.size(); i++)
-                {
-                    if (codomain.predicate_calls[predicate.term_index_mapping[i]].label > domain.predicate_calls[i].label)
-                    {
-                        any_predicate_label_higher = true;
-                        break;
-                    }
-                }
-
+                bool any_predicate_label_higher = predicate_label_higher(domain.predicate_calls, codomain.predicate_calls, predicate.term_index_mapping);
                 if (any_predicate_label_higher && !subtitutions_conflict(pointer.substitutions, predicate.substitutions))
                 {
                     Substitutions unified;
