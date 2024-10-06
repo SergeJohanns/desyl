@@ -40,7 +40,7 @@ namespace desyl
             size_t i;
             for (i = 0; i < from_precondition.size(); i++)
             {
-                if (pointer.base == from_precondition[i].base)
+                if (*pointer.base == *from_precondition[i].base)
                 {
                     result.push_back(i);
                     break;
@@ -94,12 +94,12 @@ namespace desyl
             auto substitutions = unify_predicates(spec.precondition.heap.predicate_calls, goal.spec.precondition.heap.predicate_calls, variables);
             for (auto const &substitution : substitutions)
             {
-                Heap F_prime(spec.precondition.heap);
-                F_prime.predicate_calls = {}; // Predicates have been unified separately and are not changed in the setup to the recursive call
-                substitute(F_prime, substitution);
-                auto pointer_equivalents = find_pointer_equivalents(F_prime.pointer_declarations, goal.spec.precondition.heap.pointer_declarations);
-                auto array_equivalents = find_array_equivalents(F_prime.array_declarations, goal.spec.precondition.heap.array_declarations);
-                bool incomplete_equivalents = pointer_equivalents.size() != F_prime.pointer_declarations.size() || array_equivalents.size() != F_prime.array_declarations.size();
+                Heap precondition_without_predicates(spec.precondition.heap);
+                precondition_without_predicates.predicate_calls = {}; // Predicates have been unified separately and are not changed in the setup to the recursive call
+                precondition_without_predicates = substitute(precondition_without_predicates, substitution);
+                auto pointer_equivalents = find_pointer_equivalents(precondition_without_predicates.pointer_declarations, goal.spec.precondition.heap.pointer_declarations);
+                auto array_equivalents = find_array_equivalents(precondition_without_predicates.array_declarations, goal.spec.precondition.heap.array_declarations);
+                bool incomplete_equivalents = pointer_equivalents.size() != precondition_without_predicates.pointer_declarations.size() || array_equivalents.size() != precondition_without_predicates.array_declarations.size();
                 if ((pointer_equivalents.empty() && array_equivalents.empty()) || incomplete_equivalents)
                 {
                     continue; // If we can't find a match for a pointer or array, or if the non-predicate part is completely empty (violates well-foundedness requirement) the substitution is invalid
@@ -107,17 +107,17 @@ namespace desyl
 
                 FunctionSpecification abduce_goal_spec;
                 FunctionSpecification call_goal_spec(goal.spec);
-                for (size_t i = 0; i < F_prime.pointer_declarations.size(); i++)
+                for (size_t i = 0; i < precondition_without_predicates.pointer_declarations.size(); i++)
                 {
                     abduce_goal_spec.precondition.heap.pointer_declarations.push_back(goal.spec.precondition.heap.pointer_declarations[pointer_equivalents[i]]);
-                    abduce_goal_spec.postcondition.heap.pointer_declarations.push_back(F_prime.pointer_declarations[i]);
-                    call_goal_spec.precondition.heap.pointer_declarations[pointer_equivalents[i]] = F_prime.pointer_declarations[i];
+                    abduce_goal_spec.postcondition.heap.pointer_declarations.push_back(precondition_without_predicates.pointer_declarations[i]);
+                    call_goal_spec.precondition.heap.pointer_declarations[pointer_equivalents[i]] = precondition_without_predicates.pointer_declarations[i];
                 }
-                for (size_t i = 0; i < F_prime.array_declarations.size(); i++)
+                for (size_t i = 0; i < precondition_without_predicates.array_declarations.size(); i++)
                 {
                     abduce_goal_spec.precondition.heap.array_declarations.push_back(goal.spec.precondition.heap.array_declarations[array_equivalents[i]]);
-                    abduce_goal_spec.postcondition.heap.array_declarations.push_back(F_prime.array_declarations[i]);
-                    call_goal_spec.precondition.heap.array_declarations[array_equivalents[i]] = F_prime.array_declarations[i];
+                    abduce_goal_spec.postcondition.heap.array_declarations.push_back(precondition_without_predicates.array_declarations[i]);
+                    call_goal_spec.precondition.heap.array_declarations[array_equivalents[i]] = precondition_without_predicates.array_declarations[i];
                 }
                 Goal call_goal = goal.with_spec(std::move(call_goal_spec));
                 Goal abduce_goal = goal.with_spec(std::move(abduce_goal_spec));
