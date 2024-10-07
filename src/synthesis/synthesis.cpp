@@ -13,6 +13,7 @@
 #include <proof_searchers/guided.hpp>
 #include <proof_searchers/heuristic_search.hpp>
 #include <proof_searchers/suslik_cost.hpp>
+#include <proof_searchers/rule_heuristic.hpp>
 
 namespace desyl
 {
@@ -42,6 +43,11 @@ namespace desyl
         else if (search_algorithm == "best")
         {
             auto search = HeuristicProofSearcher(suslik_cost);
+            return search.search(root, mode);
+        }
+        else if (search_algorithm == "rules")
+        {
+            auto search = HeuristicProofSearcher(rule_heuristic);
             return search.search(root, mode);
         }
         else

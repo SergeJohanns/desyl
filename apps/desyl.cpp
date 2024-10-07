@@ -5,7 +5,7 @@
 
 bool validate_algo(const char *, const std::string &value)
 {
-    if (value == "dfs" || value == "bfs" || value == "tree" || value == "best")
+    if (value == "dfs" || value == "bfs" || value == "tree" || value == "best" || value == "rules")
     {
         return true;
     }

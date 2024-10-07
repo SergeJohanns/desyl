@@ -5,13 +5,14 @@ import numpy as np
 df = pd.read_csv('benchmark.csv')
 df.sort_values(by=['dfs_nodes_expanded'], inplace=True)
 
+ALGO_COLORS = [('dfs', 'blue'), ('bfs', 'red'), ('best', 'green'), ('rules', 'purple')]
+
 def nodes_expanded_bar_chart():
-    number_of_algos = 3
+    number_of_algos = 4
     bar_width = 1 / (number_of_algos + 1)
     xs = np.arange(len(df['example']))
-    plt.bar(xs, df['dfs_nodes_expanded'], bar_width, color='blue', label='DFS')
-    plt.bar(xs + bar_width, df['bfs_nodes_expanded'], bar_width, color='red', label='BFS')
-    plt.bar(xs + 2 * bar_width, df['best_nodes_expanded'], bar_width, color='green', label='Best')
+    for i, (algo, color) in enumerate(ALGO_COLORS):
+        plt.bar(xs + i * bar_width, df[f'{algo}_nodes_expanded'], bar_width, color=color, label=algo)
     plt.xticks(xs, df['example'], rotation=90)
     plt.yscale('log')
     plt.ylabel('Nodes expanded (fewer is faster)')
@@ -25,18 +26,13 @@ def nodes_expanded_bar_chart():
 nodes_expanded_bar_chart()
 
 def times_bar_chart():
-    number_of_algos = 3
+    number_of_algos = 4
     bar_width = 1 / (number_of_algos + 1)
     xs = np.arange(len(df['example']))
-    dfs_time = df['dfs_time'].copy()
-    dfs_time[dfs_time == 10] = 0
-    plt.bar(xs, dfs_time, bar_width, color='blue', label='DFS')
-    bfs_time = df['bfs_time'].copy()
-    bfs_time[bfs_time == 10] = 0
-    plt.bar(xs + bar_width, bfs_time, bar_width, color='red', label='BFS')
-    bfs_time = df['best_time'].copy()
-    bfs_time[bfs_time == 10] = 0
-    plt.bar(xs + 2 * bar_width, bfs_time, bar_width, color='green', label='Best')
+    for i, (algo, color) in enumerate(ALGO_COLORS):
+        algo_time = df[f'{algo}_time'].copy()
+        algo_time[algo_time == 10] = 0
+        plt.bar(xs + i * bar_width, algo_time, bar_width, color=color, label=algo)
     plt.xticks(xs, df['example'], rotation=90)
     plt.yscale('log')
     plt.ylabel('Time (s)')
