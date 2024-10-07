@@ -3,6 +3,6 @@ predicate lseg(loc x, set s) {
 |  !(x == 0) |=> {s =i {v} ++ ss; [x, 2] | <x, 0> -> v | <x, 1> -> nxt | lseg(nxt, ss);}
 }
 
-{true; <r, 0> -> 0 | lseg(x, s);}
-listcopy(loc x, loc r)
+{true; <r, 0> -> x | lseg(x, s);}
+listcopy(loc r)
 {true; <r, 0> -> y | lseg(x, s) | lseg(y, s);}
