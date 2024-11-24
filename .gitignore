@@ -1,6 +1,7 @@
 proof_tree.json
 simplified_tree.json
 benchmark.csv
+model/
 
 # CMake generated files
 build/

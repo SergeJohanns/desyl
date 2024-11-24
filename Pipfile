@@ -8,8 +8,10 @@ alive-progress = "*"
 pandas = "*"
 matplotlib = "*"
 numpy = "*"
+tensorflow = "~=2.15"
+tensorflow-decision-forests = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.11"
