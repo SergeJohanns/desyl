@@ -53,15 +53,15 @@ namespace desyl
             std::make_shared<SubstRightRule>(SubstRightRule()),
             // Expensive but nongenerating rules
             std::make_shared<PostInvalidRule>(PostInvalidRule(*learned_clauses)), // Not expensive to run but adds branching targets
+            // Invertable generation rules (will *always* generate code that is not used if possible)
+            std::make_shared<ReadRule>(ReadRule()),
             // Desctructive generation rules (at the end to avoid generating code that is not used)
             std::make_shared<WriteRule>(WriteRule()),
             std::make_shared<FreeRule>(FreeRule()),
             std::make_shared<AllocRule>(AllocRule()),
-            std::make_shared<BranchRule>(BranchRule(*learned_clauses)),
             std::make_shared<CallRule>(CallRule()),
             std::make_shared<AbduceCallRule>(AbduceCallRule()),
-            // Invertable generation rules (will *always* generate code that is not used if possible)
-            std::make_shared<ReadRule>(ReadRule()),
+            std::make_shared<BranchRule>(BranchRule(*learned_clauses)),
         };
         return all_rules_vector;
     }
