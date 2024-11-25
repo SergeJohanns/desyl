@@ -11,9 +11,10 @@
 #include <proof_searchers/breadth_first.hpp>
 #include <proof_searchers/whole_tree.hpp>
 #include <proof_searchers/guided.hpp>
-#include <proof_searchers/heuristic_search.hpp>
+#include <proof_searchers/goal_heuristic_search.hpp>
 #include <proof_searchers/suslik_cost.hpp>
 #include <proof_searchers/rule_heuristic.hpp>
+#include <proof_searchers/decision_forest_heuristic.hpp>
 
 namespace desyl
 {
@@ -48,6 +49,11 @@ namespace desyl
         else if (search_algorithm == "rules")
         {
             auto search = HeuristicProofSearcher(rule_heuristic);
+            return search.search(root, mode);
+        }
+        else if (search_algorithm == "forest")
+        {
+            auto search = HeuristicProofSearcher(decision_forest_score);
             return search.search(root, mode);
         }
         else

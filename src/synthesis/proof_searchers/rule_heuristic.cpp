@@ -1,24 +1,11 @@
 #include <rule_heuristic.hpp>
+#include <goal_heuristic_search.hpp>
 
 #include <all_rules.hpp>
 #include <unordered_map>
 
 namespace desyl
 {
-    std::string get_previous_rule(ProofTreeNode const &node)
-    {
-        ProofTreeNode const *current = node.parent;
-        while (current != nullptr)
-        {
-            if (current->rule != nullptr)
-            {
-                return current->rule->name();
-            }
-            current = current->parent;
-        }
-        return "";
-    }
-
     std::unordered_map<std::string, int> get_heuristic_map()
     {
         std::unordered_map<std::string, int> heuristic_map;

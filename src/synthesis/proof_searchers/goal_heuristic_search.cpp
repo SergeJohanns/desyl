@@ -1,11 +1,20 @@
-#include <heuristic_search.hpp>
+#include <goal_heuristic_search.hpp>
 #include <failures/failure.hpp>
 
 namespace desyl
 {
-    bool PriorityProofTreeNodeComparator::operator()(PriorityProofTreeNode const &lhs, PriorityProofTreeNode const &rhs) const
+    std::string get_previous_rule(ProofTreeNode const &node)
     {
-        return lhs.cost > rhs.cost; // Lower cost is higher priority, and the priority queue expects true if rhs has higher priority
+        ProofTreeNode const *current = node.parent;
+        while (current != nullptr)
+        {
+            if (current->rule != nullptr)
+            {
+                return current->rule->name();
+            }
+            current = current->parent;
+        }
+        return "";
     }
 
     void HeuristicProofSearcher::add_children_to_queue(ProofTreeNode *node, PriorityQueue &queue) const
@@ -24,7 +33,7 @@ namespace desyl
     {
         root.make_children();
         PriorityQueue queue = PriorityQueue(PriorityProofTreeNodeComparator());
-        queue.push({&root, heuristic(root)});
+        queue.push({&root, 0}); // The root doens't need a priority, since it's the only one in the queue
         while (!root.completed && !queue.empty())
         {
             auto [node, cost] = queue.top();

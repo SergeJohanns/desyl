@@ -1,9 +1,11 @@
+import os
 import re
 import json
 import itertools
 import pandas as pd
-import tensorflow as tf
-import tensorflow_decision_forests as tfdf
+import ydf
+from alive_progress import alive_it
+from benchmark import Synthesizer, ResultType, TREEOUT
 
 GOAL_REGEX = re.compile(r"{(.*);} -> {(.*);}")
 ASSERTION_REGEX = re.compile(r"(.*); (.*)")
@@ -11,10 +13,8 @@ POINTER_REGEX = re.compile(r"<\w+, \d> -> .")
 ARRAY_REGEX = re.compile(r"[\w+, \d]")
 PREDICATE_REGEX = re.compile(r"(\w+)\((.*)\)")
 
-TREE_FILE = "proof_tree.json"
-
-with open(TREE_FILE, "r") as f:
-    tree = json.load(f)
+EXAMPLES_DIR = "examples"
+EXCLUDE = ["pick.sep"]
 
 
 def get_assertion_features(assertion: str) -> dict[str, int | str]:
@@ -81,13 +81,34 @@ def recall(y_true, y_pred):
     return true_positives / (actual_positives + tf.keras.backend.epsilon())
 
 
-row_list = get_goal_node_data(tree)
-train_df = pd.DataFrame(row_list)
-train_ds = tfdf.keras.pd_dataframe_to_tf_dataset(
-    train_df, label="score", task=tfdf.keras.Task.REGRESSION
+row_list = []
+synthesizer = Synthesizer(algo="tree", depth=10, print_tree=True)
+bar = alive_it(
+    [
+        file
+        for file in os.listdir(EXAMPLES_DIR)
+        if file.endswith(".sep") and file not in EXCLUDE
+    ]
 )
-model = tfdf.keras.RandomForestModel(task=tfdf.keras.Task.REGRESSION)
-model.fit(train_ds)
-model.compile(metrics=["accuracy", precision, recall])
-model.evaluate(train_ds, return_dict=True)
-model.save("model")
+for file in bar:
+    bar.text(f"Running {file}")
+    result_type, _, _ = synthesizer.synthesize(f"{EXAMPLES_DIR}/{file}", timeout=10)
+    if result_type != ResultType.SOLVED:
+        print(f"Failed to synthesize {file} due to {result_type.value}")
+        continue
+
+    with open(TREEOUT, "r") as f:
+        tree = json.load(f)
+
+    row_list.extend(get_goal_node_data(tree))
+
+
+if __name__ == "__main__":
+    train_ds = pd.DataFrame(row_list)
+    model = ydf.GradientBoostedTreesLearner(label="score").train(train_ds)
+    # model.describe()
+    # model.evaluate(train_ds)
+    # model.predict(train_ds)
+    # model.analyze(train_ds)
+    # model.benchmark(train_ds)
+    model.save("model")
