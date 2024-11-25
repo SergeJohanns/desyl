@@ -17,7 +17,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Generate compile_commands.json
 
     # Set flags
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror -Wno-cast-function-type -Wno-error=cast-function-type")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wno-cast-function-type -Wno-error=cast-function-type -Wno-error=unused-parameter")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -fsanitize=address,undefined")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O3 -g -fsanitize=address,undefined")
@@ -39,6 +39,11 @@ if(NOT gflags_POPULATED)
 	cmake_policy(SET CMP0069 NEW)
 	add_subdirectory(${gflags_SOURCE_DIR} ${gflags_BINARY_DIR})
 endif()
+
+# YDF needs abseil-cpp
+add_subdirectory(abseil-cpp)
+# add_subdirectory(yggdrasil-decision-forests)
+include_directories(yggdrasil-decision-forests)
 
 FetchContent_MakeAvailable(lexy gflags)
 
