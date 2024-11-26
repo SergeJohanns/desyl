@@ -40,11 +40,6 @@ if(NOT gflags_POPULATED)
 	add_subdirectory(${gflags_SOURCE_DIR} ${gflags_BINARY_DIR})
 endif()
 
-# YDF needs abseil-cpp
-add_subdirectory(abseil-cpp)
-# add_subdirectory(yggdrasil-decision-forests)
-include_directories(yggdrasil-decision-forests)
-
 FetchContent_MakeAvailable(lexy gflags)
 
 add_subdirectory(src)
