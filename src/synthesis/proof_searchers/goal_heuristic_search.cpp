@@ -17,7 +17,7 @@ namespace desyl
         return "";
     }
 
-    void HeuristicProofSearcher::add_children_to_queue(ProofTreeNode *node, PriorityQueue &queue) const
+    void GoalHeuristicProofSearcher::add_children_to_queue(ProofTreeNode *node, PriorityQueue &queue) const
     {
         for (auto &child : node->children)
         {
@@ -29,7 +29,7 @@ namespace desyl
         }
     }
 
-    std::optional<Program> HeuristicProofSearcher::search(ProofTreeNode &root, SynthesisMode mode) const
+    std::optional<Program> GoalHeuristicProofSearcher::search(ProofTreeNode &root, SynthesisMode mode) const
     {
         root.make_children();
         PriorityQueue queue = PriorityQueue(PriorityProofTreeNodeComparator());

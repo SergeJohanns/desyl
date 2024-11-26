@@ -4,5 +4,5 @@
 
 namespace desyl
 {
-    double decision_forest_score(ProofTreeNode const &node);
+    double decision_forest_score(ProofTreeNode const &node, std::string const &rule);
 }

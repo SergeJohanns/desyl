@@ -1,5 +1,5 @@
 #include <decision_forest_heuristic.hpp>
-#include <goal_heuristic_search.hpp>
+#include <rule_heuristic_search.hpp>
 
 #include <cstdio>
 #include <iostream>
@@ -53,9 +53,9 @@ namespace desyl
         return ss.str();
     }
 
-    double decision_forest_score(ProofTreeNode const &node)
+    double decision_forest_score(ProofTreeNode const &node, std::string const &rule)
     {
-        std::string cmd = "python run_dt.py " + json_inputs(node.goal->spec, get_previous_rule(node)) + " 2>/dev/null";
+        std::string cmd = "python run_dt.py " + json_inputs(node.goal->spec, rule) + " 2>/dev/null";
         auto result = exec(cmd.c_str());
         double score;
         std::from_chars(result.data(), result.data() + result.size(), score);

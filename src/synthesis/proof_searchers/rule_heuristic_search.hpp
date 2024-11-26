@@ -6,15 +6,13 @@
 
 namespace desyl
 {
-    std::string get_previous_rule(ProofTreeNode const &node);
-
-    class GoalHeuristicProofSearcher : public ProofSearcher
+    class RuleHeuristicProofSearcher : public ProofSearcher
     {
-        std::function<double(ProofTreeNode const &)> heuristic;
+        std::function<double(ProofTreeNode const &, std::string)> heuristic;
         void add_children_to_queue(ProofTreeNode *node, PriorityQueue &queue) const;
 
     public:
-        GoalHeuristicProofSearcher(std::function<double(ProofTreeNode const &)> heuristic) : heuristic(heuristic) {}
+        RuleHeuristicProofSearcher(std::function<double(ProofTreeNode const &, std::string)> heuristic) : heuristic(heuristic) {}
         std::optional<Program> search(ProofTreeNode &root, SynthesisMode mode) const override;
     };
 }
